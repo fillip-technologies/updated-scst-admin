@@ -13,12 +13,8 @@ class ManageSchoolController extends Controller
 {
     public function getHomepagedata()
     {
-
             $schoolId = SchoolLogin()->id;
             $homepagedata = Home::where('school_id', $schoolId)->first();
-            dd($homepagedata);
-
-
     }
 
     public function SaveHeroSection(Request $request)
