@@ -1,11 +1,31 @@
 <?php
 
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
+use App\Http\Controllers\School\NoticeController;
+use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
+
+
 Route::prefix('school')->middleware('school')->group(function () {
+Route::post('create/hero/section/infrastructure',[InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
+Route::post('create/campus/section/infrastructure',[InfrastructureController::class, 'SaveCampus'])->name('inf.save.campus');
+Route::post('create/acadmi/section/infrastructure',[InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
+Route::post('create/leader/section/staff',[StaffController::class, 'SaveLeader'])->name('staff.save.leader');
+Route::post('create/teache/section/staff',[StaffController::class, 'SaveTeacher'])->name('staff.save.teacher');
+Route::post('create/notice/section/staff',[NoticeController::class, 'SaveNotice'])->name('notice.save');
+
+
+
+
+
+
+
+
+
     Route::get('homepagedata',[ManageSchoolController::class, 'getHomepagedata']);
     Route::view('/dashboard', 'modules.school.dashboard.index')->name('school.dashboard');
     Route::get('/logout', [LoginController::class, 'SchoolLogout'])->name('school.logout');
@@ -18,9 +38,6 @@ Route::prefix('school')->middleware('school')->group(function () {
      Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::view('/website-cms', 'modules.school.website-cms.index')->name('school.website-cms');
     Route::view('/website-cms/home', 'modules.school.website-cms.home.index')->name('school.website-cms.home');
-
-
-
     Route::post('/create/gallery/section', [ManageSchoolController::class, 'SaveGallerySection'])->name('gallery.save');
     Route::post('/create/hero/section', [ManageSchoolController::class, 'SaveHeroSection'])->name('hero.save');
     Route::post('/create/about/section', [ManageSchoolController::class, 'SaveAboutSection'])->name('about.save');

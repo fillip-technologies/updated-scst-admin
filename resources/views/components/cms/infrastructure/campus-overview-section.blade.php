@@ -35,13 +35,15 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8">
+        <form class="p-6 sm:p-8" action="{{ route('inf.save.campus') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div class="md:col-span-2">
                     <label for="campus_overview_title" class="mb-2 block text-sm font-medium text-gray-700">Section Title</label>
                     <input
                         id="campus_overview_title"
-                        x-model="form.title"
+                        name="campus_overview_title"
                         type="text"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -50,8 +52,8 @@
                     <label for="campus_paragraph_1" class="mb-2 block text-sm font-medium text-gray-700">Description Paragraph 1</label>
                     <textarea
                         id="campus_paragraph_1"
-                        x-model="form.paragraph1"
-                        rows="4"
+                        name="campus_paragraph_1"
+                       rows="4"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
                 </div>
 
@@ -59,7 +61,7 @@
                     <label for="campus_paragraph_2" class="mb-2 block text-sm font-medium text-gray-700">Description Paragraph 2</label>
                     <textarea
                         id="campus_paragraph_2"
-                        x-model="form.paragraph2"
+                        name="campus_paragraph_2"
                         rows="4"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
                 </div>
@@ -73,7 +75,7 @@
                                     <label for="campus_feature_{{ $i }}_title" class="mb-2 block text-sm font-medium text-gray-700">Feature {{ $i }} Title</label>
                                     <input
                                         id="campus_feature_{{ $i }}_title"
-                                        x-model="form.feature{{ $i }}Title"
+                                        name="feature_{{ $i }}_title"
                                         type="text"
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
@@ -82,7 +84,7 @@
                                     <label for="campus_feature_{{ $i }}_description" class="mb-2 block text-sm font-medium text-gray-700">Feature {{ $i }} Description</label>
                                     <textarea
                                         id="campus_feature_{{ $i }}_description"
-                                        x-model="form.feature{{ $i }}Description"
+                                        name="feature_{{ $i }}_description"
                                         rows="4"
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
                                 </div>
@@ -112,6 +114,7 @@
                                     id="campus_overview_image"
                                     type="file"
                                     accept="image/*"
+                                    name="campus_overview_image"
                                     @change="handleFileChange($event)"
                                     class="mt-4 block w-full rounded-xl border border-primary-800/20 bg-white px-4 py-3 text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-primary-800 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
 
@@ -123,7 +126,7 @@
             </div>
 
             <div class="mt-8 flex justify-end border-t border-primary-800/10 pt-6">
-                <button type="button"
+                <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
                     Save / Update

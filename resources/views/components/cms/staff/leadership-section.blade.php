@@ -27,7 +27,9 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8">
+        <form class="p-6 sm:p-8" action="{{ route('staff.save.leader') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <div class="grid grid-cols-1 gap-6">
                 <div>
                     <label for="leader_image" class="mb-2 block text-sm font-medium text-gray-700">Leader Image</label>
@@ -50,6 +52,7 @@
                                     id="leader_image"
                                     type="file"
                                     accept="image/*"
+                                    name="leader_image"
                                     @change="handleFileChange($event)"
                                     class="mt-4 block w-full rounded-xl border border-primary-800/20 bg-white px-4 py-3 text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-primary-800 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
 
@@ -63,7 +66,7 @@
                     <label for="leader_name" class="mb-2 block text-sm font-medium text-gray-700">Leader Name</label>
                     <input
                         id="leader_name"
-                        x-model="form.name"
+                        name="leader_name"
                         type="text"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -72,7 +75,7 @@
                     <label for="leader_designation" class="mb-2 block text-sm font-medium text-gray-700">Designation</label>
                     <input
                         id="leader_designation"
-                        x-model="form.designation"
+                        name="leader_designation"
                         type="text"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -81,14 +84,14 @@
                     <label for="leader_bio" class="mb-2 block text-sm font-medium text-gray-700">Description / Bio</label>
                     <textarea
                         id="leader_bio"
-                        x-model="form.bio"
+                        name="leader_bio"
                         rows="6"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
                 </div>
             </div>
 
             <div class="mt-8 flex justify-end border-t border-primary-800/10 pt-6">
-                <button type="button"
+                <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
                     Save / Update

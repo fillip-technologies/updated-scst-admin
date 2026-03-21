@@ -10,7 +10,7 @@ class Staff extends Model
 
     protected $fillable = ['school_id', 'leadership', 'teacher_staff'];
 
-    protected $table = 'staffs';
+    protected $table = 'staff';
 
     protected $casts = ['leadership' => 'array', 'teacher_staff' => 'array'];
 
