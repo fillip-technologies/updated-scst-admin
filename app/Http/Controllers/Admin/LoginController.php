@@ -1,0 +1,140 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+
+class LoginController extends Controller
+{
+    public function login(Request $request)
+    {
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $loginUser = Auth::user();
+
+            if ($loginUser->role === 'super_admin') {
+                return redirect()->route('super-admin.dashboard');
+            } elseif ($loginUser->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+        }
+
+        return back()->with('error', 'Invalid credentials.');
+    }
+
+    public function store(Request $request)
+    {
+
+        $user = User::create([
+            'name' => 'Abhishek',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin@123'),
+            'phone' => '9923546784',
+            'role_id' => 1,
+        ]);
+
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('admin');
+    }
+
+    public function update_password()
+    {
+
+        return view('admin.include.change_password');
+
+    }
+
+    public function update(Request $request)
+    {
+
+        $request->validate([
+            'current_password' => ['required'],
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+            ],
+        ]);
+
+        $admin = auth('admin')->user();
+
+        if (! $admin) {
+            return redirect()->back()->withErrors(['error' => 'Unauthorized access']);
+        }
+        if (! Hash::check($request->current_password, $admin->password)) {
+            return back()->withErrors([
+                'current_password' => 'Current password does not match',
+            ]);
+        }
+        $admin->password = Hash::make($request->password);
+        $admin->save();
+
+        return redirect()
+            ->route('admin')
+            ->with('status', 'Password changed successfully');
+    }
+
+    public function SystemLogin(Request $request)
+    {
+        if ($request->login_type === 'school') {
+            $request->validate([
+                'schoolCode' => 'required',
+                'password' => 'required',
+            ]);
+
+            if (Auth::attempt(['schoolCode' => $request->schoolCode, 'password' => $request->password])) {
+                $loginUser = Auth::user();
+                if ($loginUser->role === 'school_admin') {
+                    return redirect()->route('school.dashboard');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Invalide School Credaincials');
+            }
+        } else {
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+            ]);
+            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+                $loginUser = Auth::user();
+                if ($loginUser->role === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Invalide Department Credaincials');
+            }
+        }
+
+    }
+
+    public function SchoolLogout()
+    {
+        Auth::guard('school')->logout();
+
+        return redirect()->route('login');
+    }
+
+    public function AdminLogout()
+    {
+        Auth::guard('admin')->logout();
+
+        return redirect()->route('login');
+    }
+}
