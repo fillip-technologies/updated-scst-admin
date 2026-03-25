@@ -1,5 +1,4 @@
 
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
    @if ($errors->any())
@@ -32,7 +31,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ route('hero.save') }}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{isset($home) ? route('hero.update') :  route('hero.save') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{SchoolLogin()->id}}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -45,7 +44,7 @@
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
                                 <img
-                                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80"
+                                    src="{{ asset($home->bgimage) ?? "" }}"
                                     alt="Hero background preview"
                                     class="h-48 w-full object-cover">
                             </div>
@@ -60,6 +59,7 @@
                                     id="hero_background"
                                     type="file"
                                     accept="image/*"
+
                                     name="bgimage"
                                     class="mt-4 block w-full rounded-xl border border-primary-800/20 bg-white px-4 py-3 text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-primary-800 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                             </div>
@@ -73,6 +73,7 @@
                         id="badge_text"
                         type="text"
                         name="badge_text"
+                        value="{{ old('badge_text',$home->badge_text ?? "") }}"
                         placeholder="Residential • SC/ST Welfare"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -83,6 +84,7 @@
                         id="rating_value"
                         type="text"
                         name="rating_value"
+                          value="{{ old('rating_value',$home->rating_value ?? "") }}"
                         placeholder="4.6"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -93,6 +95,7 @@
                         id="school_title"
                         type="text"
                         name="school_title"
+                                value="{{ old('school_title',$home->school_title ?? "") }}"
                         placeholder="Dr. B.R. Ambedkar Residential School"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -103,6 +106,7 @@
                         id="location_text"
                         type="text"
                         name="location_text"
+                          value="{{ old('location_text',$home->location_text ?? "") }}"
                         placeholder="Patna, Bihar"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -113,6 +117,7 @@
                         id="students_count"
                         type="text"
                         name="students_count"
+                          value="{{ old('students_count',$home->students_count ?? "") }}"
                         placeholder="650 Students"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -123,6 +128,7 @@
                         id="class_range"
                         type="text"
                         name="class_range"
+                         value="{{ old('class_range',$home->class_range ?? "") }}"
                         placeholder="Class 6 - 12"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -132,6 +138,7 @@
                     <input
                         id="back_button_text"
                         type="text"
+                        value="{{ old('back_button_text',$home->back_button_text ?? "") }}"
                         name="back_button_text"
                         placeholder="Back to Schools"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -147,10 +154,12 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    Save / Update
+                    {{ isset($home) ? "Update" : "Save" }}
+
                 </button>
             </div>
         </form>
+
     </div>
 
     <div class="rounded-3xl border border-primary-800/10 bg-white p-6 shadow-sm">
@@ -165,7 +174,7 @@
         <div class="mt-6 overflow-hidden rounded-3xl bg-primary-900 shadow-sm">
             <div class="relative min-h-[520px]">
                 <img
-                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80"
+                    src="{{ asset($home->bgimage) ?? "" }}"
                     alt="Homepage hero preview"
                     class="absolute inset-0 h-full w-full object-cover opacity-35">
                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/85 to-primary-800/40"></div>
@@ -173,37 +182,37 @@
                 <div class="relative flex h-full min-h-[520px] flex-col justify-end p-6 text-white">
                     <div class="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
                         <span class="h-2 w-2 rounded-full bg-accent-500"></span>
-                        Residential • SC/ST Welfare
+                        {{ $home->badge_text ?? "" }}
                     </div>
 
                     <div class="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
                         <i class="fa-solid fa-star text-accent-500"></i>
-                        4.6
+                        {{ $home->rating_value ?? ""}}
                     </div>
 
                     <h3 class="mt-6 text-3xl font-semibold leading-tight">
-                        Dr. B.R. Ambedkar Residential School
+                       {{$home->school_title ?? ""}}
                     </h3>
 
                     <div class="mt-5 space-y-3 text-sm text-gray-100">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-location-dot text-accent-500"></i>
-                            <span>Patna, Bihar</span>
+                            <span>{{ $home->location_text ?? ""}}</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-user-group text-accent-500"></i>
-                            <span>650 Students</span>
+                            <span>{{ $home->students_count ?? ""}}</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-book-open text-accent-500"></i>
-                            <span>Class 6 - 12</span>
+                            <span>{{ $home->class_range  ?? ""}}</span>
                         </div>
                     </div>
 
                     <button type="button"
                         class="mt-8 inline-flex w-fit items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/20">
                         <i class="fa-solid fa-arrow-left text-xs"></i>
-                        Back to Schools
+                        {{ $home->back_button_text ?? "" }}
                     </button>
                 </div>
             </div>

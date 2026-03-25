@@ -1,5 +1,5 @@
-{{-- <div
-    x-data="{
+<div
+    {{-- x-data="{
         form: {
             label: 'About the School',
             title: 'Dr. B.R. Ambedkar SC/ST Residential School, Patna',
@@ -12,9 +12,9 @@
             passPercentage: '98%',
             image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
         }
-    }"
-    class="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_420px]"> --}}
-    
+    }" --}}
+    class="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_420px]">
+
     <div class="rounded-3xl border border-primary-800/10 bg-white shadow-sm">
         <div class="border-b border-primary-800/10 px-6 py-5 sm:px-8">
             <h2 class="text-xl font-semibold text-gray-800">About Section</h2>
@@ -23,7 +23,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ route('about.save') }}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{isset($about) ?  route('about.update') :  route('about.save')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -31,9 +31,9 @@
                     <label for="about_label" class="mb-2 block text-sm font-medium text-gray-700">Section Label</label>
                     <input
                         id="about_label"
-                        x-model="form.label"
                         type="text"
                         name="about_label"
+                        value="{{ old('about_label',$about->about_label ?? '') }}"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
@@ -41,7 +41,7 @@
                     <label for="about_title" class="mb-2 block text-sm font-medium text-gray-700">Title</label>
                     <input
                         id="about_title"
-                        x-model="form.title"
+                       value="{{ old('about_title',$about->about_title ?? '') }}"
                         type="text"
                         name="about_title"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -51,10 +51,9 @@
                     <label for="about_description" class="mb-2 block text-sm font-medium text-gray-700">Description</label>
                     <textarea
                         id="about_description"
-                        x-model="form.description"
                         rows="5"
                         name="about_description"
-                        class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
+                        class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('about_description',$about->about_description ?? '') }}</textarea>
                 </div>
 
                 <div class="md:col-span-2 rounded-2xl border border-primary-800/10 bg-gray-50 p-5">
@@ -64,7 +63,7 @@
                             <label for="about_bullet_1" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 1</label>
                             <input
                                 id="about_bullet_1"
-                                x-model="form.bullet1"
+                                value="{{ old('about_bullate_1',$about->about_bullet_1 ?? '') }}"
                                 type="text"
                                 name="about_bullet_1"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -74,7 +73,7 @@
                             <label for="about_bullet_2" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 2</label>
                             <input
                                 id="about_bullet_2"
-                                x-model="form.bullet2"
+                                 value="{{ old('about_bullate_2',$about->about_bullet_2 ?? '') }}"
                                 type="text"
                                 name="about_bullet_2"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -84,7 +83,7 @@
                             <label for="about_bullet_3" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 3</label>
                             <input
                                 id="about_bullet_3"
-                                x-model="form.bullet3"
+                               value="{{ old('about_bullate_3',$about->about_bullet_3 ?? '') }}"
                                 type="text"
                                 name="about_bullet_3"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -99,7 +98,7 @@
                             <label for="students_count" class="mb-2 block text-sm font-medium text-gray-700">Students Count</label>
                             <input
                                 id="students_count"
-                                x-model="form.studentsCount"
+                                value="{{ old('students_count',$about->students_count ?? '') }}"
                                 type="text"
                                 name="students_count"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -110,7 +109,7 @@
                             <input
                                 id="student_ratio"
                                 name="student_ratio"
-                                x-model="form.ratio"
+                                value="{{ old('student_ratio',$about->student_ratio ?? '') }}"
                                 type="text"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
@@ -119,7 +118,7 @@
                             <label for="pass_percentage" class="mb-2 block text-sm font-medium text-gray-700">Pass Percentage</label>
                             <input
                                 id="pass_percentage"
-                                x-model="form.passPercentage"
+                                 value="{{ old('pass_percentage',$about->pass_percentage ?? '') }}"
                                 type="text"
                                 name="pass_percentage"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -133,7 +132,7 @@
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
                                 <img
-                                    :src="form.image"
+                                    src="{{ asset($about->about_image) ?? '' }}"
                                     alt="Campus image preview"
                                     class="h-44 w-full object-cover">
                             </div>
@@ -161,10 +160,12 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    Save / Update
+                    {{ isset($about) ? "Update" : "Save" }}
                 </button>
             </div>
         </form>
+
+
     </div>
 
     <div class="rounded-3xl border border-primary-800/10 bg-white p-6 shadow-sm">
@@ -178,22 +179,22 @@
 
         <div class="mt-6 space-y-5">
             <div class="rounded-3xl border border-primary-800/10 bg-gray-50 p-5">
-                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary-700" x-text="form.label"></p>
-                <h3 class="mt-3 text-2xl font-semibold leading-tight text-gray-800" x-text="form.title"></h3>
-                <p class="mt-4 text-sm leading-6 text-gray-500" x-text="form.description"></p>
+                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary-700">{{ $about->about_label ?? "" }}</p>
+                <h3 class="mt-3 text-2xl font-semibold leading-tight text-gray-800">{{ $about->about_title  ?? ''}}</h3>
+                <p class="mt-4 text-sm leading-6 text-gray-500">{{ $about->about_description ?? ''}}</p>
 
                 <div class="mt-5 space-y-3">
                     <div class="flex items-start gap-3">
                         <span class="mt-1 h-2.5 w-2.5 rounded-full bg-accent-500"></span>
-                        <p class="text-sm leading-6 text-gray-600" x-text="form.bullet1"></p>
+                        <p class="text-sm leading-6 text-gray-600">{{ $about->about_bullet_1 ?? ''}}</p>
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="mt-1 h-2.5 w-2.5 rounded-full bg-accent-500"></span>
-                        <p class="text-sm leading-6 text-gray-600" x-text="form.bullet2"></p>
+                        <p class="text-sm leading-6 text-gray-600">{{ $about->about_bullet_2 ?? '' }}</p>
                     </div>
                     <div class="flex items-start gap-3">
                         <span class="mt-1 h-2.5 w-2.5 rounded-full bg-accent-500"></span>
-                        <p class="text-sm leading-6 text-gray-600" x-text="form.bullet3"></p>
+                        <p class="text-sm leading-6 text-gray-600">{{ $about->about_bullet_3 ?? ''}}</p>
                     </div>
                 </div>
             </div>
@@ -201,21 +202,21 @@
             <div class="grid grid-cols-3 gap-3">
                 <div class="rounded-2xl bg-primary-900 p-4 text-white shadow-sm">
                     <p class="text-xs uppercase tracking-[0.18em] text-gray-200">Students</p>
-                    <p class="mt-2 text-2xl font-semibold" x-text="form.studentsCount"></p>
+                    <p class="mt-2 text-2xl font-semibold">{{ $about->students_count ?? "" }}</p>
                 </div>
                 <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
                     <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Ratio</p>
-                    <p class="mt-2 text-2xl font-semibold text-gray-800" x-text="form.ratio"></p>
+                    <p class="mt-2 text-2xl font-semibold text-gray-800">{{ $about->student_ratio ?? "" }}</p>
                 </div>
                 <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
                     <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Pass %</p>
-                    <p class="mt-2 text-2xl font-semibold text-gray-800" x-text="form.passPercentage"></p>
+                    <p class="mt-2 text-2xl font-semibold text-gray-800" >{{ $about->pass_percentage ?? '' }}</p>
                 </div>
             </div>
 
             <div class="overflow-hidden rounded-3xl border border-primary-800/10 bg-white shadow-sm">
                 <img
-                    :src="form.image"
+                    src="{{ asset($about->about_image) ?? ""}}"
                     alt="Campus preview"
                     class="h-64 w-full object-cover">
             </div>

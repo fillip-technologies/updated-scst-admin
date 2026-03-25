@@ -5,16 +5,14 @@ namespace App\Http\Controllers\School;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\Home;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ManageSchoolController extends Controller
 {
     public function getHomepagedata()
     {
-            $schoolId = SchoolLogin()->id;
-            $homepagedata = Home::where('school_id', $schoolId)->first();
+        $schoolId = SchoolLogin()->id;
+        $homepagedata = Home::where('school_id', $schoolId)->first();
     }
 
     public function SaveHeroSection(Request $request)
@@ -64,56 +62,117 @@ class ManageSchoolController extends Controller
         }
     }
 
+    // public function SaveGallerySection(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'school_id' => 'required',
+    //             'gallery_card_image' => 'required|file|mimes:jpg,jpeg,png,webp',
+    //             'gallery_card_title' => 'required|string',
+    //             'gallery_card_subtitle' => 'required|string',
+    //         ]);
+
+    //         $gallaryImage = '';
+
+    //         // Upload Image
+    //         if ($request->hasFile('gallery_card_image')) {
+    //             $file = $request->file('gallery_card_image');
+    //             $filename = time().'.'.$file->getClientOriginalExtension();
+    //             $uploadPath = public_path('GalleryImage');
+
+    //             if (! file_exists($uploadPath)) {
+    //                 mkdir($uploadPath, 0777, true);
+    //             }
+
+    //             $file->move($uploadPath, $filename);
+    //             $gallaryImage = 'GalleryImage/'.$filename;
+    //         }
+
+    //         $newGallary = [
+    //             'gallery_card_image' => $gallaryImage,
+    //             'gallery_card_title' => $request->gallery_card_title,
+    //             'gallery_card_subtitle' => $request->gallery_card_subtitle,
+    //         ];
+
+    //         $section = Home::where('school_id', $request->school_id)->first();
+
+    //         if ($section) {
+
+    //             $gallery = json_decode($section->gallery, true) ?? [];
+    //             $gallery[] = $newGallary;
+
+    //             $section->update([
+    //                 'gallery' => json_encode($gallery),
+    //             ]);
+
+    //         } else {
+
+    //             Home::create([
+    //                 'school_id' => $request->school_id,
+    //                 'gallery' => json_encode([$newGallary]),
+    //             ]);
+    //         }
+
+    //         return redirect()->back()->with('success', 'Gallery added successfully');
+
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', 'Something went wrong');
+    //     }
+    // }
+
     public function SaveGallerySection(Request $request)
     {
+        $request->validate([
+            'school_id' => 'required',
+            'gallery_card_image' => 'required|file|mimes:jpg,jpeg,png,webp',
+            'gallery_card_title' => 'required|string',
+            'gallery_card_subtitle' => 'required|string',
+        ]);
 
-        try {
-            $request->validate([
-                'gallery_card_image' => 'required|file',
-                'gallery_card_title' => 'required|string',
-                'gallery_card_subtitle' => 'required|string',
-            ]);
+        $imagePath = '';
+        if ($request->hasFile('gallery_card_image')) {
+            $file = $request->file('gallery_card_image');
+            $filename = time().'.'.$file->getClientOriginalExtension();
 
-            $gallaryImage = '';
-            $gallarydata = [];
-
-            if ($request->hasFile('gallery_card_image')) {
-                $file = $request->file('gallery_card_image');
-                $filename = time().'.'.$file->getClientOriginalExtension();
-                $upload = public_path('GalleryImage');
-
-                if (! file_exists($upload)) {
-                    mkdir($upload, 0777, true);
-                }
-
-                $file->move($upload, $filename);
-                $gallaryImage = 'GalleryImage/'.$filename;
+            $path = public_path('GalleryImage');
+            if (! file_exists($path)) {
+                mkdir($path, 0777, true);
             }
 
-            $gallarydata['gallery_card_image'] = $gallaryImage;
-            $gallarydata['gallery_card_title'] = $request->gallery_card_title;
-            $gallarydata['gallery_card_subtitle'] = $request->gallery_card_subtitle;
-
-            $data = ['gallery' => json_encode($gallarydata)];
-
-            $AccessHome = Home::where('school_id', $request->school_id)->first();
-
-            if ($AccessHome) {
-                ManageCrud::querydataupdate(Home::class, $request->school_id, $data);
-            } else {
-                Home::create([
-                    'school_id' => $request->school_id,
-                    'gallery' => json_encode($gallarydata),
-                ]);
-            }
-
-            return redirect()->route('school.website-cms.home')
-                ->with('success', 'Gallery section saved successfully');
-
-        } catch (Exception $e) {
-            return redirect()->route('school.website-cms.home')
-                ->with('error', 'Something went wrong: '.$e->getMessage());
+            $file->move($path, $filename);
+            $imagePath = 'GalleryImage/'.$filename;
         }
+
+        $newData = [
+            'gallery_card_image' => $imagePath,
+            'gallery_card_title' => $request->gallery_card_title,
+            'gallery_card_subtitle' => $request->gallery_card_subtitle,
+        ];
+
+        $section = Home::where('school_id', $request->school_id)->first();
+
+        if (! $section) {
+
+            Home::create([
+                'school_id' => $request->school_id,
+                'gallery' => json_encode([$newData]),
+            ]);
+        } else {
+
+            $gallery = json_decode($section->gallery, true);
+
+            if (! is_array($gallery)) {
+                $gallery = [];
+            }
+
+            $gallery[] = $newData;
+
+            $section->update([
+                'gallery' => json_encode($gallery),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Gallery saved successfully');
     }
 
     public function SaveAboutSection(Request $request)

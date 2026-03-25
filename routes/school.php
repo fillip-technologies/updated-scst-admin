@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
+use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\WebsiteCmsController;
@@ -25,15 +26,22 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
     Route::view('/reports', 'modules.school.reports.index')->name('school.reports');
-    Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
-    Route::get('/website-cms',[WebsiteCmsController::class,'cmsIndex'])->name('school.website-cms');
-    Route::get('/website-cms/home',[WebsiteCmsController::class,'cmsHome'])->name('school.website-cms.home');
+
+    Route::get('/website-cms', [WebsiteCmsController::class, 'cmsIndex'])->name('school.website-cms');
+    Route::get('/website-cms/home', [WebsiteCmsController::class, 'cmsHome'])->name('school.website-cms.home');
     Route::post('/create/gallery/section', [ManageSchoolController::class, 'SaveGallerySection'])->name('gallery.save');
     Route::post('/create/hero/section', [ManageSchoolController::class, 'SaveHeroSection'])->name('hero.save');
+    Route::post('/update/hero/section', [ManageSchoolUpdateController::class, 'UpdateHeroSection'])->name('hero.update');
     Route::post('/create/about/section', [ManageSchoolController::class, 'SaveAboutSection'])->name('about.save');
+    Route::post('/update/about/section', [ManageSchoolUpdateController::class, 'UpdateAboutSection'])->name('about.update');
     Route::post('/create/school/ata/glance/section', [ManageSchoolController::class, 'SaveSchoolAtAGlance'])->name('glance.save');
+    Route::post('/update/school/ata/glance/section', [ManageSchoolUpdateController::class, 'UpdateSchoolAtAGlance'])->name('glance.update');
     Route::post('/create/infrastructure/section', [ManageSchoolController::class, 'SaveInfrastructureSection'])->name('infrastructure.save');
+    Route::post('/update/infrastructure/section', [ManageSchoolUpdateController::class, 'UpdateInfrastructureSection'])->name('infrastructure.update');
+
     Route::post('/create/activities/section', [ManageSchoolController::class, 'SaveActivitiesSection'])->name('activites.save');
+    Route::post('/update/activities/section', [ManageSchoolUpdateController::class, 'UpdateActivitiesSection'])->name('activites.update');
+    Route::post('/delete/activities/section', [ManageSchoolUpdateController::class, 'DeleteActivity'])->name('activites.delete');
     Route::get('/website-cms/home/hero', [WebsiteCmsController::class, 'cmshero'])->name('school.website-cms.home.hero');
     Route::get('/website-cms/home/gallery', [WebsiteCmsController::class, 'cmsgallery'])->name('school.website-cms.home.gallery');
     Route::get('/website-cms/home/about', [WebsiteCmsController::class, 'cmsabout'])->name('school.website-cms.home.about');
@@ -46,7 +54,10 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/website-cms/infrastructure', [WebsiteCmsController::class, 'cmsinfrastructureindex'])->name('school.website-cms.infrastructure');
     Route::get('/website-cms/staff', [WebsiteCmsController::class, 'cmsstaffindex'])->name('school.website-cms.staff');
     Route::get('/website-cms/notices', [WebsiteCmsController::class, 'cmsnoticeindex'])->name('school.website-cms.notices');
-
+    Route::post('/get/quize/edit/section', [ManageSchoolUpdateController::class, 'editQuize'])->name('quize.edit');
+    Route::post('/alumni/update/section', [ManageSchoolUpdateController::class, 'UpdateAlumniSection'])->name('alumni.update');
+    Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
+    Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
     // RouteCms-Wedsite
 
 });

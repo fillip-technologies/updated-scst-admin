@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
+use App\Models\Home;
 
 class WebsiteCmsController extends Controller
 {
@@ -13,7 +14,8 @@ class WebsiteCmsController extends Controller
 
     public function cmsHome()
     {
-        return view('modules.school.website-cms.home.index');
+        $homePage = Home::where('school_id',SchoolLogin()->id)->first();
+        return view('modules.school.website-cms.home.index',compact('homePage'));
     }
 
     public function cmshero()
