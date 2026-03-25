@@ -40,4 +40,9 @@ class School extends Authenticatable
     {
         return $this->hasMany(Infrastructure::class);
     }
+
+    public function Allclass()
+    {
+        $this->hasMany(AddClasses::class);
+    }
 }
