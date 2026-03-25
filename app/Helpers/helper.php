@@ -2,7 +2,8 @@
 
 if (!function_exists('districts')) {
 
-    function districts() {
+    function districts()
+    {
         return [
             'Araria',
             'Arwal',
@@ -44,11 +45,11 @@ if (!function_exists('districts')) {
             'West Champaran'
         ];
     }
-
 }
 
-if(!function_exists('category')){
-    function category(){
-        return ['Residential','Day School'];
+if (!function_exists('category')) {
+    function category()
+    {
+        return ['Boys', 'Girls', 'Co-educational'];
     }
 }
