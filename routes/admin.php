@@ -43,6 +43,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // System Settings
     Route::view('/system-settings', 'modules.system-settings.index')
         ->name('system.settings');
-    Route::get('/school-monitoring', [HomeController::class, 'schoolMonitoring'])
+    Route::get('/school-monitoring', [HomeController::class, 'monitoring'])
         ->name('school.monitoring');
+    Route::post('/send-notice', [HomeController::class, 'sendNotice'])
+        ->name('school.monitoring.send-notice');
 });
