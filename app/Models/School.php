@@ -45,4 +45,9 @@ class School extends Authenticatable
     {
         $this->hasMany(AddClasses::class);
     }
+
+    public function report()
+    {
+        $this->hasMany(Report::class);
+    }
 }

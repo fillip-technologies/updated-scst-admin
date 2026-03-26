@@ -5,6 +5,7 @@ namespace App\Http\Controllers\School\Class;
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Attendance;
+use App\Models\Report;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -75,5 +76,38 @@ class ClassController extends Controller
         }
 
         return back()->with('success', 'Attendance Saved');
+    }
+
+    public function ReportUpload(Request $request)
+    {
+
+        $request->validate([
+            'type' => 'required',
+            'school_id' => 'required',
+            'date' => 'required|date',
+            'report_img' => 'required|file',
+        ]);
+        $uploadImage = null;
+
+        if ($request->hasFile('report_img')) {
+            $file = $request->file('report_img');
+            $filename = time().$request->type.'.'.$file->getClientOriginalExtension();
+            $upload = public_path('Reports');
+            $file->move($upload, $filename);
+            $uploadImage = 'Reports/'.$filename;
+        }
+
+        $data = Report::create([
+            'type' => $request->type,
+            'date' => $request->date,
+            'school_id' => $request->school_id,
+            'report_img' => $uploadImage,
+        ]);
+        if ($data) {
+            return back()->with('success', 'Upload Reports SuccessFully');
+        } else {
+            return back()->with('error', 'Something Went Wrong');
+        }
+
     }
 }

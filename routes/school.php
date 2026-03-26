@@ -7,6 +7,7 @@ use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\StaffController;
+use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
     Route::post('/attendance/update',[ClassController::class, 'updateattendance'])->name('attendance.status.update');
+    Route::post('/studen/addmition',[StudentManageController::class,'createStudent'])->name('addmition.student');
+    Route::post('/report/send',[ClassController::class, 'ReportUpload'])->name('report.save');
     // RouteCms-Wedsite
 
     Route::get('classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');

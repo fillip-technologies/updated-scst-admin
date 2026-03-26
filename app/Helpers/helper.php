@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AddClasses;
+
 if (! function_exists('districts')) {
 
     function districts()
@@ -62,12 +64,21 @@ if (! function_exists('roll_number')) {
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
             'U', 'V', 'W', 'X', 'Y', 'Z',
         ];
-        
+
         $getnamesub = strtoupper(substr($student_name, 0, 2));
         $random_number = random_int(10000, 90000);
         $randomKey = array_rand($letters);
         $randomLetter = $letters[$randomKey];
 
         return $getnamesub.$random_number.$randomLetter;
+    }
+
+}
+
+if (! function_exists('getClass')) {
+    function getClass()
+    {
+        $classes = AddClasses::all();
+        return $classes;
     }
 }

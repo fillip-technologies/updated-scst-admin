@@ -1,6 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `
+                <ul style="text-align:center;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            `
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <div class="p-8 bg-gray-100 min-h-screen">
 
         <!-- Header -->
@@ -77,16 +104,60 @@
                         </div>
 
                     </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openModal()"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                            📤 Upload Report
+                        </button>
 
-                    <button onclick="history.back()"
-                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
-                        ← Back
-                    </button>
+                        <button onclick="history.back()"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                            ← Back
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Attendance Table -->
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100">
+                    <div id="uploadModal" class="fixed inset-0 hidden flex items-center justify-end me-5 mt-5 z-50">
 
+                        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative ml-4">
+
+                            <!-- Close Button -->
+                            <button onclick="closeModal()"
+                                class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-lg">
+                                ✖
+                            </button>
+
+                            <h2 class="text-lg font-semibold mb-4">Upload Report</h2>
+
+                            <!-- Form -->
+                            <form action="{{ route('report.save') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                <div class="mb-3">
+                                    <label class="block text-sm mb-1">Report Title</label>
+                                    <input type="text" name="type" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="block text-sm mb-1">Upload File</label>
+                                    <input type="file" name="report_img" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="block text-sm mb-1">Date</label>
+                                    <input type="date" name="date" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                </div>
+
+                                <button type="submit"
+                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">
+                                    Submit
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
                     <div class="flex justify-between items-center px-6 py-4 border-b">
                         <h2 class="font-semibold text-lg text-gray-700">
                             📚 Class Attendance List
@@ -159,7 +230,8 @@
                                                         Absent</option>
                                                     <option value="late" {{ $status == 'late' ? 'selected' : '' }}>⏰ Late
                                                     </option>
-                                                    <option value="excused" {{ $status == 'excused' ? 'selected' : '' }}>📄
+                                                    <option value="excused" {{ $status == 'excused' ? 'selected' : '' }}>
+                                                        📄
                                                         Excused</option>
 
                                                 </select>
@@ -197,6 +269,16 @@
         function selectClass(classId) {
             document.getElementById('selectedClass').value = classId;
             document.getElementById('classForm').submit();
+        }
+
+        function openModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+            document.getElementById('uploadModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('uploadModal').classList.remove('flex');
         }
     </script>
 @endsection
