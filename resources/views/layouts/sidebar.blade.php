@@ -58,7 +58,7 @@
             </a>
 
             <!-- School Management -->
-            <a href="{{ route('school.management') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+            <a href="{{ route('admin.school.management') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
                     stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -196,7 +196,7 @@
             Student Attendance
         </a>
 
-        <a href="{{ url('school-management') }}"
+        <a href="{{ route('school.management') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->is('school-management') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 

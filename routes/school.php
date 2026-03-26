@@ -19,9 +19,9 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('create/notice/section/staff', [NoticeController::class, 'SaveNotice'])->name('notice.save');
 
     Route::get('/homepagedata', [ManageSchoolController::class, 'getHomepagedata']);
-    Route::get('/dashboard', [WebsiteCmsController::class,'schoolDashboard'])->name('school.dashboard');
+    Route::get('/dashboard', [WebsiteCmsController::class, 'schoolDashboard'])->name('school.dashboard');
     Route::get('/logout', [LoginController::class, 'SchoolLogout'])->name('school.logout');
-    Route::get('/attendance', [WebsiteCmsController::class,'attandence'])->name('school.attendance');
+    Route::get('/attendance', [WebsiteCmsController::class, 'attandence'])->name('school.attendance');
     Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
     Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
@@ -59,8 +59,23 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/alumni/update/section', [ManageSchoolUpdateController::class, 'UpdateAlumniSection'])->name('alumni.update');
     Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
+    Route::post('/attendance/update',[ClassController::class, 'updateattendance'])->name('attendance.status.update');
     // RouteCms-Wedsite
 
-    Route::post('classs/filter/',[ClassController::class,'classFilter'])->name('class.filter');
+    Route::get('classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
+    Route::get('school/schoolmanagement', function () {
+        return view('modules.school.school-management.index');
+    });
 
+    Route::get('/schoolmanagement/create', function () {
+        return view('modules.school.school-management.create');
+    });
+
+    Route::get('/schoolmanagement/bulk-upload', function () {
+        return view('modules.school.school-management.bulk-upload');
+    });
+
+    Route::get('/schoolmanagement/edit/{id}', function ($id) {
+        return view('modules.school.school-management.edit');
+    });
 });

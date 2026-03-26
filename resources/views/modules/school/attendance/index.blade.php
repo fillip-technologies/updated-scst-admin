@@ -10,7 +10,7 @@
                 <p class="text-sm text-gray-500">Mark and manage daily student attendance records.</p>
             </div>
 
-            <input type="date" class="border rounded-lg px-3 py-2 text-sm">
+            {{-- <input type="date" class="border rounded-lg px-3 py-2 text-sm"> --}}
         </div>
 
         <div class="grid grid-cols-12 gap-6">
@@ -20,65 +20,76 @@
 
                 <h2 class="text-sm font-semibold text-gray-600 mb-4">Select Class</h2>
 
-                <div id="classList" class="space-y-2">
-                    <form id="classForm" action="{{ route('class.filter') }}" method="POST">
-                        @csrf
+                <form id="classForm" action="{{ route('class.filter') }}" method="GET">
 
-                        <input type="hidden" name="class" id="selectedClass">
-                        <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                    <input type="hidden" name="class" id="selectedClass">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
 
+                    @php
+                        $activeClass = session('selected_class') ?? $classes->first()->id;
+                    @endphp
+
+                    <div class="space-y-2">
                         @foreach ($classes as $class)
-                            <div onclick="selectClass('{{ $class->id }}', this)"
+                            <div onclick="selectClass('{{ $class->id }}')"
                                 class="class-item px-4 py-2 rounded-lg cursor-pointer
-                {{ (session('selected_class') ?? $classes->first()->id) == $class->id
-                    ? 'bg-primary-900 text-white'
-                    : 'hover:bg-gray-100 text-gray-700' }}">
-
+        {{ $activeClass == $class->id ? 'bg-primary-900 text-white' : 'hover:bg-gray-100 text-gray-700' }}">
                                 {{ $class->name }}
                             </div>
                         @endforeach
-                    </form>
-                </div>
+                    </div>
+                </form>
 
             </div>
 
-
             <!-- RIGHT SIDE -->
             <div class="col-span-9 space-y-6">
-
+                @php
+                    $activeClass = session('selected_class') ?? (request('class') ?? $classes->first()->id);
+                @endphp
                 <!-- Top Summary -->
+                @php
+                    $total = $studentdata->count();
+                    $present = $studentdata
+                        ->filter(fn($s) => optional($s->attendance->first())->status == 'present')
+                        ->count();
+                    $absent = $studentdata
+                        ->filter(fn($s) => optional($s->attendance->first())->status == 'absent')
+                        ->count();
+                @endphp
+
                 <div class="bg-white rounded-xl shadow-sm p-4 flex justify-between items-center">
 
                     <div class="flex gap-8 text-sm">
-
                         <div>
                             <p class="text-gray-500">TOTAL STUDENTS</p>
-                            <h3 id="totalCount" class="font-semibold text-gray-800">0</h3>
+                            <h3 class="font-semibold text-gray-800">{{ $total }}</h3>
                         </div>
 
                         <div>
                             <p class="text-gray-500">PRESENT</p>
-                            <h3 id="presentCount" class="font-semibold text-green-600">0</h3>
+                            <h3 class="font-semibold text-green-600">{{ $present }}</h3>
                         </div>
 
                         <div>
                             <p class="text-gray-500">ABSENT</p>
-                            <h3 id="absentCount" class="font-semibold text-red-500">0</h3>
+                            <h3 class="font-semibold text-red-500">{{ $absent }}</h3>
                         </div>
 
                     </div>
 
-                    <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search student..."
-                        class="border rounded-lg px-3 py-2 text-sm w-64">
+                    <button onclick="history.back()"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                        ← Back
+                    </button>
                 </div>
 
-
                 <!-- Attendance Table -->
-                <div class="bg-white rounded-xl shadow-sm">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100">
 
                     <div class="flex justify-between items-center px-6 py-4 border-b">
-                        <h2 id="classTitle" class="font-semibold text-gray-700">
-                            Class 1 Attendance List
+                        <h2 class="font-semibold text-lg text-gray-700">
+                            📚 Class Attendance List
                         </h2>
                     </div>
 
@@ -94,15 +105,70 @@
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y">
+                            <tbody id="attendanceBody" class="divide-y">
+
                                 @foreach ($studentdata as $student)
-                                    <tr>
-                                        <td class="py-3 px-6 text-left">{{ $student->roll_number }}</td>
-                                        <td class="py-3 px-6 text-left">{{ $student->name }}</td>
-                                        <td class="py-3 px-6 text-left">{{ $student->attendance}}</td>
-                                        <td class="py-3 px-6 text-left"></td>
+                                    @php
+                                        $attendance = $student->attendance->first();
+                                        $status = $attendance->status ?? null;
+                                    @endphp
+
+                                    <tr class="hover:bg-gray-50">
+
+                                        <!-- Roll -->
+                                        <td class="py-3 px-6 font-medium text-gray-700">
+                                            {{ $student->roll_number }}
+                                        </td>
+
+                                        <!-- Name -->
+                                        <td class="py-3 px-6 text-gray-600 student-name">
+                                            {{ $student->name }}
+                                        </td>
+
+                                        <!-- Status -->
+                                        <td class="py-3 px-6">
+                                            <span
+                                                class="
+                                            px-3 py-1 rounded-full text-xs font-semibold
+                                            @if ($status == 'present') bg-green-100 text-green-700
+                                            @elseif($status == 'absent') bg-red-100 text-red-700
+                                            @elseif($status == 'late') bg-yellow-100 text-yellow-700
+                                            @elseif($status == 'excused') bg-blue-100 text-blue-700
+                                            @else bg-gray-100 text-gray-600 @endif
+                                        ">
+                                                {{ ucfirst($status ?? 'N/A') }}
+                                            </span>
+                                        </td>
+
+                                        <!-- Action -->
+                                        <td class="py-3 px-6">
+                                            <form action="{{ route('attendance.status.update') }}" method="POST">
+                                                @csrf
+
+                                                <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                                <input type="hidden" name="class_id" value="{{ $student->class_id }}">
+                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                                <input type="hidden" name="date" value="{{ date('Y-m-d') }}">
+
+                                                <select name="status" onchange="this.form.submit()"
+                                                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+
+                                                    <option value="present" {{ $status == 'present' ? 'selected' : '' }}>✅
+                                                        Present</option>
+                                                    <option value="absent" {{ $status == 'absent' ? 'selected' : '' }}>❌
+                                                        Absent</option>
+                                                    <option value="late" {{ $status == 'late' ? 'selected' : '' }}>⏰ Late
+                                                    </option>
+                                                    <option value="excused" {{ $status == 'excused' ? 'selected' : '' }}>📄
+                                                        Excused</option>
+
+                                                </select>
+                                            </form>
+                                        </td>
+
                                     </tr>
                                 @endforeach
+
                             </tbody>
 
                         </table>
@@ -116,109 +182,9 @@
 
     </div>
 
-
+    <!-- JS -->
     <script>
-        // Sample data for all classes
-        let attendanceData = {};
-
-        for (let c = 1; c <= 10; c++) {
-            attendanceData[c] = [];
-            for (let i = 1; i <= 20; i++) {
-                attendanceData[c].push({
-                    roll: 100 + i,
-                    name: "Student " + i,
-                    status: "Present"
-                });
-            }
-        }
-
-        let currentClass = 1;
-
-        function renderTable() {
-
-            let tbody = document.getElementById("attendanceBody");
-            tbody.innerHTML = "";
-
-            let students = attendanceData[currentClass];
-
-            students.forEach((student, index) => {
-
-                let badgeColor = student.status === "Present" ?
-                    "bg-green-100 text-green-600" :
-                    "bg-red-100 text-red-600";
-
-                let buttonColor = student.status === "Present" ?
-                    "border-red-500 text-red-500" :
-                    "border-green-500 text-green-500";
-
-                let buttonText = student.status === "Present" ?
-                    "Mark Absent" :
-                    "Mark Present";
-
-                tbody.innerHTML += `
-            <tr class="hover:bg-gray-50">
-                <td class="py-3 px-6">${student.roll}</td>
-                <td class="py-3 px-6 student-name">${student.name}</td>
-                <td class="py-3 px-6">
-                    <span class="${badgeColor} px-3 py-1 rounded-full text-xs">
-                        ${student.status}
-                    </span>
-                </td>
-                <td class="py-3 px-6">
-                    <button onclick="toggleStatus(${index})"
-                        class="border ${buttonColor} px-3 py-1 rounded-md text-xs">
-                        ${buttonText}
-                    </button>
-                </td>
-            </tr>
-        `;
-            });
-
-            updateCounts();
-        }
-
-        function toggleStatus(index) {
-
-            let student = attendanceData[currentClass][index];
-
-            student.status = student.status === "Present" ? "Absent" : "Present";
-
-            renderTable();
-        }
-
-        function updateCounts() {
-
-            let students = attendanceData[currentClass];
-
-            let total = students.length;
-            let present = students.filter(s => s.status === "Present").length;
-            let absent = total - present;
-
-            document.getElementById("totalCount").innerText = total;
-            document.getElementById("presentCount").innerText = present;
-            document.getElementById("absentCount").innerText = absent;
-        }
-
-        function selectClass(classNumber) {
-
-            currentClass = classNumber;
-
-            document.querySelectorAll(".class-item").forEach(el => {
-                el.classList.remove("bg-primary-900", "text-white");
-                el.classList.add("hover:bg-gray-100", "text-gray-700");
-            });
-
-            let active = document.getElementById("class" + classNumber);
-            active.classList.add("bg-primary-900", "text-white");
-
-            document.getElementById("classTitle").innerText =
-                "Class " + classNumber + " Attendance List";
-
-            renderTable();
-        }
-
         function searchStudent() {
-
             let input = document.getElementById("searchInput").value.toLowerCase();
             let rows = document.querySelectorAll("#attendanceBody tr");
 
@@ -228,25 +194,8 @@
             });
         }
 
-        // Initial load
-        renderTable();
-    </script>
-
-    <script>
-        function selectClass(classId, el) {
-            // value set
+        function selectClass(classId) {
             document.getElementById('selectedClass').value = classId;
-
-            // UI update (instant feel)
-            document.querySelectorAll('.class-item').forEach(item => {
-                item.classList.remove('bg-primary-900', 'text-white');
-                item.classList.add('hover:bg-gray-100', 'text-gray-700');
-            });
-
-            el.classList.add('bg-primary-900', 'text-white');
-            el.classList.remove('hover:bg-gray-100', 'text-gray-700');
-
-            // submit
             document.getElementById('classForm').submit();
         }
     </script>

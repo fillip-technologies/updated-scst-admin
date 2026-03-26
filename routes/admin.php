@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
     Route::get('/logout', [LoginController::class, 'AdminLogout'])->name('admin.logout');
-    Route::get('/school-management', [HomeController::class, 'schoolManagement'])->name('school.management');
+    Route::get('/school-management', [HomeController::class, 'schoolManagement'])->name('admin.school.management');
     Route::get('/school-management/create', function () {return view('modules.school-management.create');});
     Route::post('/school/create', [SchoolManageController::class, 'AddSchool'])->name('save.school');
     Route::get('/edit/school/{id}', [SchoolManageController::class, 'EditSchool'])->name('edit.school');
