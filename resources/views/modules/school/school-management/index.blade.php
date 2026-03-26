@@ -158,10 +158,10 @@
                     </td>
                     <td class="py-3 px-6">
                         <div class="flex items-center gap-2">
-                            <a href="#" class="inline-flex items-center px-3 py-1 rounded-md bg-green-50 text-green-700 border border-green-200 text-xs font-medium hover:bg-green-100 transition">
+                            <a href="{{ url('school-management/edit/1') }}" class="inline-flex items-center px-3 py-1 rounded-md bg-green-50 text-green-700 border border-green-200 text-xs font-medium hover:bg-green-100 transition">
                                 Edit
                             </a>
-                            <button type="button" class="inline-flex items-center px-3 py-1 rounded-md bg-red-50 text-red-600 border border-red-200 text-xs font-medium hover:bg-red-100 transition">
+                            <button type="button" onclick="confirmDelete()" class="inline-flex items-center px-3 py-1 rounded-md bg-red-50 text-red-600 border border-red-200 text-xs font-medium hover:bg-red-100 transition">
                                 Delete
                             </button>
                         </div>
@@ -188,6 +188,11 @@
         renderTable();
     }
 
+    function confirmDelete() {
+        if (confirm('Are you sure you want to delete this student?')) {
+            alert('Deleted (UI only)');
+        }
+    }
     function searchStudent() {
         const query = document.getElementById('searchInput').value.toLowerCase();
         const rows = document.querySelectorAll('#studentTableBody tr');

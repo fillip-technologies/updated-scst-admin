@@ -43,6 +43,10 @@ Route::get('/school-management/bulk-upload', function () {
     return view('modules.school.school-management.bulk-upload');
 });
 
+Route::get('/school-management/edit/{id}', function ($id) {
+    return view('modules.school.school-management.edit');
+});
+
 // // School Management Edit
 // Route::view('/school-management/edit', 'modules.school-management.edit')
 //     ->name('school-management.edit');

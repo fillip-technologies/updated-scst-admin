@@ -14,7 +14,5 @@
         @include('modules.school-monitoring.components.drawer')
     </div>
 
-    <script>
-        @php echo file_get_contents(resource_path('views/modules/school-monitoring/js/monitoring.js')); @endphp
-    </script>
+    <script src="{{ asset('js/monitoring.js') }}"></script>
 @endsection
