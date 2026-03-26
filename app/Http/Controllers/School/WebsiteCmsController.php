@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
+use App\Models\AddClasses;
+use App\Models\Attendance;
 use App\Models\Home;
+use App\Models\Student;
 
 class WebsiteCmsController extends Controller
 {
+
+public function schoolDashboard(){
+    return view('modules.school.dashboard.index');
+}
     public function cmsIndex()
     {
         return view('modules.school.website-cms.index');
@@ -14,8 +21,9 @@ class WebsiteCmsController extends Controller
 
     public function cmsHome()
     {
-        $homePage = Home::where('school_id',SchoolLogin()->id)->first();
-        return view('modules.school.website-cms.home.index',compact('homePage'));
+        $homePage = Home::where('school_id', SchoolLogin()->id)->first();
+
+        return view('modules.school.website-cms.home.index', compact('homePage'));
     }
 
     public function cmshero()
@@ -76,5 +84,28 @@ class WebsiteCmsController extends Controller
     public function cmsnoticeindex()
     {
         return view('modules.school.notices.index');
+    }
+
+    public function attandence()
+    {
+
+        $classes = AddClasses::all();
+        $studentdata = Student::with(['attendance'])->get();
+        return view('modules.school.attendance.index',compact('classes','studentdata'));
+    }
+
+    public function academics()
+    {
+        return view('modules.school.academics.index');
+    }
+
+    public function mealreporting()
+    {
+        return view('modules.school.meal-reporting.index');
+    }
+
+    public function reports(){
+
+        return view('modules.school.reports.index');
     }
 }

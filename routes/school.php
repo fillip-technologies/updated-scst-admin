@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\School\Class\ClassController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
@@ -17,15 +18,15 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('create/teache/section/staff', [StaffController::class, 'SaveTeacher'])->name('staff.save.teacher');
     Route::post('create/notice/section/staff', [NoticeController::class, 'SaveNotice'])->name('notice.save');
 
-    Route::get('homepagedata', [ManageSchoolController::class, 'getHomepagedata']);
-    Route::view('/dashboard', 'modules.school.dashboard.index')->name('school.dashboard');
+    Route::get('/homepagedata', [ManageSchoolController::class, 'getHomepagedata']);
+    Route::get('/dashboard', [WebsiteCmsController::class,'schoolDashboard'])->name('school.dashboard');
     Route::get('/logout', [LoginController::class, 'SchoolLogout'])->name('school.logout');
-    Route::view('/attendance', 'modules.school.attendance.index')->name('school.attendance');
-    Route::view('/academics', 'modules.school.academics.index')->name('school.academics');
-    Route::view('/meal-reporting', 'modules.school.meal-reporting.index')->name('school.meal');
+    Route::get('/attendance', [WebsiteCmsController::class,'attandence'])->name('school.attendance');
+    Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
+    Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
-    Route::view('/reports', 'modules.school.reports.index')->name('school.reports');
+    Route::get('/reports', [WebsiteCmsController::class, 'reports'])->name('school.reports');
 
     Route::get('/website-cms', [WebsiteCmsController::class, 'cmsIndex'])->name('school.website-cms');
     Route::get('/website-cms/home', [WebsiteCmsController::class, 'cmsHome'])->name('school.website-cms.home');
@@ -59,5 +60,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
     // RouteCms-Wedsite
+
+    Route::post('classs/filter/',[ClassController::class,'classFilter'])->name('class.filter');
 
 });

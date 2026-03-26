@@ -13,9 +13,11 @@ class ClassController extends Controller
             'class'=>'required',
             'classname'=>'required',
         ]);
-
         $schoolId = trim($request->school_id);
-        
+    }
 
+    public function classFilter(Request $request){
+        // return redirect('school/attendance');
+        dd($request->all());
     }
 }

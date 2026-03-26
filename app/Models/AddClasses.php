@@ -22,8 +22,9 @@ class AddClasses extends Model
         $this->hasMany(Student::class);
     }
 
-    public function attendances()
+    public function attendance()
     {
         return $this->hasMany(Attendance::class);
     }
+
 }

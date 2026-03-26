@@ -20,6 +20,7 @@ class HomeController extends Controller
         //     'role'=>'admin'
         // ]);
         return view('auth.login');
+
     }
 
     public function schoolMonitoring()

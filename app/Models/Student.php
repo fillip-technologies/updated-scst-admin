@@ -27,12 +27,13 @@ class Student extends Model
 
     protected $primaryKey = 'id';
 
-    public function allClass()
+    public function attendance()
     {
-        $this->belongsTo(AddClasses::class);
+        return $this->hasMany(Attendance::class);
     }
-    public function attendances()
+
+    public function allclass()
     {
-        return $this->hasMany(Attendance::class, 'class_id');
+        return $this->belongsTo(AddClasses::class);
     }
 }
