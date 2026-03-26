@@ -1,21 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
- @if ($errors->any())
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                html: `
-                <ul style="text-align:center;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            `
-            });
-        </script>
-    @endif
+
 
     @if (session('success'))
         <script>
@@ -42,6 +28,7 @@
 
                 <form method="POST" action="{{ route('addmition.student') }}" class="p-6 space-y-6">
                     @csrf
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 

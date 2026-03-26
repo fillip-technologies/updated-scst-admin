@@ -12,11 +12,12 @@ class StudentManageController extends Controller
 {
     public function createStudent(Request $request)
     {
-        try {
+
 
             $request->validate([
                 'name' => 'required|string',
                 'class_id' => 'required',
+                'school_id'=>'required',
                 'dob' => 'required|date',
                 'gender' => 'required|in:male,female,other',
                 'email' => 'required|email',
@@ -31,6 +32,7 @@ class StudentManageController extends Controller
                 'name' => $request->name,
                 'roll_number' => $roll_number, // direct use
                 'class_id' => $request->class_id,
+                'school_id'=>$request->school_id,
                 'dob' => $request->dob,
                 'gender' => $request->gender,
                 'email' => $request->email,
@@ -45,8 +47,6 @@ class StudentManageController extends Controller
 
             return back()->with('success', 'Student Admission Successfully');
 
-        } catch (Exception $e) {
-            return back()->with('error', 'Something Went Wrong: '.$e->getMessage());
-        }
+
     }
 }

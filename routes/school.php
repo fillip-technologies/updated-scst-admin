@@ -61,7 +61,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
     Route::post('/attendance/update',[ClassController::class, 'updateattendance'])->name('attendance.status.update');
-    Route::post('/studen/addmition',[StudentManageController::class,'createStudent'])->name('addmition.student');
+    Route::post('/student/addmition',[StudentManageController::class,'createStudent'])->name('addmition.student');
     Route::post('/report/send',[ClassController::class, 'ReportUpload'])->name('report.save');
     // RouteCms-Wedsite
 
