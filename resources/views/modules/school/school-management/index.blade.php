@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+=
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <div class="bg-gray-100 min-h-screen">
         <div class="flex justify-between items-start mb-6">
             <div>

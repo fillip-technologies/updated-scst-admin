@@ -28,8 +28,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('rankings');
 
     // Reports
-    Route::view('/reports', 'modules.reports.index')
-        ->name('reports');
+    Route::get('/reports',[HomeController::class,'allreport'])->name('report');
     Route::get('/reports/data', [HomeController::class, 'getReportsData'])
         ->name('reports.data');
 
