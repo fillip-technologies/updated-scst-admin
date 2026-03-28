@@ -125,6 +125,30 @@ class HomeController extends Controller
     {
     }
 
+    public function infraInfo()
+    {
+        return view('modules.school.infra-info.index');
+    }
+
+    public function storeInfraInfo()
+    {
+        return redirect()
+            ->route('school.infra.info')
+            ->with('success', 'Infrastructure info submitted successfully.');
+    }
+
+    public function editInfraInfo()
+    {
+        return view('modules.school.infra-info.edit');
+    }
+
+    public function updateInfraInfo()
+    {
+        return redirect()
+            ->route('school.infra.edit')
+            ->with('success', 'Infrastructure info updated successfully.');
+    }
+
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
     {
         $search = strtolower(trim((string) $request->input('search')));

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
@@ -28,6 +29,10 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/attendance', [WebsiteCmsController::class, 'attandence'])->name('school.attendance');
     Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
     Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
+    Route::get('/infra-info', [HomeController::class, 'infraInfo'])->name('school.infra.info');
+    Route::post('/infra-info/store', [HomeController::class, 'storeInfraInfo'])->name('school.infra.store');
+    Route::get('/infra-info/edit', [HomeController::class, 'editInfraInfo'])->name('school.infra.edit');
+    Route::post('/infra-info/update', [HomeController::class, 'updateInfraInfo'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
     Route::get('/reports', [WebsiteCmsController::class, 'reports'])->name('school.reports');
