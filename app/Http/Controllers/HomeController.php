@@ -122,7 +122,8 @@ class HomeController extends Controller
     }
 
     public function allreport(){
-        return view('modules.reports.index');
+        $allSchools = School::select('id','school_name')->get();
+        return view('modules.reports.index',compact('allSchools'));
     }
 
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection

@@ -13,7 +13,7 @@
     @endphp
 
     <div class="space-y-6" x-data="reportsDashboard()" x-init="init()">
-        @include('modules.reports.partials.filter-bar')
+        @include('modules.reports.partials.filter-bar', ['schools' => $allSchools])
 
         <section>
             @include('modules.reports.partials.report-display')

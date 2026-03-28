@@ -37,7 +37,8 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
         </div>
     </div>
 
-    <form class="mt-6 grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-5" @submit.prevent="fetchReportData">
+    <form class="mt-6 grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-5" action="{{ route('show.all.report') }}" method="GET">
+        @csrf
         <div>
             <label for="district" class="mb-1 block text-sm text-gray-500">Select District</label>
             <select
@@ -46,7 +47,7 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
                 x-model="filters.district"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select District</option>
-                @foreach ($districtOptions as $district)
+                @foreach (districts() as $district)
                     <option value="{{ $district }}">{{ $district }}</option>
                 @endforeach
             </select>
@@ -61,7 +62,7 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select School</option>
                 @foreach ($schools as $school)
-                    <option value="{{ $school['id'] }}">{{ $school['name'] }}</option>
+                    <option value="{{ $school['id'] }}">{{ $school->school_name }}</option>
                 @endforeach
             </select>
         </div>

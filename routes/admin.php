@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\SchoolManageController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\School\ReportManageController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
@@ -19,6 +21,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::delete('/delete/{id}/school', [SchoolManageController::class, 'DeleteSchool'])->name('delete.school');
     Route::post('/update/school/{id}/status', [SchoolManageController::class, 'StatusUpdate'])->name('status.update');
     Route::get('school/export', [SchoolManageController::class, 'SchoolExport'])->name('export.school');
+    Route::get('/getall/report',[ReportManageController::class, 'showallReport'])->name('show.all.report');
 
     Route::view('/performance-analytics', 'modules.performance-management.index')
         ->name('performance.analytics');
