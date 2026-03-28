@@ -79,6 +79,35 @@ if (! function_exists('getClass')) {
     function getClass()
     {
         $classes = AddClasses::all();
+
         return $classes;
+    }
+}
+
+if (! function_exists('academicType')) {
+    function academicType()
+    {
+        return [
+            'Student Attendance',
+            'Student Marks',
+            'Teacher Attendance',
+            'Student Leave',
+            'Dropout Rate',
+            'Meal Attendance',
+        ];
+    }
+}
+
+if (! function_exists('infrastructureType')) {
+    function infrastructureType()
+    {
+        return [
+            'Electricity',
+            'Toilets',
+            'Drinking Water',
+            'Building Safety',
+            'Network',
+
+        ];
     }
 }

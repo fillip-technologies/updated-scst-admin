@@ -10,7 +10,7 @@ class Report extends Model
 
     protected $table = 'reports';
 
-    protected $fillable = ['school_id', 'type', 'report_img','date','district'];
+    protected $fillable = ['school_id', 'type', 'report_img','date','district','report_type'];
 
     public function school()
     {

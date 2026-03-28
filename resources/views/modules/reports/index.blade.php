@@ -13,10 +13,16 @@
     @endphp
 
     <div class="space-y-6" x-data="reportsDashboard()" x-init="init()">
-        @include('modules.reports.partials.filter-bar', ['schools' => $allSchools])
+        @include('modules.reports.partials.filter-bar', [
+            'schools' => $allSchools ?? null,
+            'allReports' => $reports ?? null,
+        ])
 
         <section>
-            @include('modules.reports.partials.report-display')
+            @include('modules.reports.partials.report-display', [
+                'allReports' => $reports ?? null,
+                'schools' => $allSchools ?? null,
+            ])
         </section>
     </div>
 
@@ -29,20 +35,51 @@
                 hasLoaded: false,
                 tableRows: [],
                 reportOptions: {
-                    academic: [
-                        { value: 'student_attendance', label: 'Student Attendance' },
-                        { value: 'student_marks', label: 'Student Marks' },
-                        { value: 'student_leave', label: 'Student Leave' },
-                        { value: 'teacher_attendance', label: 'Teacher Attendance' },
-                        { value: 'dropout_rate', label: 'Dropout Rate' },
-                        { value: 'meal_attendance', label: 'Meal Attendance' },
+                    academic: [{
+                            value: 'Student Attendance',
+                            label: 'Student Attendance'
+                        },
+                        {
+                            value:'Student Marks',
+                            label: 'Student Marks'
+                        },
+                        {
+                            value: 'Student Leave',
+                            label: 'Student Leave'
+                        },
+                        {
+                            value: 'Teacher Attendance',
+                            label: 'Teacher Attendance'
+                        },
+                        {
+                            value: 'Dropout Rate',
+                            label: 'Dropout Rate'
+                        },
+                        {
+                            value: 'Meal Attendance',
+                            label: 'Meal Attendance'
+                        },
                     ],
-                    infrastructure: [
-                        { value: 'electricity', label: 'Electricity' },
-                        { value: 'toilets', label: 'Toilets' },
-                        { value: 'drinking_water', label: 'Drinking Water' },
-                        { value: 'building_safety', label: 'Building Safety' },
-                        { value: 'network', label: 'Network' },
+                    infrastructure: [{
+                            value: 'Electricity',
+                            label: 'Electricity'
+                        },
+                        {
+                            value: 'Toilets',
+                            label: 'Toilets'
+                        },
+                        {
+                            value: 'Drinking Water',
+                            label: 'Drinking Water'
+                        },
+                        {
+                            value: 'Building Safety',
+                            label: 'Building Safety'
+                        },
+                        {
+                            value: 'Network',
+                            label: 'Network'
+                        },
                     ],
                 },
                 filters: {

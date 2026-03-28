@@ -93,6 +93,17 @@
                         <input type="text" name="menu" class="mt-2 w-full border rounded-lg px-4 py-2"
                             placeholder="Rice, Dal, Mixed Veg, Salad">
                     </div>
+                     <div class="mb-3">
+                                    <label class="block text-sm mb-1">Report Type</label>
+                                    <select name="report_type" id="report_type"
+                                        class="w-full border rounded-lg px-3 py-2 text-sm">
+                                        <option value="">Select Report Type</option>
+                                        @foreach (academicType() as $academic)
+                                            <option value="{{ $academic }}">{{ $academic }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
 
                     <!-- Rating -->
                     <div class="mb-6">

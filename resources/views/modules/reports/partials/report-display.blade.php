@@ -1,3 +1,7 @@
+@php
+    print_r($allReports);
+@endphp
+
 <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
     <div class="flex flex-col gap-4 border-b border-slate-100 pb-4 lg:flex-row lg:items-center lg:justify-between">
         <div>

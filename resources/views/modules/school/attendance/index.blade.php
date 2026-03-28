@@ -136,15 +136,22 @@
                             <form action="{{ route('report.save') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
-                                  <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
+                                <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
                                 <div class="mb-3">
-                                    <label class="block text-sm mb-1">Report Title</label>
-                                    <input type="text" name="type" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                    <label class="block text-sm mb-1">Report Type</label>
+                                    <select name="report_type" id="report_type"
+                                        class="w-full border rounded-lg px-3 py-2 text-sm">
+                                        <option value="">Select Report Type</option>
+                                        @foreach (academicType() as $academic)
+                                            <option value="{{ $academic }}">{{ $academic }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">Upload File</label>
-                                    <input type="file" name="report_img" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                    <input type="file" name="report_img"
+                                        class="w-full border rounded-lg px-3 py-2 text-sm">
                                 </div>
 
                                 <div class="mb-4">
@@ -230,7 +237,8 @@
                                                         Present</option>
                                                     <option value="absent" {{ $status == 'absent' ? 'selected' : '' }}>❌
                                                         Absent</option>
-                                                    <option value="late" {{ $status == 'late' ? 'selected' : '' }}>⏰ Late
+                                                    <option value="late" {{ $status == 'late' ? 'selected' : '' }}>⏰
+                                                        Late
                                                     </option>
                                                     <option value="excused" {{ $status == 'excused' ? 'selected' : '' }}>
                                                         📄
