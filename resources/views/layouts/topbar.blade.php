@@ -30,14 +30,14 @@
 
                 {{ Auth::user()->role === 'school_admin'
                     ? strtoupper(substr(Auth::user()->school->principle_name, 0, 2))
-                    : 'AD' }}
+                    : 'PR' }}
 
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-800">
                    {{ Auth::user()->role === 'school_admin'
                     ? Auth::user()->school->principle_name
-                    : 'Director' }}
+                    : 'Priyanka Rani (IAS)' }}
                 </p>
                 <p class="text-xs text-gray-500">
                     SC & ST Dept

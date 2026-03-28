@@ -4,15 +4,15 @@
     <!-- Header -->
     <div class="h-[88px] px-6 flex items-center border-b border-primary-800 flex-shrink-0">
         <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-accent-500 rounded-md flex items-center justify-center font-semibold text-black">
-                A
+            <div class="w-10 h-10 rounded-md overflow-hidden bg-black flex items-center justify-center">
+                <img src="{{ asset('images/bihar-sarka.png') }}" alt="Logo" class="w-full h-full object-contain">
             </div>
             <div>
                 <h2 class="text-white text-xl font-semibold">
-                    Admin Panel
+                    SC & ST Welfare
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">
-                    v2.4.0
+                    2026
                 </p>
             </div>
         </div>
@@ -64,7 +64,27 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M4 6h16v12H4z" />
                 </svg>
-                School Management
+                Manage School
+            </a>
+
+            <!-- Reports -->
+            <a href="{{ route('reports') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                    stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 2h9l5 5v15H6z" />
+                </svg>
+                Reports
+            </a>
+
+            <!-- Rankings -->
+            <a href="{{ route('rankings') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                    stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8 21l4-7 4 7M12 14V3" />
+                </svg>
+                Rankings
             </a>
 
             <!-- Performance -->
@@ -80,25 +100,9 @@
                 Performance Analytics
             </a>
 
-            <!-- Rankings -->
-            <a href="{{ route('rankings') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="1.8" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M8 21l4-7 4 7M12 14V3" />
-                </svg>
-                Rankings
-            </a>
 
-            <!-- Reports -->
-            <a href="{{ route('reports') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="1.8" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6 2h9l5 5v15H6z" />
-                </svg>
-                Reports
-            </a>
+
+
 
             <!-- Approvals -->
             <a href="{{ route('approvals') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
@@ -167,9 +171,9 @@
             Sign Out
         </a>
     </div>
-@else
+    @else
 
-                                                      {{-- SCHOOL PANENL --}}
+    {{-- SCHOOL PANENL --}}
 
     <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">
         School Panel
