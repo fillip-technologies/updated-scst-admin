@@ -50,4 +50,8 @@ class School extends Authenticatable
     {
         $this->hasMany(Report::class);
     }
+
+    public function mealreport(){
+        return $this->hasMany(MealReport::class);
+    }
 }

@@ -137,7 +137,7 @@ class StudentManageController extends Controller
         $classes = AddClasses::where('school_id', $schoolId)->get();
         $studentdata = Student::with('allclass')
             ->where('class_id', $classId)
-            ->get();
+            ->paginate(10);
 
         return view('modules.school.school-management.index', compact('studentdata', 'classes'));
     }

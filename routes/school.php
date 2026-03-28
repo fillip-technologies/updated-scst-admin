@@ -6,11 +6,13 @@ use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\NoticeController;
+use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('school')->middleware('school')->group(function () {
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
@@ -63,7 +65,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
     Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('attendance.status.update');
     Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
-    Route::post('/report/send', [ClassController::class, 'ReportUpload'])->name('report.save');
+    Route::post('/report/send', [ReportManageController::class, 'ReportUpload'])->name('report.save');
+    Route::post('/meals/report',[ReportManageController::class, 'mealReport'])->name('meal.report');
     // RouteCms-Wedsite
     Route::get('/attendance/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
       Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');

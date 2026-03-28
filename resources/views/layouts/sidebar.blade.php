@@ -204,7 +204,7 @@
         {{ request()->is('school-management') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
             <i class="fa-solid fa-school {{ request()->is('school-management') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-            School Management
+            Students Management
         </a>
 
         <!-- Academic Activities -->
