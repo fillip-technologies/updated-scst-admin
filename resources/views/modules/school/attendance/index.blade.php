@@ -52,6 +52,7 @@
                     <input type="hidden" name="class" id="selectedClass">
                     <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
 
+
                     @php
                         $activeClass = session('selected_class') ?? $classes->first()->id;
                     @endphp
@@ -135,6 +136,7 @@
                             <form action="{{ route('report.save') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                  <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">Report Title</label>
                                     <input type="text" name="type" class="w-full border rounded-lg px-3 py-2 text-sm">

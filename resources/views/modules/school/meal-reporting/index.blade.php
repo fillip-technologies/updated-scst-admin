@@ -1,6 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+ @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `
+                <ul style="text-align:center;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            `
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <div class="p-8 bg-gray-100 min-h-screen">
 
         <!-- Header -->
@@ -34,7 +61,8 @@
 
                     <!-- Hidden Fields -->
                     <input type="hidden" name="meal_type" id="meal_type" value="lunch">
-                    <input type="hidden" name="rating" id="rating" value="0">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                     <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
 
                     <!-- Meal Time -->
                     <div class="grid grid-cols-3 gap-4 mb-6">
@@ -83,7 +111,7 @@
                     <div class="mb-6">
                         <label class="text-sm text-gray-600">Upload Meal Photo</label>
 
-                        <input type="file" name="photo" id="photoInput" class="hidden">
+                        <input type="file" name="reportimage" id="photoInput" class="hidden">
 
                         <div onclick="document.getElementById('photoInput').click()"
                             class="mt-3 border-2 border-dashed rounded-xl h-40 flex items-center justify-center cursor-pointer text-gray-400">
