@@ -10,38 +10,12 @@
             ['id' => 'sch-105', 'name' => 'Purulia Model Residential School', 'district' => 'Purulia'],
         ];
 
-        $reportGroups = [
-            'academic' => [
-                'label' => 'Academic Reports',
-                'description' => 'Track participation, learning continuity, and attendance outcomes across monitored schools.',
-                'reports' => [
-                    ['key' => 'student_attendance', 'label' => 'Student Attendance', 'icon' => 'fa-user-check'],
-                    ['key' => 'student_marks', 'label' => 'Student Marks', 'icon' => 'fa-chart-column'],
-                    ['key' => 'student_leave', 'label' => 'Student Leave', 'icon' => 'fa-calendar-minus'],
-                    ['key' => 'teacher_attendance', 'label' => 'Teacher Attendance', 'icon' => 'fa-chalkboard-user'],
-                    ['key' => 'dropout_rate', 'label' => 'Dropout Rate', 'icon' => 'fa-arrow-trend-down'],
-                    ['key' => 'meal_attendance', 'label' => 'Meal Attendance', 'icon' => 'fa-bowl-food'],
-                ],
-            ],
-            'infrastructure' => [
-                'label' => 'Infrastructure Reports',
-                'description' => 'Review essential school facilities and operational readiness at the district level.',
-                'reports' => [
-                    ['key' => 'electricity', 'label' => 'Electricity', 'icon' => 'fa-bolt'],
-                    ['key' => 'toilets', 'label' => 'Toilets', 'icon' => 'fa-restroom'],
-                    ['key' => 'drinking_water', 'label' => 'Drinking Water', 'icon' => 'fa-faucet-drip'],
-                    ['key' => 'building_safety', 'label' => 'Building Safety', 'icon' => 'fa-shield-halved'],
-                    ['key' => 'network', 'label' => 'Network', 'icon' => 'fa-tower-cell'],
-                ],
-            ],
-        ];
     @endphp
 
     <div class="space-y-6" x-data="reportsDashboard()" x-init="init()">
         @include('modules.reports.partials.filter-bar')
 
-        <section class="grid grid-cols-1 gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-            @include('modules.reports.partials.report-selector')
+        <section>
             @include('modules.reports.partials.report-display')
         </section>
     </div>
@@ -49,12 +23,28 @@
     <script>
         function reportsDashboard() {
             return {
-                activeGroup: 'academic',
+                selectedCategory: '',
                 selectedReport: '',
-                selectedReportLabel: '',
                 isLoading: false,
                 hasLoaded: false,
                 tableRows: [],
+                reportOptions: {
+                    academic: [
+                        { value: 'student_attendance', label: 'Student Attendance' },
+                        { value: 'student_marks', label: 'Student Marks' },
+                        { value: 'student_leave', label: 'Student Leave' },
+                        { value: 'teacher_attendance', label: 'Teacher Attendance' },
+                        { value: 'dropout_rate', label: 'Dropout Rate' },
+                        { value: 'meal_attendance', label: 'Meal Attendance' },
+                    ],
+                    infrastructure: [
+                        { value: 'electricity', label: 'Electricity' },
+                        { value: 'toilets', label: 'Toilets' },
+                        { value: 'drinking_water', label: 'Drinking Water' },
+                        { value: 'building_safety', label: 'Building Safety' },
+                        { value: 'network', label: 'Network' },
+                    ],
+                },
                 filters: {
                     district: '',
                     school_id: '',
@@ -62,9 +52,8 @@
                 init() {
                     this.tableRows = [];
                 },
-                selectReport(reportType, label) {
-                    this.selectedReport = reportType;
-                    this.selectedReportLabel = label;
+                availableReports() {
+                    return this.reportOptions[this.selectedCategory] || [];
                 },
                 prettify(value) {
                     return value
