@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Exports\StudentExport;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
+use App\Imports\StudentImport;
 use App\Models\AddClasses;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentManageController extends Controller
 {
@@ -44,13 +47,13 @@ class StudentManageController extends Controller
 
         ManageCrud::createdatas(Student::class, $data);
 
-         return redirect()->route('school.student')->with('success', 'Student Admission Successfully');
+        return redirect()->route('school.student')->with('success', 'Student Admission Successfully');
 
     }
 
     public function getallStudent()
     {
-        $studentdata = Student::with(['allclass'])->get();
+        $studentdata = Student::with(['allclass'])->paginate(10);
         $classes = AddClasses::all();
 
         return view('modules.school.school-management.index', compact('studentdata', 'classes'));
@@ -109,10 +112,51 @@ class StudentManageController extends Controller
         return redirect()->route('school.student')->with('success', 'Student Updated Successfully');
     }
 
-    public function studentDelete($id){
-          $id = trim($id);
-          ManageCrud::deletedata(Student::class,$id);
-          return redirect()->route('school.student')->with('success', 'Student deleted Successfully');
+    public function studentDelete($id)
+    {
+        $id = trim($id);
+        ManageCrud::deletedata(Student::class, $id);
+
+        return redirect()->route('school.student')->with('success', 'Student deleted Successfully');
+
+    }
+
+    public function studentclassFilter(Request $request)
+    {
+        $request->validate([
+            'class' => 'required',
+            'school_id' => 'required',
+        ]);
+
+        $schoolId = $request->school_id;
+        $classId = $request->class
+            ?? session('selected_class')
+            ?? AddClasses::where('school_id', $schoolId)->first()->id;
+
+        session(['selected_class' => $classId]);
+        $classes = AddClasses::where('school_id', $schoolId)->get();
+        $studentdata = Student::with('allclass')
+            ->where('class_id', $classId)
+            ->get();
+
+        return view('modules.school.school-management.index', compact('studentdata', 'classes'));
+    }
+
+    public function exportStudent()
+    {
+        return Excel::download(new StudentExport, 'student.xlsx');
+    }
+
+    public function importStudent(Request $request)
+    {
+        $request->validate([
+            // 'class' => 'required',
+            'upload_file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        Excel::import(new StudentImport, $request->file('upload_file'));
+
+        return redirect()->route('school.student')->with('success', 'Students Imported Successfully');
 
     }
 }

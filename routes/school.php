@@ -65,11 +65,14 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
     Route::post('/report/send', [ClassController::class, 'ReportUpload'])->name('report.save');
     // RouteCms-Wedsite
-    Route::get('/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
+    Route::get('/attendance/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
+      Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');
     Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('school.student');
     Route::get('/schoolmanagement/create', [StudentManageController::class, 'studentCreate'])->name('school.stud.create');
     Route::get('/schoolmanagement/bulk-upload', [StudentManageController::class, 'bulkUploadStudent'])->name('student.bulkupload');
     Route::get('/schoolmanagement/edit/{id}', [StudentManageController::class, 'studentEdit'])->name('school.stud.edit');
     Route::post('/student/update/{id}',[StudentManageController::class, 'studentUpdate'])->name('student.update');
     Route::delete('/student/delete/{id}',[StudentManageController::class, 'studentDelete'])->name('student.delete');
+    Route::get('/student/export',[StudentManageController::class, 'exportStudent'])->name('student.export');
+    Route::post('/student/import',[StudentManageController::class, 'importStudent'])->name('student.import');
 });
