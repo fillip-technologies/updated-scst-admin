@@ -121,8 +121,8 @@ class HomeController extends Controller
         return view('modules.performance-management.index');
     }
 
-    public function getReportsData()
-    {
+    public function allreport(){
+        return view('modules.reports.index');
     }
 
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
