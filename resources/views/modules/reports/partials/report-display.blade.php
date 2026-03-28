@@ -3,10 +3,10 @@
         <div>
             <h2 class="text-xl font-semibold text-slate-900">Report Output</h2>
             <p class="mt-1 text-sm text-slate-500">
-                <template x-if="selectedReportLabel">
-                    <span x-text="selectedReportLabel + ' report selected'"></span>
+                <template x-if="selectedReport">
+                    <span x-text="prettify(selectedReport) + ' report selected'"></span>
                 </template>
-                <template x-if="!selectedReportLabel">
+                <template x-if="!selectedReport">
                     <span>Please select filters and report</span>
                 </template>
             </p>
@@ -15,7 +15,8 @@
         <div class="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
             <span class="rounded-full bg-slate-100 px-3 py-1.5" x-text="filters.district ? 'District: ' + prettify(filters.district) : 'District: Not selected'"></span>
             <span class="rounded-full bg-slate-100 px-3 py-1.5" x-text="selectedSchoolLabel()"></span>
-            <span class="rounded-full bg-slate-100 px-3 py-1.5" x-text="selectedReportLabel ? 'Report: ' + selectedReportLabel : 'Report: Not selected'"></span>
+            <span class="rounded-full bg-slate-100 px-3 py-1.5" x-text="selectedCategory ? 'Category: ' + prettify(selectedCategory) : 'Category: Not selected'"></span>
+            <span class="rounded-full bg-slate-100 px-3 py-1.5" x-text="selectedReport ? 'Report: ' + prettify(selectedReport) : 'Report: Not selected'"></span>
         </div>
     </div>
 
@@ -28,7 +29,7 @@
             </div>
             <h3 class="mt-4 text-lg font-semibold text-slate-900">Please select filters and report</h3>
             <p class="mt-2 max-w-lg text-sm text-slate-500">
-                Choose a district, school, and report from the library to preview district monitoring data here.
+                Choose a district, school, category, and report to preview district monitoring data here.
             </p>
         </div>
 
