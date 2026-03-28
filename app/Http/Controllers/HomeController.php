@@ -121,6 +121,10 @@ class HomeController extends Controller
         return view('modules.performance-management.index');
     }
 
+    public function getReportsData()
+    {
+    }
+
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
     {
         $search = strtolower(trim((string) $request->input('search')));

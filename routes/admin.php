@@ -28,38 +28,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // Reports
     Route::view('/reports', 'modules.reports.index')
         ->name('reports');
-    Route::get('/reports/data', function () {
-        $district = request('district', '');
-        $schoolId = request('school_id', '');
-        $reportType = request('report_type', '');
-
-        return response()->json([
-            'status' => true,
-            'rows' => [
-                [
-                    'district' => $district ? ucwords(str_replace(['-', '_'], ' ', $district)) : 'Sample District',
-                    'school' => $schoolId ?: 'Sample School',
-                    'report_type' => $reportType ? ucwords(str_replace('_', ' ', $reportType)) : 'Sample Report',
-                    'status' => 'On Track',
-                    'updated_on' => now()->format('d M Y, h:i A'),
-                ],
-                [
-                    'district' => $district ? ucwords(str_replace(['-', '_'], ' ', $district)) : 'Sample District',
-                    'school' => $schoolId ?: 'Sample School',
-                    'report_type' => $reportType ? ucwords(str_replace('_', ' ', $reportType)) : 'Sample Report',
-                    'status' => 'Review Pending',
-                    'updated_on' => now()->subDay()->format('d M Y, h:i A'),
-                ],
-                [
-                    'district' => $district ? ucwords(str_replace(['-', '_'], ' ', $district)) : 'Sample District',
-                    'school' => $schoolId ?: 'Sample School',
-                    'report_type' => $reportType ? ucwords(str_replace('_', ' ', $reportType)) : 'Sample Report',
-                    'status' => 'Verified',
-                    'updated_on' => now()->subDays(2)->format('d M Y, h:i A'),
-                ],
-            ],
-        ]);
-    })->name('reports.data');
+    Route::get('/reports/data', [HomeController::class, 'getReportsData'])
+        ->name('reports.data');
 
     // Approvals
     Route::view('/approvals', 'modules.approvals.index')
