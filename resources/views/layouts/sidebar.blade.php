@@ -225,6 +225,14 @@
             Meal Reporting
         </a>
 
+        <a href="{{ route('school.infra.info') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->routeIs('school.infra.*') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+            <i class="fa-solid fa-building {{ request()->routeIs('school.infra.*') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Infra Info
+        </a>
+
         <!-- School Reports -->
         <a href="{{ route('school.reports') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
