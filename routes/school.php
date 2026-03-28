@@ -9,6 +9,7 @@ use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('school')->middleware('school')->group(function () {
@@ -60,25 +61,15 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/alumni/update/section', [ManageSchoolUpdateController::class, 'UpdateAlumniSection'])->name('alumni.update');
     Route::post('/create/alumni/section', [ManageSchoolController::class, 'SaveAlumniSection'])->name('alumni.save');
     Route::delete('/delete/alumni/section', [ManageSchoolUpdateController::class, 'DeleteAlumniSection'])->name('alumni.delete');
-    Route::post('/attendance/update',[ClassController::class, 'updateattendance'])->name('attendance.status.update');
-    Route::post('/student/addmition',[StudentManageController::class,'createStudent'])->name('addmition.student');
-    Route::post('/report/send',[ClassController::class, 'ReportUpload'])->name('report.save');
+    Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('attendance.status.update');
+    Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
+    Route::post('/report/send', [ClassController::class, 'ReportUpload'])->name('report.save');
     // RouteCms-Wedsite
-
-    Route::get('classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
-    Route::get('school/schoolmanagement', function () {
-        return view('modules.school.school-management.index');
-    });
-
-    Route::get('/schoolmanagement/create', function () {
-        return view('modules.school.school-management.create');
-    });
-
-    Route::get('/schoolmanagement/bulk-upload', function () {
-        return view('modules.school.school-management.bulk-upload');
-    });
-
-    Route::get('/schoolmanagement/edit/{id}', function ($id) {
-        return view('modules.school.school-management.edit');
-    });
+    Route::get('/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
+    Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('school.student');
+    Route::get('/schoolmanagement/create', [StudentManageController::class, 'studentCreate'])->name('school.stud.create');
+    Route::get('/schoolmanagement/bulk-upload', [StudentManageController::class, 'bulkUploadStudent'])->name('student.bulkupload');
+    Route::get('/schoolmanagement/edit/{id}', [StudentManageController::class, 'studentEdit'])->name('school.stud.edit');
+    Route::post('/student/update/{id}',[StudentManageController::class, 'studentUpdate'])->name('student.update');
+    Route::delete('/student/delete/{id}',[StudentManageController::class, 'studentDelete'])->name('student.delete');
 });

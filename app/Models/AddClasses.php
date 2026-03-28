@@ -10,16 +10,16 @@ class AddClasses extends Model
 
     protected $table = 'add_classes';
 
-    protected $fillable = ['name', 'classs', 'school_id'];
+    protected $fillable = ['name', 'class', 'school_id'];
 
     public function school()
     {
-        $this->belongsTo(School::class);
+        return $this->belongsTo(School::class);
     }
 
     public function student()
     {
-        $this->hasMany(Student::class);
+        return $this->hasMany(Student::class);
     }
 
     public function attendance()

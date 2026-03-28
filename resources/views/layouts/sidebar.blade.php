@@ -168,10 +168,9 @@
         </a>
     </div>
 @else
-    <!-- Divider -->
 
+                                                      {{-- SCHOOL PANENL --}}
 
-    <!-- Divider -->
     <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">
         School Panel
     </div>
@@ -196,7 +195,7 @@
             Student Attendance
         </a>
 
-        <a href="{{ route('school.management') }}"
+        <a href="{{ route('school.student') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->is('school-management') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 

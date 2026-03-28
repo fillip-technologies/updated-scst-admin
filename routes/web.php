@@ -31,21 +31,21 @@ Route::view('/signup', 'auth.signup')->name('signup');
 //     ->name('school.monitoring');
 
 // School Management
-Route::get('/school-management', function () {
-    return view('modules.school.school-management.index');
-})->name('school.management');
+// Route::get('/school-management', function () {
+//     return view('modules.school.school-management.index');
+// })->name('school.management');
 
-Route::get('/school-management/create', function () {
-    return view('modules.school.school-management.create');
-});
+// Route::get('/school-management/create', function () {
+//     return view('modules.school.school-management.create');
+// });
 
-Route::get('/school-management/bulk-upload', function () {
-    return view('modules.school.school-management.bulk-upload');
-});
+// Route::get('/school-management/bulk-upload', function () {
+//     return view('modules.school.school-management.bulk-upload');
+// });
 
-Route::get('/school-management/edit/{id}', function ($id) {
-    return view('modules.school.school-management.edit');
-});
+// Route::get('/school-management/edit/{id}', function ($id) {
+//     return view('modules.school.school-management.edit');
+// });
 
 // // School Management Edit
 // Route::view('/school-management/edit', 'modules.school-management.edit')

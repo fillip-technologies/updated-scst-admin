@@ -19,6 +19,7 @@ class Student extends Model
         'gender',
         'email',
         'phone',
+        'school_id',
         'parent_name',
         'parent_email',
         'parent_phone',
@@ -32,8 +33,9 @@ class Student extends Model
         return $this->hasMany(Attendance::class);
     }
 
+
     public function allclass()
     {
-        return $this->belongsTo(AddClasses::class);
+        return $this->belongsTo(AddClasses::class, 'class_id');
     }
 }

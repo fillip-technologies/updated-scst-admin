@@ -28,8 +28,6 @@ return new class extends Migration
             $table->string('parent_relation')->nullable();
 
             $table->timestamps();
-
-
             $table->foreign('class_id')->references('id')->on('add_classes')->onDelete('cascade');
         });
     }
