@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
+use App\Models\InfraReport;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\School;
@@ -127,8 +128,9 @@ class HomeController extends Controller
     {
         $allSchools = School::select('id', 'school_name')->get();
         $reports = Report::with('school')->get();
+        $infrReports = InfraReport::with('school')->get();
 
-        return view('modules.reports.index', compact('allSchools', 'reports'));
+        return view('modules.reports.index', compact('allSchools', 'reports','infrReports'));
     }
 
     public function infraInfo()

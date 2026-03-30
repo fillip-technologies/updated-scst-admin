@@ -54,6 +54,7 @@ class SchoolManageController extends Controller
 
 
         $data = ManageCrud::createdatas(School::class, $validatedata);
+
         User::create([
             'name'=>$data->school_name,
             'username'=>$data->school_admin_username,

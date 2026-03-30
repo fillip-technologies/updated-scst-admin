@@ -76,7 +76,7 @@
             </select>
         </div>
 
-        <div>
+        <div id="reporthidden">
             <label for="report_type" class="mb-1 block text-sm text-gray-500">Report</label>
             <select id="report_type" name="report_type"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -98,20 +98,24 @@
 </section>
 <script>
     function reportCategory(value) {
+        let reportType = document.querySelector('#report_type');
+        let reportHidden = document.querySelector('#reporthidden');
+
         if (value === 'academic') {
-            document.querySelector('#report_type').innerHTML = `
-              <option selected  >Select Report</option>
+            reportType.innerHTML = `
+                <option selected>Select Report</option>
                 @foreach (academicType() as $academic)
                     <option value="{{ $academic }}">{{ $academic }}</option>
                 @endforeach
             `;
+
+            reportHidden.classList.remove('hidden');
+
+
         } else {
-            document.querySelector('#report_type').innerHTML = `
-             <option selected  >Select Report</option>
-                @foreach (infrastructureType() as $infrastructure)
-                    <option value="{{ $infrastructure }}">{{ $infrastructure }}</option>
-                @endforeach
-            `;
+            reportType.innerHTML = `<option selected>Select Report</option>`;
+            reportHidden.classList.add('hidden');
+
         }
     }
 </script>

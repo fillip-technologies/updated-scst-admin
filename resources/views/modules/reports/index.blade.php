@@ -2,6 +2,7 @@
 
 @section('content')
     @php
+
         $schools = [
             ['id' => 'sch-101', 'name' => 'Birsa Munda Residential School', 'district' => 'Alipurduar'],
             ['id' => 'sch-102', 'name' => 'Netaji Subhash Model School', 'district' => 'Bankura'],
@@ -15,13 +16,15 @@
     <div class="space-y-6" x-data="reportsDashboard()" x-init="init()">
         @include('modules.reports.partials.filter-bar', [
             'schools' => $allSchools ?? null,
-            'allReports' => $reports ?? null,
+            'allReports' => $reportData ?? null,
+            'infrReports'=> $infrReports ?? null,
         ])
 
         <section>
             @include('modules.reports.partials.report-display', [
                 'allReports' => $reports ?? null,
                 'schools' => $allSchools ?? null,
+                'infrReports'=> $infrReports ?? null,
             ])
         </section>
     </div>

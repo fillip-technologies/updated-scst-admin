@@ -111,3 +111,10 @@ if (! function_exists('infrastructureType')) {
         ];
     }
 }
+
+if(!function_exists('checkCandition')){
+    function checkCandition(){
+        return
+        ['Yes','No'];
+    }
+}

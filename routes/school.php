@@ -30,7 +30,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
     Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
     Route::get('/infra-info', [HomeController::class, 'infraInfo'])->name('school.infra.info');
-    Route::post('/infra-info/store', [HomeController::class, 'storeInfraInfo'])->name('school.infra.store');
+
+    Route::post('/infra-info/store', [ReportManageController::class, 'infrReportSave'])->name('infra.store');
     Route::get('/infra-info/edit', [HomeController::class, 'editInfraInfo'])->name('school.infra.edit');
     Route::post('/infra-info/update', [HomeController::class, 'updateInfraInfo'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');

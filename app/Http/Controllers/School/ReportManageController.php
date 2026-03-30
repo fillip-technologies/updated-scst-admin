@@ -4,6 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
+use App\Models\InfraReport;
 use App\Models\MealReport;
 use App\Models\Report;
 use App\Models\School;
@@ -110,8 +111,46 @@ class ReportManageController extends Controller
             ->where('district', $district)
             ->get();
 
+        $infrReports = InfraReport::with('school')->where('report_category', $category)
+            ->where('school_id', $school_id)
+            ->where('district', $district)
+            ->get();
         $reports = $reportData->merge($mealData);
-        return view('modules.reports.index', compact('reports','allSchools'));
+
+        return view('modules.reports.index', compact('reports', 'allSchools', 'infrReports'));
+
+    }
+
+    public function infrReportSave(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'school_id' => 'required',
+            'toilets' => 'required',
+            'electricity' => 'required',
+            'district' => 'required',
+            'drinking_water' => 'required',
+            'building_safety' => 'required',
+            'network' => 'required',
+        ]);
+
+        $data = [
+            'school_id' => $request->school_id,
+            'toilet' => $request->toilets,
+            'report_category' => 'infrastructure',
+            'district' => $request->district,
+            'electricity' => $request->electricity,
+            'drinking_water' => $request->drinking_water,
+            'building_safety' => $request->building_safety,
+            'network_availability' => $request->network,
+        ];
+        if ($data) {
+            ManageCrud::createdatas(InfraReport::class, $data);
+
+            return redirect()->route('school.infra.info')->with('success', 'Uploaded Infrastructure Info SuccessFully');
+        } else {
+            return redirect()->route('school.infra.info')->with('error', 'Something Went Wrong');
+        }
 
     }
 }
