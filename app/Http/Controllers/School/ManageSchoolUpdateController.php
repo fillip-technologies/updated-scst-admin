@@ -371,6 +371,43 @@ class ManageSchoolUpdateController extends Controller
 
     public function UpdateFaqSection(Request $request)
     {
-        dd($request->all());
+        $record = Home::where('school_id', $request->school_id)->first();
+        $index = $request->faq_index;
+        $faqs = json_decode($record->faq, true) ?? [];
+
+        $faqs[$index] = [
+            'faq_question' => $request->faq_question,
+            'faq_answer' => $request->faq_answer,
+        ];
+        $record->faq = json_encode($faqs);
+        $record->save();
+
+        return back()->with('success', 'FAQ added successfully');
+    }
+
+    public function DeleteFaqSection(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required',
+        ]);
+
+        $index = $request->index;
+
+        $getdata = Home::where('school_id', $request->school_id)->first();
+
+        $faqs = json_decode($getdata->faq, true) ?? [];
+        if (! isset($faqs[$index])) {
+            return back()->with('error', 'FAQ not found');
+        }
+
+        unset($faqs[$index]);
+
+        $faqs = array_values($faqs);
+
+        $getdata->faq = json_encode($faqs);
+        $getdata->save();
+
+        return back()->with('success', 'Faq deleted successfully');
     }
 }

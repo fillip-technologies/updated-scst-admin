@@ -1,57 +1,4 @@
-<div x-data="{
-    sectionTitle: 'Frequently Asked Questions',
-    sectionDescription: 'Manage the common questions and answers displayed on the homepage FAQ accordion.',
-    faqs: [{
-            question: 'What classes are offered at the school?',
-            answer: 'The school currently offers classes from 6 to 12 with a structured academic and residential program.'
-        },
-        {
-            question: 'Is hostel accommodation available for students?',
-            answer: 'Yes, the school provides residential hostel facilities with supervised care, meals and study support.'
-        },
-        {
-            question: 'How can parents contact the school administration?',
-            answer: 'Parents can connect through the official contact channels, school office or scheduled campus visits.'
-        }
-    ],
-    editorOpen: false,
-    editingIndex: null,
-    form: {
-        question: '',
-        answer: ''
-    },
-    openCreate() {
-        this.editingIndex = null;
-        this.form = {
-            question: '',
-            answer: ''
-        };
-        this.editorOpen = true;
-    },
-    openEdit(index) {
-        this.editingIndex = index;
-        this.form = { ...this.faqs[index] };
-        this.editorOpen = true;
-    },
-    saveFaq() {
-        const payload = {
-            question: this.form.question,
-            answer: this.form.answer
-        };
-        if (this.editingIndex === null) {
-            this.faqs.push(payload);
-        } else {
-            this.faqs[this.editingIndex] = payload;
-        }
-        this.editorOpen = false;
-    },
-    deleteFaq(index) {
-        this.faqs.splice(index, 1);
-        if (this.editingIndex === index) {
-            this.editorOpen = false;
-        }
-    }
-}" class="relative">
+<div x-data="faqComponent()" class="relative">
     <div class="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_420px]">
         <div class="rounded-3xl border border-primary-800/10 bg-white shadow-sm">
             <div
@@ -98,28 +45,38 @@
                         </div>
 
                         <div class="space-y-4">
-                            <template x-for="(faq, index) in faqs" :key="`${faq.question}-${index}`">
+                            <!-- ✅ Alpine Live Data (for edit/delete preview) -->
+                            <template x-for="(faq, index) in faqs" :key="index">
                                 <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm">
                                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+
                                         <div class="min-w-0">
-                                            <h3 class="text-base font-semibold text-gray-800" x-text="faq.question">
+                                            <h3 class="text-base font-semibold text-gray-800" x-text="faq.faq_question">
                                             </h3>
+
                                             <p class="mt-2 text-sm leading-6 text-gray-500 line-clamp-3"
-                                                x-text="faq.answer"></p>
+                                                x-text="faq.faq_answer"></p>
                                         </div>
 
                                         <div class="flex items-center gap-3">
+
                                             <button type="button" @click="openEdit(index)"
-                                                class="inline-flex items-center gap-2 rounded-lg border border-primary-800/20 bg-white px-3 py-2 text-xs font-medium text-primary-900 transition hover:border-primary-700 hover:bg-primary-900/5">
-                                                <i class="fa-solid fa-pen text-[10px]"></i>
+                                                class="inline-flex items-center gap-2 rounded-lg border border-primary-800/20 bg-white px-3 py-2 text-xs font-medium text-primary-900">
                                                 Edit
                                             </button>
+                                            <form method="POST" action="{{ route('faq.delete.index') }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                                <input type="hidden" name="index" :value="index">
 
-                                            <button type="button" @click="deleteFaq(index)"
-                                                class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-500 transition hover:bg-red-50">
-                                                <i class="fa-solid fa-trash text-[10px]"></i>
-                                                Delete
-                                            </button>
+                                                <button type="submit"
+                                                    class="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs text-red-500">
+                                                    Delete
+                                                </button>
+                                            </form>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -153,12 +110,22 @@
                 <p class="mt-2 text-sm leading-6 text-gray-500" x-text="sectionDescription"></p>
 
                 <div class="mt-5 space-y-3">
-                    <template x-for="(faq, index) in faqs.slice(0, 3)" :key="`preview-${index}`">
+                    @forelse ($faqs ?? [] as $faq)
                         <div class="rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-primary-800/10">
-                            <p class="text-sm font-medium text-gray-800" x-text="faq.question"></p>
-                            <p class="mt-2 text-sm leading-6 text-gray-500 line-clamp-2" x-text="faq.answer"></p>
+
+                            <!-- ✅ FIX -->
+                            <p class="text-sm font-medium text-gray-800">
+                                {{ $faq->faq_question ?? '' }}
+                            </p>
+
+                            <p class="mt-2 text-sm leading-6 text-gray-500 line-clamp-2">
+                                {{ $faq->faq_answer ?? '' }}
+                            </p>
+
                         </div>
-                    </template>
+                    @empty
+                        <p class="text-sm text-gray-500">No FAQs found</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -183,32 +150,42 @@
                 </button>
             </div>
 
-            <form action="{{ route('faq.save') }}" method="POST">
+            <form x-ref="faqForm"
+                :action="editingIndex === null ?
+                    '{{ route('faq.save') }}' :
+                    '{{ route('faq.update') }}'"
+                method="POST">
                 @csrf
-                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}" >
+                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                <input type="hidden" name="faq_index" :value="editingIndex">
                 <div class="p-6 sm:p-8">
                     <div class="grid grid-cols-1 gap-5">
+
+                        <!-- ✅ FIX -->
                         <div>
                             <label for="faq_question"
                                 class="mb-2 block text-sm font-medium text-gray-700">Question</label>
-                            <input id="faq_question"  type="text" name="faq_question"
+                            <input id="faq_question" type="text" x-model="form.question" name="faq_question"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
 
+                        <!-- ✅ FIX -->
                         <div>
-                            <label for="faq_answer" class="mb-2 block text-sm font-medium text-gray-700">Answer</label>
-                            <textarea id="faq_answer"  rows="6" name="faq_answer"
+                            <label for="faq_answer"
+                                class="mb-2 block text-sm font-medium text-gray-700">Answer</label>
+                            <textarea id="faq_answer" rows="6" x-model="form.answer" name="faq_answer"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
                         </div>
 
                         <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
                             <button type="button" @click="editorOpen = false"
-                                class="inline-flex items-center justify-center rounded-xl border border-primary-800/20 bg-white px-4 py-2.5 text-sm font-medium text-primary-900 transition hover:border-primary-700 hover:bg-primary-900/5">
+                                class="inline-flex items-center justify-center rounded-xl border border-primary-800/20 bg-white px-4 py-2.5 text-sm font-medium text-primary-900">
                                 Cancel
                             </button>
 
+                            <!-- ✅ FIX -->
                             <button type="submit" @click="saveFaq()"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-medium text-white">
                                 <i class="fa-solid fa-floppy-disk text-xs"></i>
                                 Save
                             </button>
@@ -220,3 +197,70 @@
         </div>
     </div>
 </div>
+<script>
+    function faqComponent() {
+        return {
+            sectionTitle: 'Frequently Asked Questions',
+            sectionDescription: 'Manage the common questions and answers displayed on the homepage FAQ accordion.',
+            faqs: @json($faqs ?? []),
+
+            editorOpen: false,
+            editingIndex: null,
+
+            form: {
+                question: '',
+                answer: ''
+            },
+
+            openCreate() {
+                this.editingIndex = null;
+                this.form = {
+                    question: '',
+                    answer: ''
+                };
+                this.editorOpen = true;
+            },
+
+            openEdit(index) {
+                this.editingIndex = index;
+
+                let faq = this.faqs[index];
+
+                this.form = {
+                    question: faq.faq_question ?? faq.question,
+                    answer: faq.faq_answer ?? faq.answer
+                };
+
+                this.editorOpen = true;
+            },
+
+            saveFaq() {
+                if (!this.form.question || !this.form.answer) {
+                    alert('Both fields are required');
+                    return;
+                }
+
+                const payload = {
+                    faq_question: this.form.question,
+                    faq_answer: this.form.answer
+                };
+
+                if (this.editingIndex === null) {
+                    this.faqs.push(payload);
+                } else {
+                    this.faqs[this.editingIndex] = payload;
+                }
+
+                this.editorOpen = false;
+            },
+
+            deleteFaq(index) {
+                this.faqs.splice(index, 1);
+
+                if (this.editingIndex === index) {
+                    this.editorOpen = false;
+                }
+            }
+        }
+    }
+</script>

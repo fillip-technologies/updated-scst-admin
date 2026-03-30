@@ -76,6 +76,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/report/send', [ReportManageController::class, 'ReportUpload'])->name('report.save');
     Route::post('/meals/report',[ReportManageController::class, 'mealReport'])->name('meal.report');
     // RouteCms-Wedsite
+    Route::post('/update/school/faq',[ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
+     Route::delete('/update/school/faq/delete/index',[ManageSchoolUpdateController::class, 'DeleteFaqSection'])->name('faq.delete.index');
     Route::get('/attendance/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
       Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');
     Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('school.student');
