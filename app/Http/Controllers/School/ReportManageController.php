@@ -71,7 +71,7 @@ class ReportManageController extends Controller
         $data = [
             'school_id' => $request->school_id,
             'district' => $request->district,
-            'report_image' => $uploadmeals,
+            'report_img' => $uploadmeals,
             'report_type' => $request->report_type,
             'report_category' => 'academic',
             'menu' => $request->menu,
@@ -98,23 +98,20 @@ class ReportManageController extends Controller
         $type = trim($request->report_type);
         $district = trim($request->district);
         $allSchools = School::select('id', 'school_name')->get();
-        $reportData = Report::where('report_category', $category)
+        $reportData = Report::with('school')->where('report_category', $category)
             ->where('school_id', $school_id)
             ->where('report_type', $type)
             ->where('district', $district)
             ->get();
 
-        $mealData = MealReport::where('report_category', $category)
+        $mealData = MealReport::with('school')->where('report_category', $category)
             ->where('school_id', $school_id)
             ->where('report_type', $type)
             ->where('district', $district)
             ->get();
 
         $reports = $reportData->merge($mealData);
-
-        dd($reports);
-
-        return view('modules.reports.index', compact('reports', 'allSchools'));
+        return view('modules.reports.index', compact('reports','allSchools'));
 
     }
 }

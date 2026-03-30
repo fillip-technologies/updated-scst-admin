@@ -21,7 +21,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::delete('/delete/{id}/school', [SchoolManageController::class, 'DeleteSchool'])->name('delete.school');
     Route::post('/update/school/{id}/status', [SchoolManageController::class, 'StatusUpdate'])->name('status.update');
     Route::get('school/export', [SchoolManageController::class, 'SchoolExport'])->name('export.school');
-    Route::post('/getall/report',[ReportManageController::class, 'showallReport'])->name('show.all.report');
+    Route::get('/getall/report',[ReportManageController::class, 'showallReport'])->name('show.all.report');
 
     Route::view('/performance-analytics', 'modules.performance-management.index')
         ->name('performance.analytics');

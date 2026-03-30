@@ -14,6 +14,6 @@ class Report extends Model
 
     public function school()
     {
-        $this->belongsTo(School::class);
+        return $this->belongsTo(School::class);
     }
 }

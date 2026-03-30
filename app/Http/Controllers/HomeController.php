@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
-use App\Models\MealReport;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\School;
@@ -127,10 +126,7 @@ class HomeController extends Controller
     public function allreport()
     {
         $allSchools = School::select('id', 'school_name')->get();
-        $mealrReport = MealReport::latest()->get();
-        $reportsdata = Report::latest()->get();
-
-        $reports = $reportsdata->merge($mealrReport);
+        $reports = Report::with('school')->get();
 
         return view('modules.reports.index', compact('allSchools', 'reports'));
     }
