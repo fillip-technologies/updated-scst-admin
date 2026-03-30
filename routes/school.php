@@ -32,9 +32,11 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/infra-info', [HomeController::class, 'infraInfo'])->name('school.infra.info');
 
     Route::post('/infra-info/store', [ReportManageController::class, 'infrReportSave'])->name('infra.store');
-    Route::get('/infra-info/edit', [HomeController::class, 'editInfraInfo'])->name('school.infra.edit');
-    Route::post('/infra-info/update', [HomeController::class, 'updateInfraInfo'])->name('school.infra.update');
+    Route::get('/infra/edit/{id}', [HomeController::class, 'editInfraInfo'])
+    ->name('school.infra.edit');
+    Route::post('/infra-info/update/{id}', [ReportManageController::class, 'infrReportUpdate'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
+    Route::get('/create/createInfrastructure',[HomeController::class, 'createInfrastructure'])->name('school.infra.create');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
     Route::get('/reports', [WebsiteCmsController::class, 'reports'])->name('school.reports');
 

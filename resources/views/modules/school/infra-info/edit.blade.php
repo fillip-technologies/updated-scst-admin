@@ -43,7 +43,7 @@
                 <p class="mt-1 text-sm text-gray-500">Modify the existing school infrastructure information below.</p>
             </div>
 
-            <form action="{{ route('school.infra.update') }}" method="POST" class="mt-6 space-y-6">
+            <form action="{{ route('school.infra.update',$editData->id) }}" method="POST" class="mt-6 space-y-6">
                 @csrf
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -53,9 +53,11 @@
                             id="school_name"
                             type="text"
                             name="school_name"
-                            value="{{ $infraInfo['school_name'] }}"
+                            value="{{ $editData->school->school_name }}" readonly
                             placeholder="Enter school name"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
+                             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                        <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
                     </div>
 
                     <div>
@@ -64,7 +66,7 @@
                             id="toilets"
                             type="number"
                             name="toilets"
-                            value="{{ $infraInfo['toilets'] }}"
+                            value="{{ $editData->toilet }}"
                             placeholder="Enter number of toilets"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
                     </div>
@@ -76,8 +78,11 @@
                             name="electricity"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
                             <option value="">Select Electricity Status</option>
-                            <option value="yes" @selected($infraInfo['electricity'] === 'yes')>Yes</option>
-                            <option value="no" @selected($infraInfo['electricity'] === 'no')>No</option>
+                             @foreach (checkCandition() as $check)
+                                <option value="{{ $check }}" @selected($editData->electricity === $check)>
+                                    {{ $check }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -88,8 +93,11 @@
                             name="drinking_water"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
                             <option value="">Select Drinking Water Status</option>
-                            <option value="yes" @selected($infraInfo['drinking_water'] === 'yes')>Yes</option>
-                            <option value="no" @selected($infraInfo['drinking_water'] === 'no')>No</option>
+                           @foreach (checkCandition() as $check)
+                                <option value="{{ $check }}" @selected($editData->drinking_water === $check)>
+                                    {{ $check }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -100,8 +108,11 @@
                             name="building_safety"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
                             <option value="">Select Building Safety Status</option>
-                            <option value="yes" @selected($infraInfo['building_safety'] === 'yes')>Yes</option>
-                            <option value="no" @selected($infraInfo['building_safety'] === 'no')>No</option>
+                          @foreach (checkCandition() as $check)
+                                <option value="{{ $check }}" @selected($editData->building_safety === $check)>
+                                    {{ $check }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -112,8 +123,11 @@
                             name="network"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
                             <option value="">Select Network Availability</option>
-                            <option value="yes" @selected($infraInfo['network'] === 'yes')>Yes</option>
-                            <option value="no" @selected($infraInfo['network'] === 'no')>No</option>
+                           @foreach (checkCandition() as $check)
+                                <option value="{{ $check }}" @selected($editData->network_availability === $check)>
+                                    {{ $check }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

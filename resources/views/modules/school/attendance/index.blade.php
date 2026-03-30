@@ -257,7 +257,9 @@
                     </div>
 
                 </div>
-
+                <div class="mt-4">
+                    {{ $studentdata->links() }}
+                </div>
             </div>
 
         </div>

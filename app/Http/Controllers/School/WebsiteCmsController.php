@@ -4,16 +4,16 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
-use App\Models\Attendance;
 use App\Models\Home;
 use App\Models\Student;
 
 class WebsiteCmsController extends Controller
 {
+    public function schoolDashboard()
+    {
+        return view('modules.school.dashboard.index');
+    }
 
-public function schoolDashboard(){
-    return view('modules.school.dashboard.index');
-}
     public function cmsIndex()
     {
         return view('modules.school.website-cms.index');
@@ -86,13 +86,16 @@ public function schoolDashboard(){
         return view('modules.school.notices.index');
     }
 
-    public function attandence()
-    {
+   public function attandence()
+{
+    $classes = AddClasses::all();
 
-        $classes = AddClasses::all();
-        $studentdata = Student::with(['attendance'])->get();
-        return view('modules.school.attendance.index',compact('classes','studentdata'));
-    }
+    $studentdata = Student::with(['attendance' => function($q){
+        $q->whereDate('date', now());
+    }])->paginate(10); 
+
+    return view('modules.school.attendance.index', compact('classes','studentdata'));
+}
 
     public function academics()
     {
@@ -104,7 +107,8 @@ public function schoolDashboard(){
         return view('modules.school.meal-reporting.index');
     }
 
-    public function reports(){
+    public function reports()
+    {
 
         return view('modules.school.reports.index');
     }

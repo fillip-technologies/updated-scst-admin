@@ -36,10 +36,7 @@
                 <p class="mt-1 text-sm text-gray-500">Add and manage your school infrastructure details in one place.</p>
             </div>
 
-            <a href="{{ route('school.infra.edit') }}"
-                class="inline-flex items-center justify-center rounded-lg border border-primary-900 px-5 py-2.5 text-sm font-medium text-primary-900 transition hover:bg-primary-50">
-                Edit Info
-            </a>
+            
         </div>
 
         <div class="mx-auto max-w-5xl rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8">
@@ -139,10 +136,7 @@
                         Submit
                     </button>
 
-                    <a href="{{ route('school.infra.edit') }}"
-                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">
-                        Edit Info
-                    </a>
+
                 </div>
             </form>
         </div>

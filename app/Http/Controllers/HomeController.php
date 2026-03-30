@@ -130,32 +130,28 @@ class HomeController extends Controller
         $reports = Report::with('school')->get();
         $infrReports = InfraReport::with('school')->get();
 
-        return view('modules.reports.index', compact('allSchools', 'reports','infrReports'));
+        return view('modules.reports.index', compact('allSchools', 'reports', 'infrReports'));
     }
 
-    public function infraInfo()
-    {
+    public function createInfrastructure(){
         return view('modules.school.infra-info.index');
     }
 
-    public function storeInfraInfo()
+
+
+    public function infraInfo()
     {
-        return redirect()
-            ->route('school.infra.info')
-            ->with('success', 'Infrastructure info submitted successfully.');
+        $infrReports = InfraReport::with('school')->where('school_id',SchoolLogin()->id)->get();
+        return view('modules.school.infra-info.listing',compact('infrReports'));
     }
 
-    public function editInfraInfo()
+
+    public function editInfraInfo($id)
     {
-        return view('modules.school.infra-info.edit');
+        $editData = InfraReport::with('school')->findOrFail($id);
+        return view('modules.school.infra-info.edit', compact('editData'));
     }
 
-    public function updateInfraInfo()
-    {
-        return redirect()
-            ->route('school.infra.edit')
-            ->with('success', 'Infrastructure info updated successfully.');
-    }
 
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
     {
