@@ -6,17 +6,17 @@ use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\MealReport;
 use App\Models\Report;
+use App\Models\School;
 use Illuminate\Http\Request;
 
 class ReportManageController extends Controller
 {
     public function ReportUpload(Request $request)
     {
-       
 
         $request->validate([
-            'type' => 'required',
-            'district'=>'required',
+            'district' => 'required',
+            'report_type' => 'required',
             'school_id' => 'required',
             'date' => 'required|date',
             'report_img' => 'required|file',
@@ -32,10 +32,11 @@ class ReportManageController extends Controller
         }
 
         $data = Report::create([
-            'type' => $request->type,
             'date' => $request->date,
-            'district' =>$request->district,
+            'district' => $request->district,
             'school_id' => $request->school_id,
+            'report_type' => $request->report_type,
+            'report_category' => 'academic',
             'report_img' => $uploadImage,
         ]);
         if ($data) {
@@ -48,34 +49,69 @@ class ReportManageController extends Controller
 
     public function mealReport(Request $request)
     {
-       $request->validate([
+        $request->validate([
             'meal_type' => 'required',
             'school_id' => 'required',
-            'district'=>'required',
-            'reportimage'=>'required|file',
+            'report_type' => 'required',
+            'district' => 'required',
+            'reportimage' => 'required|file',
             'menu' => 'required',
         ]);
 
         $uploadmeals = null;
 
-        if($request->hasFile('reportimage')){
+        if ($request->hasFile('reportimage')) {
             $file = $request->file('reportimage');
             $filaname = time().'.'.$file->getClientOriginalExtension();
             $upload = public_path('mealImage');
-            $file->move($upload,$filaname);
-            $uploadmeals = "mealImage/".$filaname;
+            $file->move($upload, $filaname);
+            $uploadmeals = 'mealImage/'.$filaname;
         }
 
         $data = [
-            'reportname'=>$request->meal_type,
-            'school_id'=>$request->school_id,
-            'district' =>$request->district,
-            'report_image' => $uploadmeals,
-            'menu'=>$request->menu,
-            'date'=> now()->format('Y-m-d H:i:s')
+            'school_id' => $request->school_id,
+            'district' => $request->district,
+            'report_img' => $uploadmeals,
+            'report_type' => $request->report_type,
+            'report_category' => 'academic',
+            'menu' => $request->menu,
+            'date' => now()->format('Y-m-d H:i:s'),
         ];
 
-        ManageCrud::createdatas(MealReport::class,$data);
-         return back()->with('success', 'Meal Reports Uploade SuccessFully');
+        ManageCrud::createdatas(MealReport::class, $data);
+
+        return back()->with('success', 'Meal Reports Uploade SuccessFully');
+    }
+
+    public function showallReport(Request $request)
+    {
+
+        $request->validate([
+            'district' => 'required',
+            'school_id' => 'required',
+            'report_category' => 'required',
+            'report_type' => 'required',
+        ]);
+
+        $category = trim($request->report_category);
+        $school_id = trim($request->school_id);
+        $type = trim($request->report_type);
+        $district = trim($request->district);
+        $allSchools = School::select('id', 'school_name')->get();
+        $reportData = Report::with('school')->where('report_category', $category)
+            ->where('school_id', $school_id)
+            ->where('report_type', $type)
+            ->where('district', $district)
+            ->get();
+
+        $mealData = MealReport::with('school')->where('report_category', $category)
+            ->where('school_id', $school_id)
+            ->where('report_type', $type)
+            ->where('district', $district)
+            ->get();
+
+        $reports = $reportData->merge($mealData);
+        return view('modules.reports.index', compact('reports','allSchools'));
+
     }
 }

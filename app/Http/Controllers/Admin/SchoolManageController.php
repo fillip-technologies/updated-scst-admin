@@ -63,11 +63,11 @@ class SchoolManageController extends Controller
             'school_id'=>$data->id
         ]);
         if ($data) {
-            return redirect()->route('school.management')
+            return redirect()->route('admin.school.management')
                 ->with('success', 'School Created Successfully');
         }
 
-        return redirect()->route('school.management')
+        return redirect()->route('admin.school.management')
             ->with('error', 'Something Went Wrong');
     }
 
@@ -118,11 +118,11 @@ class SchoolManageController extends Controller
         }
         $data = ManageCrud::updatedata(School::class, $id, $validatedata);
         if ($data) {
-            return redirect()->route('school.management')
+            return redirect()->route('admin.school.management')
                 ->with('success', 'School Updated Successfully');
         }
 
-        return redirect()->route('school.management')
+        return redirect()->route('admin.school.management')
             ->with('error', 'Something Went Wrong');
     }
 
@@ -140,9 +140,9 @@ class SchoolManageController extends Controller
         $id = decrypt($id);
         $datadelete = ManageCrud::deletedata(School::class, $id);
         if ($datadelete) {
-            return redirect()->route('school.management')->with('success', 'School Deleted SuccessFul');
+            return redirect()->route('admin.school.management')->with('success', 'School Deleted SuccessFul');
         } else {
-            return redirect()->route('school.management')->with('success', 'Something Went Wrong');
+            return redirect()->route('admin.school.management')->with('success', 'Something Went Wrong');
         }
     }
 
@@ -154,7 +154,7 @@ class SchoolManageController extends Controller
         $school->update([
             'account_status' => $status,
         ]);
-        return redirect()->route('school.management')
+        return redirect()->route('admin.school.management')
             ->with('success', 'Account Status Updated Successfully');
     }
 

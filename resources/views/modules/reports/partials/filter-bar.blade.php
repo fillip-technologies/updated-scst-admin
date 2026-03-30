@@ -1,14 +1,17 @@
 @php
-$districtOptions = collect($schools)->pluck('district')->filter()->unique()->sort()->values();
+    $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sort()->values();
 @endphp
 
-<section class="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-sky-900 to-cyan-700 p-6 text-white shadow-xl">
+<section
+    class="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-sky-900 to-cyan-700 p-6 text-white shadow-xl">
     <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div class="max-w-3xl">
             <p class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-100">District Monitoring Reports</p>
-            <h1 class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">Unified reporting dashboard for Admin review</h1>
+            <h1 class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">Unified reporting dashboard for Admin
+                review</h1>
             <p class="mt-3 max-w-2xl text-sm text-slate-200 md:text-base">
-                Filter by district and school, choose a report, and review monitoring data in a single responsive workspace.
+                Filter by district and school, choose a report, and review monitoring data in a single responsive
+                workspace.
             </p>
         </div>
 
@@ -33,20 +36,20 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
     <div class="border-b border-slate-200 pb-4">
         <div>
             <h2 class="text-lg font-semibold text-slate-900">Filters</h2>
-            <p class="mt-1 text-sm text-slate-500">Choose the reporting scope before loading district monitoring data.</p>
+            <p class="mt-1 text-sm text-slate-500">Choose the reporting scope before loading district monitoring data.
+            </p>
         </div>
     </div>
 
-    <form class="mt-6 grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-5" @submit.prevent="fetchReportData">
+    <form class="mt-6 grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-5"
+        action="{{ route('show.all.report') }}" method="GET">
+
         <div>
             <label for="district" class="mb-1 block text-sm text-gray-500">Select District</label>
-            <select
-                id="district"
-                name="district"
-                x-model="filters.district"
+            <select id="district" name="district" x-model="filters.district"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select District</option>
-                @foreach ($districtOptions as $district)
+                @foreach (districts() as $district)
                     <option value="{{ $district }}">{{ $district }}</option>
                 @endforeach
             </select>
@@ -54,25 +57,18 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
 
         <div>
             <label for="school_id" class="mb-1 block text-sm text-gray-500">Select School</label>
-            <select
-                id="school_id"
-                name="school_id"
-                x-model="filters.school_id"
+            <select id="school_id" name="school_id" x-model="filters.school_id"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select School</option>
                 @foreach ($schools as $school)
-                    <option value="{{ $school['id'] }}">{{ $school['name'] }}</option>
+                    <option value="{{ $school->id }}">{{ $school->school_name }}</option>
                 @endforeach
             </select>
         </div>
 
         <div>
             <label for="report_category" class="mb-1 block text-sm text-gray-500">Report Category</label>
-            <select
-                id="report_category"
-                name="report_category"
-                x-model="selectedCategory"
-                @change="selectedReport = ''"
+            <select id="report_category" name="report_category" onchange="reportCategory(this.value)"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select Category</option>
                 <option value="academic">Academic</option>
@@ -82,24 +78,40 @@ $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sor
 
         <div>
             <label for="report_type" class="mb-1 block text-sm text-gray-500">Report</label>
-            <select
-                id="report_type"
-                name="report_type"
-                x-model="selectedReport"
+            <select id="report_type" name="report_type"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <option value="">Select Report</option>
-                <template x-for="report in availableReports()" :key="report.value">
-                    <option :value="report.value" x-text="report.label"></option>
-                </template>
+                <option selected>Select Report</option>
             </select>
         </div>
 
         <div class="flex items-end">
-            <button
-                type="submit"
+            <button type="submit"
                 class="inline-flex h-11 w-full items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Load Report
             </button>
+            <a href="{{ route('report') }}"
+                class="inline-flex h-11 ms-3  items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Refresh
+            </a>
         </div>
     </form>
 </section>
+<script>
+    function reportCategory(value) {
+        if (value === 'academic') {
+            document.querySelector('#report_type').innerHTML = `
+              <option selected  >Select Report</option>
+                @foreach (academicType() as $academic)
+                    <option value="{{ $academic }}">{{ $academic }}</option>
+                @endforeach
+            `;
+        } else {
+            document.querySelector('#report_type').innerHTML = `
+             <option selected  >Select Report</option>
+                @foreach (infrastructureType() as $infrastructure)
+                    <option value="{{ $infrastructure }}">{{ $infrastructure }}</option>
+                @endforeach
+            `;
+        }
+    }
+</script>

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
 use App\Models\Notices;
+use App\Models\Report;
 use App\Models\School;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
@@ -112,8 +113,9 @@ class HomeController extends Controller
 
     public function schoolManagement()
     {
-         $schools = ManageCrud::getAll(School::class);
-        return view('modules.school-management.index',compact('schools'));
+        $schools = ManageCrud::getAll(School::class);
+
+        return view('modules.school-management.index', compact('schools'));
     }
 
     public function performance()
@@ -121,8 +123,12 @@ class HomeController extends Controller
         return view('modules.performance-management.index');
     }
 
-    public function allreport(){
-        return view('modules.reports.index');
+    public function allreport()
+    {
+        $allSchools = School::select('id', 'school_name')->get();
+        $reports = Report::with('school')->get();
+
+        return view('modules.reports.index', compact('allSchools', 'reports'));
     }
 
     public function infraInfo()

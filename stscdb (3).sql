@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2026 at 08:39 AM
+-- Generation Time: Mar 28, 2026 at 02:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,6 +71,39 @@ CREATE TABLE `attendances` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `attendances`
+--
+
+INSERT INTO `attendances` (`id`, `student_id`, `class_id`, `date`, `status`, `remarks`, `recorded_by`, `created_at`, `updated_at`) VALUES
+(1, 18, 9, '2026-03-24', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 04:20:47'),
+(6, 6, 5, '2026-03-25', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(11, 13, 6, '2026-03-26', 'late', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 04:29:33'),
+(14, 15, 1, '2026-03-26', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(18, 10, 11, '2026-03-21', 'present', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(19, 2, 10, '2026-03-26', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 05:39:24'),
+(22, 13, 7, '2026-03-26', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(23, 12, 5, '2026-03-26', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 04:29:13'),
+(24, 10, 6, '2026-03-22', 'late', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(26, 12, 11, '2026-03-24', 'present', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(29, 17, 6, '2026-03-21', 'late', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(33, 10, 11, '2026-03-21', 'present', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(36, 12, 5, '2026-03-23', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(38, 5, 7, '2026-03-21', 'excused', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(39, 4, 3, '2026-03-22', 'late', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(40, 11, 2, '2026-03-22', 'excused', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(41, 3, 7, '2026-03-26', 'absent', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 04:22:48'),
+(42, 16, 7, '2026-03-25', 'present', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(45, 14, 10, '2026-03-24', 'excused', 'Auto generated', 3, '2026-03-26 00:52:11', '2026-03-26 00:52:11'),
+(51, 5, 7, '2026-03-26', 'absent', NULL, 1, '2026-03-26 04:22:38', '2026-03-26 05:10:08'),
+(52, 4, 5, '2026-03-26', 'present', NULL, 1, '2026-03-26 04:28:45', '2026-03-26 04:33:46'),
+(53, 11, 5, '2026-03-26', 'present', NULL, 1, '2026-03-26 04:29:17', '2026-03-26 04:33:44'),
+(54, 17, 5, '2026-03-26', 'late', NULL, 1, '2026-03-26 04:32:41', '2026-03-26 04:36:44'),
+(55, 18, 5, '2026-03-26', 'present', NULL, 1, '2026-03-26 04:32:44', '2026-03-26 04:36:46'),
+(56, 10, 4, '2026-03-26', 'late', NULL, 1, '2026-03-26 04:33:08', '2026-03-26 04:33:08'),
+(58, 4, 5, '2026-03-28', 'absent', NULL, 1, '2026-03-27 23:16:00', '2026-03-27 23:16:00'),
+(59, 2, 10, '2026-03-28', 'present', NULL, 1, '2026-03-27 23:16:06', '2026-03-27 23:16:06');
 
 -- --------------------------------------------------------
 
@@ -229,6 +262,32 @@ CREATE TABLE `job_batches` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `meal_reports`
+--
+
+CREATE TABLE `meal_reports` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `date` varchar(255) NOT NULL,
+  `menu` text NOT NULL,
+  `district` varchar(255) NOT NULL,
+  `report_image` varchar(255) NOT NULL,
+  `school_id` bigint(20) UNSIGNED NOT NULL,
+  `report_type` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `report_category` enum('academic','infrastructure') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `meal_reports`
+--
+
+INSERT INTO `meal_reports` (`id`, `date`, `menu`, `district`, `report_image`, `school_id`, `report_type`, `created_at`, `updated_at`, `report_category`) VALUES
+(1, '2026-03-28 12:50:41', 'Rice,Roti,Sabji', 'Patna', 'mealImage/1774702241.jpeg', 3, 'Meal Attendance', '2026-03-28 07:20:41', '2026-03-28 07:20:41', 'academic');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -259,7 +318,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2026_03_18_125049_create_notices_table', 5),
 (18, '2026_03_25_060142_create_add_classes_table', 6),
 (19, '2026_03_25_062708_create_students_table', 7),
-(20, '2026_03_25_070850_create_attendances_table', 8);
+(20, '2026_03_25_070850_create_attendances_table', 8),
+(21, '2026_03_26_085512_add_to_colum_school_id_to_table_stundents', 7),
+(22, '2026_03_26_102149_create_reports_table', 9),
+(23, '2026_03_26_111102_add_to_colum_to_table_reports', 10),
+(24, '2026_03_28_090125_create_meal_reports_table', 11),
+(25, '2026_03_28_120731_add_to_colum_report_category_to_reports_table', 12),
+(26, '2026_03_28_120851_add_to_colum_report_category_to_reports_table', 12);
 
 -- --------------------------------------------------------
 
@@ -312,6 +377,31 @@ CREATE TABLE `personal_access_tokens` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `school_id` bigint(20) UNSIGNED NOT NULL,
+  `report_type` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  `district` varchar(255) NOT NULL,
+  `report_img` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `report_category` enum('academic','infrastructure') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reports`
+--
+
+INSERT INTO `reports` (`id`, `school_id`, `report_type`, `date`, `district`, `report_img`, `created_at`, `updated_at`, `report_category`) VALUES
+(1, 3, 'Student Attendance', '2026-03-12', 'Patna', 'Reports/1774702163.jpg', '2026-03-28 07:19:23', '2026-03-28 07:19:23', 'academic');
 
 -- --------------------------------------------------------
 
@@ -375,7 +465,7 @@ CREATE TABLE `schools` (
 
 INSERT INTO `schools` (`id`, `school_name`, `school_logo`, `school_code`, `establishment_year`, `district`, `block`, `full_address`, `official_email`, `school_phone`, `principle_name`, `principle_contact`, `total_classrooms`, `total_students_enrolled`, `total_teachers_sanctioned`, `hostel_capacity`, `school_admin_username`, `password`, `account_status`, `created_at`, `updated_at`, `category`) VALUES
 (1, 'Dr. B.R. Ambedkar Residential School', 'SchoolLogo/1773743328.jpg', 'GHS2026MP01', '2022', 'Patna', 'Mithapur', 'Patna', 'first@gmail.com', '9874576454', 'Abhishek', '2345665432', 100, 1000, 80, 50, 'first_school', '$2y$12$9DYSJrIc0S5Y26cZGoO1BuWbebdRoxB6VR//GYpxRFufsnmbRcO0O', 'inactive', '2026-03-17 01:11:02', '2026-03-17 07:40:10', 'Residential'),
-(3, 'Dr. B.R. Ambedkar Residential School', 'SchoolLogo/1773752713.png', 'BR-AMB-RDSL-S', '2022', 'Khagaria', 'Mithapur', 'Patna', 'Testing@gmail.com', '9874576454', 'Abhishek', '3442424224', 100, 10000, 29, 20, 'testschool', '$2y$12$BQF6k3CZmca8qWN7B85e5e8/JLRnrh9IkK1Cu1U3FbOJyZOZ.lp0u', 'active', '2026-03-17 07:35:13', '2026-03-17 07:35:13', 'Day School'),
+(3, 'Dr. B.R. Ambedkar Residential School', 'SchoolLogo/1773752713.png', 'BR-AMB-RDSL-S', '2022', 'Patna', 'Mithapur', 'Patna', 'Testing@gmail.com', '9874576454', 'Abhishek', '3442424224', 100, 10000, 29, 20, 'testschool', '$2y$12$BQF6k3CZmca8qWN7B85e5e8/JLRnrh9IkK1Cu1U3FbOJyZOZ.lp0u', 'active', '2026-03-17 07:35:13', '2026-03-17 07:35:13', 'Day School'),
 (6, 'Dr. B.R. Ambedkar Residential School', 'SchoolLogo/1773989215.png', 'BR-AMB-RDSL-5', '2022', 'Katihar', 'Mithapur', 'Testing for data', 'second@gmail.com', '3434344444', 'Abhishek', '1234567890', 12, 100, 200, 399, 'testschool2', '$2y$12$vMBo4STf/t9VswXVh/6Wbeg67LQga2ISb0Aq/cAu82w0AIEcIpF.W', 'active', '2026-03-20 01:16:42', '2026-03-20 01:16:55', 'Day School');
 
 -- --------------------------------------------------------
@@ -435,64 +525,43 @@ CREATE TABLE `students` (
   `parent_phone` varchar(255) NOT NULL,
   `parent_relation` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `school_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `roll_number`, `class_id`, `dob`, `gender`, `email`, `phone`, `parent_name`, `parent_email`, `parent_phone`, `parent_relation`, `created_at`, `updated_at`) VALUES
-(1, 'Student 1', '1', 12, '2013-03-25', 'Female', 'student1@example.com', '9000000001', 'Parent 1', 'parent1@example.com', '9100000001', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(2, 'Student 2', '2', 10, '2020-03-25', 'Female', 'student2@example.com', '9000000002', 'Parent 2', 'parent2@example.com', '9100000002', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(3, 'Student 3', '3', 10, '2011-03-25', 'Male', 'student3@example.com', '9000000003', 'Parent 3', 'parent3@example.com', '9100000003', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(4, 'Student 4', '4', 5, '2020-03-25', 'Male', 'student4@example.com', '9000000004', 'Parent 4', 'parent4@example.com', '9100000004', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(5, 'Student 5', '5', 7, '2018-03-25', 'Male', 'student5@example.com', '9000000005', 'Parent 5', 'parent5@example.com', '9100000005', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(6, 'Student 6', '6', 3, '2012-03-25', 'Female', 'student6@example.com', '9000000006', 'Parent 6', 'parent6@example.com', '9100000006', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(7, 'Student 7', '7', 8, '2020-03-25', 'Female', 'student7@example.com', '9000000007', 'Parent 7', 'parent7@example.com', '9100000007', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(8, 'Student 8', '8', 5, '2016-03-25', 'Male', 'student8@example.com', '9000000008', 'Parent 8', 'parent8@example.com', '9100000008', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(9, 'Student 9', '9', 6, '2012-03-25', 'Female', 'student9@example.com', '9000000009', 'Parent 9', 'parent9@example.com', '9100000009', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(10, 'Student 10', '10', 4, '2016-03-25', 'Female', 'student10@example.com', '9000000010', 'Parent 10', 'parent10@example.com', '9100000010', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(11, 'Student 11', '11', 5, '2013-03-25', 'Female', 'student11@example.com', '9000000011', 'Parent 11', 'parent11@example.com', '9100000011', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(12, 'Student 12', '12', 8, '2017-03-25', 'Female', 'student12@example.com', '9000000012', 'Parent 12', 'parent12@example.com', '9100000012', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(13, 'Student 13', '13', 8, '2010-03-25', 'Female', 'student13@example.com', '9000000013', 'Parent 13', 'parent13@example.com', '9100000013', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(14, 'Student 14', '14', 12, '2011-03-25', 'Male', 'student14@example.com', '9000000014', 'Parent 14', 'parent14@example.com', '9100000014', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(15, 'Student 15', '15', 8, '2015-03-25', 'Male', 'student15@example.com', '9000000015', 'Parent 15', 'parent15@example.com', '9100000015', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(16, 'Student 16', '16', 10, '2010-03-25', 'Female', 'student16@example.com', '9000000016', 'Parent 16', 'parent16@example.com', '9100000016', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(17, 'Student 17', '17', 5, '2012-03-25', 'Male', 'student17@example.com', '9000000017', 'Parent 17', 'parent17@example.com', '9100000017', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(18, 'Student 18', '18', 5, '2020-03-25', 'Female', 'student18@example.com', '9000000018', 'Parent 18', 'parent18@example.com', '9100000018', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(19, 'Student 19', '19', 1, '2011-03-25', 'Female', 'student19@example.com', '9000000019', 'Parent 19', 'parent19@example.com', '9100000019', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(20, 'Student 20', '20', 1, '2012-03-25', 'Female', 'student20@example.com', '9000000020', 'Parent 20', 'parent20@example.com', '9100000020', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(21, 'Student 21', '21', 4, '2012-03-25', 'Female', 'student21@example.com', '9000000021', 'Parent 21', 'parent21@example.com', '9100000021', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(22, 'Student 22', '22', 12, '2011-03-25', 'Male', 'student22@example.com', '9000000022', 'Parent 22', 'parent22@example.com', '9100000022', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(23, 'Student 23', '23', 11, '2013-03-25', 'Male', 'student23@example.com', '9000000023', 'Parent 23', 'parent23@example.com', '9100000023', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(24, 'Student 24', '24', 7, '2019-03-25', 'Male', 'student24@example.com', '9000000024', 'Parent 24', 'parent24@example.com', '9100000024', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(25, 'Student 25', '25', 6, '2018-03-25', 'Male', 'student25@example.com', '9000000025', 'Parent 25', 'parent25@example.com', '9100000025', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(26, 'Student 26', '26', 11, '2011-03-25', 'Female', 'student26@example.com', '9000000026', 'Parent 26', 'parent26@example.com', '9100000026', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(27, 'Student 27', '27', 4, '2019-03-25', 'Female', 'student27@example.com', '9000000027', 'Parent 27', 'parent27@example.com', '9100000027', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(28, 'Student 28', '28', 8, '2017-03-25', 'Female', 'student28@example.com', '9000000028', 'Parent 28', 'parent28@example.com', '9100000028', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(29, 'Student 29', '29', 1, '2013-03-25', 'Female', 'student29@example.com', '9000000029', 'Parent 29', 'parent29@example.com', '9100000029', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(30, 'Student 30', '30', 7, '2016-03-25', 'Male', 'student30@example.com', '9000000030', 'Parent 30', 'parent30@example.com', '9100000030', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(31, 'Student 31', '31', 7, '2020-03-25', 'Female', 'student31@example.com', '9000000031', 'Parent 31', 'parent31@example.com', '9100000031', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(32, 'Student 32', '32', 2, '2012-03-25', 'Female', 'student32@example.com', '9000000032', 'Parent 32', 'parent32@example.com', '9100000032', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(33, 'Student 33', '33', 1, '2011-03-25', 'Male', 'student33@example.com', '9000000033', 'Parent 33', 'parent33@example.com', '9100000033', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(34, 'Student 34', '34', 12, '2014-03-25', 'Female', 'student34@example.com', '9000000034', 'Parent 34', 'parent34@example.com', '9100000034', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(35, 'Student 35', '35', 7, '2020-03-25', 'Female', 'student35@example.com', '9000000035', 'Parent 35', 'parent35@example.com', '9100000035', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(36, 'Student 36', '36', 4, '2018-03-25', 'Female', 'student36@example.com', '9000000036', 'Parent 36', 'parent36@example.com', '9100000036', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(37, 'Student 37', '37', 4, '2020-03-25', 'Male', 'student37@example.com', '9000000037', 'Parent 37', 'parent37@example.com', '9100000037', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(38, 'Student 38', '38', 8, '2010-03-25', 'Female', 'student38@example.com', '9000000038', 'Parent 38', 'parent38@example.com', '9100000038', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(39, 'Student 39', '39', 11, '2013-03-25', 'Female', 'student39@example.com', '9000000039', 'Parent 39', 'parent39@example.com', '9100000039', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(40, 'Student 40', '40', 7, '2015-03-25', 'Male', 'student40@example.com', '9000000040', 'Parent 40', 'parent40@example.com', '9100000040', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(41, 'Student 41', '41', 4, '2014-03-25', 'Female', 'student41@example.com', '9000000041', 'Parent 41', 'parent41@example.com', '9100000041', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(42, 'Student 42', '42', 8, '2012-03-25', 'Female', 'student42@example.com', '9000000042', 'Parent 42', 'parent42@example.com', '9100000042', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(43, 'Student 43', '43', 12, '2010-03-25', 'Male', 'student43@example.com', '9000000043', 'Parent 43', 'parent43@example.com', '9100000043', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(44, 'Student 44', '44', 3, '2010-03-25', 'Male', 'student44@example.com', '9000000044', 'Parent 44', 'parent44@example.com', '9100000044', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(45, 'Student 45', '45', 7, '2012-03-25', 'Male', 'student45@example.com', '9000000045', 'Parent 45', 'parent45@example.com', '9100000045', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(46, 'Student 46', '46', 8, '2020-03-25', 'Female', 'student46@example.com', '9000000046', 'Parent 46', 'parent46@example.com', '9100000046', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(47, 'Student 47', '47', 7, '2012-03-25', 'Male', 'student47@example.com', '9000000047', 'Parent 47', 'parent47@example.com', '9100000047', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(48, 'Student 48', '48', 6, '2015-03-25', 'Female', 'student48@example.com', '9000000048', 'Parent 48', 'parent48@example.com', '9100000048', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(49, 'Student 49', '49', 6, '2011-03-25', 'Male', 'student49@example.com', '9000000049', 'Parent 49', 'parent49@example.com', '9100000049', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34'),
-(50, 'Student 50', '50', 3, '2013-03-25', 'Female', 'student50@example.com', '9000000050', 'Parent 50', 'parent50@example.com', '9100000050', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34');
+INSERT INTO `students` (`id`, `name`, `roll_number`, `class_id`, `dob`, `gender`, `email`, `phone`, `parent_name`, `parent_email`, `parent_phone`, `parent_relation`, `created_at`, `updated_at`, `school_id`) VALUES
+(2, 'Student 2', '2', 10, '2020-03-25', 'Female', 'student2@example.com', '9000000002', 'Parent 2', 'parent2@example.com', '9100000002', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(3, 'Student 3', '3', 10, '2011-03-25', 'Male', 'student3@example.com', '9000000003', 'Parent 3', 'parent3@example.com', '9100000003', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(4, 'Student 4', '4', 5, '2020-03-25', 'Male', 'student4@example.com', '9000000004', 'Parent 4', 'parent4@example.com', '9100000004', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(5, 'Karan Kumar', '5', 10, '2018-03-25', 'Male', 'student5@example.com', '9000000005', 'Parent 5', 'parent5@example.com', '9100000005', 'Father', '2026-03-25 01:29:34', '2026-03-28 01:01:43', 3),
+(6, 'Student 6', '6', 3, '2012-03-25', 'Female', 'student6@example.com', '9000000006', 'Parent 6', 'parent6@example.com', '9100000006', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(10, 'Student 10', '10', 4, '2016-03-25', 'Female', 'student10@example.com', '9000000010', 'Parent 10', 'parent10@example.com', '9100000010', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(11, 'Student 11', '11', 5, '2013-03-25', 'Female', 'student11@example.com', '9000000011', 'Parent 11', 'parent11@example.com', '9100000011', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(12, 'Student 12', '12', 8, '2017-03-25', 'Female', 'student12@example.com', '9000000012', 'Parent 12', 'parent12@example.com', '9100000012', 'Mother', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(13, 'Student 13', '13', 8, '2010-03-25', 'Female', 'student13@example.com', '9000000013', 'Parent 13', 'parent13@example.com', '9100000013', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(14, 'Student 14', '14', 12, '2011-03-25', 'Male', 'student14@example.com', '9000000014', 'Parent 14', 'parent14@example.com', '9100000014', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(15, 'Student 15', '15', 8, '2015-03-25', 'Male', 'student15@example.com', '9000000015', 'Parent 15', 'parent15@example.com', '9100000015', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(16, 'Student 16', '16', 10, '2010-03-25', 'Female', 'student16@example.com', '9000000016', 'Parent 16', 'parent16@example.com', '9100000016', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(17, 'Student 17', '17', 5, '2012-03-25', 'Male', 'student17@example.com', '9000000017', 'Parent 17', 'parent17@example.com', '9100000017', 'Father', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(18, 'Student 18', '18', 5, '2020-03-25', 'Female', 'student18@example.com', '9000000018', 'Parent 18', 'parent18@example.com', '9100000018', 'Guardian', '2026-03-25 01:29:34', '2026-03-25 01:29:34', 3),
+(53, 'Student 2', 'ST38826P', 10, '2020-03-25', 'Female', 'student2@example.com', '9000000002', 'Parent 2', 'parent2@example.com', '9100000002', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(54, 'Student 3', 'ST38659A', 10, '2011-03-25', 'Male', 'student3@example.com', '9000000003', 'Parent 3', 'parent3@example.com', '9100000003', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(55, 'Student 4', 'ST52865P', 5, '2020-03-25', 'Male', 'student4@example.com', '9000000004', 'Parent 4', 'parent4@example.com', '9100000004', 'Mother', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(56, 'Karan Kumar', 'KA81828G', 10, '2018-03-25', 'Male', 'student5@example.com', '9000000005', 'Parent 5', 'parent5@example.com', '9100000005', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(57, 'Student 6', 'ST83367J', 3, '2012-03-25', 'Female', 'student6@example.com', '9000000006', 'Parent 6', 'parent6@example.com', '9100000006', 'Guardian', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(58, 'Student 10', 'ST30623N', 4, '2016-03-25', 'Female', 'student10@example.com', '9000000010', 'Parent 10', 'parent10@example.com', '9100000010', 'Mother', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(59, 'Student 11', 'ST66722S', 5, '2013-03-25', 'Female', 'student11@example.com', '9000000011', 'Parent 11', 'parent11@example.com', '9100000011', 'Mother', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(60, 'Student 12', 'ST56771P', 8, '2017-03-25', 'Female', 'student12@example.com', '9000000012', 'Parent 12', 'parent12@example.com', '9100000012', 'Mother', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(61, 'Student 13', 'ST65265V', 8, '2010-03-25', 'Female', 'student13@example.com', '9000000013', 'Parent 13', 'parent13@example.com', '9100000013', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(62, 'Student 14', 'ST78670T', 12, '2011-03-25', 'Male', 'student14@example.com', '9000000014', 'Parent 14', 'parent14@example.com', '9100000014', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(63, 'Student 15', 'ST29848A', 8, '2015-03-25', 'Male', 'student15@example.com', '9000000015', 'Parent 15', 'parent15@example.com', '9100000015', 'Guardian', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(64, 'Student 16', 'ST71766O', 10, '2010-03-25', 'Female', 'student16@example.com', '9000000016', 'Parent 16', 'parent16@example.com', '9100000016', 'Guardian', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(65, 'Student 17', 'ST55250C', 5, '2012-03-25', 'Male', 'student17@example.com', '9000000017', 'Parent 17', 'parent17@example.com', '9100000017', 'Father', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3),
+(66, 'Student 18', 'ST57612S', 5, '2020-03-25', 'Female', 'student18@example.com', '9000000018', 'Parent 18', 'parent18@example.com', '9100000018', 'Guardian', '2026-03-28 03:05:38', '2026-03-28 03:05:38', 3);
 
 -- --------------------------------------------------------
 
@@ -624,6 +693,13 @@ ALTER TABLE `job_batches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `meal_reports`
+--
+ALTER TABLE `meal_reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `meal_reports_school_id_foreign` (`school_id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -650,6 +726,13 @@ ALTER TABLE `personal_access_tokens`
   ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`),
   ADD KEY `personal_access_tokens_expires_at_index` (`expires_at`);
+
+--
+-- Indexes for table `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reports_school_id_foreign` (`school_id`);
 
 --
 -- Indexes for table `scholarship_documents`
@@ -722,7 +805,7 @@ ALTER TABLE `add_classes`
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `complaints`
@@ -755,10 +838,16 @@ ALTER TABLE `jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `meal_reports`
+--
+ALTER TABLE `meal_reports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `notices`
@@ -771,6 +860,12 @@ ALTER TABLE `notices`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `scholarship_documents`
@@ -794,7 +889,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `support_tickets`
@@ -832,10 +927,22 @@ ALTER TABLE `infrastructures`
   ADD CONSTRAINT `infrastructures_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `meal_reports`
+--
+ALTER TABLE `meal_reports`
+  ADD CONSTRAINT `meal_reports_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `notices`
 --
 ALTER TABLE `notices`
   ADD CONSTRAINT `notices_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reports`
+--
+ALTER TABLE `reports`
+  ADD CONSTRAINT `reports_school_id_foreign` FOREIGN KEY (`school_id`) REFERENCES `schools` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `staff`
