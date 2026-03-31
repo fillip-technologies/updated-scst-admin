@@ -1,136 +1,246 @@
 @extends('layouts.app')
 
 @section('content')
-    @php
-        $attendanceData = [
-            [
-                'id' => 1,
+       @php
+        $teachers = [
+            (object) [
                 'teacher_name' => 'Teacher A',
-                'total_days' => 30,
-                'present' => 30,
-                'absent' => 0,
-                'status' => 'Present',
+                'status' => 'present',
                 'reason' => null,
             ],
-            [
-                'id' => 2,
+            (object) [
                 'teacher_name' => 'Teacher B',
-                'total_days' => 30,
-                'present' => 28,
-                'absent' => 2,
-                'status' => 'Absent',
+                'status' => 'absent',
                 'reason' => 'Sick Leave',
             ],
-            [
-                'id' => 3,
+            (object) [
                 'teacher_name' => 'Teacher C',
-                'total_days' => 30,
-                'present' => 29,
-                'absent' => 1,
-                'status' => 'Absent',
+                'status' => 'present',
+                'reason' => null,
+            ],
+            (object) [
+                'teacher_name' => 'Teacher D',
+                'status' => 'absent',
                 'reason' => 'Casual Leave',
             ],
         ];
+
+        $teacherRows = collect($teachers);
+        $total = $teacherRows->count();
+        $present = $teacherRows->where('status', 'present')->count();
+        $absent = $teacherRows->where('status', 'absent')->count();
     @endphp
 
-    <div class="min-h-screen bg-gray-100 p-6 md:p-8">
-        <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+    <div class="p-8 bg-gray-100 min-h-screen">
+        <div class="flex justify-between items-center mb-6">
             <div>
-                <h1 class="text-2xl font-semibold text-gray-800">Teacher Attendance</h1>
-                <p class="mt-1 text-sm text-gray-500">Track daily attendance status for teaching staff in a clean summary view.</p>
-            </div>
-
-            <div class="w-full max-w-xs">
-                <label for="attendance_date" class="mb-2 block text-sm font-medium text-gray-600">Select Date</label>
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                        📅
-                    </span>
-                    <input
-                        id="attendance_date"
-                        type="date"
-                        value="{{ now()->format('Y-m-d') }}"
-                        class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
-                </div>
+                <h1 class="text-xl font-semibold text-gray-800">Teacher Attendance</h1>
+                <p class="text-sm text-gray-500">Mark and manage daily teacher attendance records.</p>
             </div>
         </div>
 
-        <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Total Teachers</p>
-                <h2 class="mt-2 text-2xl font-semibold text-gray-800">{{ count($attendanceData) }}</h2>
-            </div>
-            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Present Today</p>
-                <h2 class="mt-2 text-2xl font-semibold text-green-600">
-                    {{ collect($attendanceData)->where('status', 'Present')->count() }}
-                </h2>
-            </div>
-            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Absent Today</p>
-                <h2 class="mt-2 text-2xl font-semibold text-red-500">
-                    {{ collect($attendanceData)->where('status', 'Absent')->count() }}
-                </h2>
-            </div>
-        </div>
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-4 flex justify-between items-center">
+                <div class="flex gap-8 text-sm">
+                    <div>
+                        <p class="text-gray-500">TOTAL TEACHERS</p>
+                        <h3 class="font-semibold text-gray-800">{{ $total }}</h3>
+                    </div>
 
-        <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div class="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-800">Attendance Register</h2>
-                    <p class="mt-1 text-sm text-gray-500">Static preview for the teacher attendance management module.</p>
+                    <div>
+                        <p class="text-gray-500">PRESENT</p>
+                        <h3 id="presentCount" class="font-semibold text-green-600">{{ $present }}</h3>
+                    </div>
+
+                    <div>
+                        <p class="text-gray-500">ABSENT</p>
+                        <h3 id="absentCount" class="font-semibold text-red-500">{{ $absent }}</h3>
+                    </div>
                 </div>
+
+                <button onclick="history.back()"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                    ← Back
+                </button>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm">
-                    <thead class="bg-gray-50">
-                        <tr class="text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                            <th class="px-6 py-4">Teacher Name</th>
-                            <th class="px-6 py-4">Total Days</th>
-                            <th class="px-6 py-4">Present</th>
-                            <th class="px-6 py-4">Absent</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Reason</th>
-                            <th class="px-6 py-4 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach ($attendanceData as $teacher)
-                            <tr class="transition hover:bg-gray-50">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-900">
-                                            {{ substr($teacher['teacher_name'], -1) }}
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-gray-800">{{ $teacher['teacher_name'] }}</p>
-                                            <p class="text-xs text-gray-400">Teaching Staff</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 font-medium text-gray-700">{{ $teacher['total_days'] }}</td>
-                                <td class="px-6 py-4 font-medium text-green-600">{{ $teacher['present'] }}</td>
-                                <td class="px-6 py-4 font-medium text-red-500">{{ $teacher['absent'] }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ $teacher['status'] === 'Present' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                        {{ $teacher['status'] === 'Present' ? 'Present' : 'Absent' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600">
-                                    {{ $teacher['status'] === 'Absent' ? $teacher['reason'] : '-' }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <a href="{{ route('school.teacher.attendance.edit', $teacher['id']) }}"
-                                        class="inline-flex items-center gap-2 rounded-lg bg-primary-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-800">
-                                        ✏️ Edit
-                                    </a>
-                                </td>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100">
+                <div class="flex justify-between items-center px-6 py-4 border-b">
+                    <h2 class="font-semibold text-lg text-gray-700">👩‍🏫 Teacher Attendance List</h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+                            <tr>
+                                <th class="py-3 px-6 text-left">Teacher Name</th>
+                                <th class="py-3 px-6 text-left">Status</th>
+                                <th class="py-3 px-6 text-left">Action</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody id="teacherAttendanceBody" class="divide-y">
+                            @foreach ($teacherRows as $teacher)
+                                <tr class="teacher-row transition hover:bg-gray-50"
+                                    data-teacher-name="{{ $teacher->teacher_name }}"
+                                    data-initial-status="{{ $teacher->status }}"
+                                    data-initial-reason="{{ $teacher->reason ?? '' }}">
+                                    <td class="py-4 px-6 text-gray-700 font-medium whitespace-nowrap">
+                                        {{ $teacher->teacher_name }}
+                                    </td>
+
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="status-badge inline-flex px-3 py-1 rounded-full text-xs font-semibold w-fit {{ $teacher->status === 'present' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ ucfirst($teacher->status) }}
+                                        </span>
+                                    </td>
+
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3 flex-wrap md:flex-nowrap">
+                                            <select
+                                                class="status-select border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white min-w-[150px] focus:ring-2 focus:ring-primary-100 focus:border-primary-900 outline-none">
+                                                <option value="present" {{ $teacher->status === 'present' ? 'selected' : '' }}>
+                                                    ✅ Present
+                                                </option>
+                                                <option value="absent" {{ $teacher->status === 'absent' ? 'selected' : '' }}>
+                                                    ❌ Absent
+                                                </option>
+                                            </select>
+
+                                            <div class="reason-wrap {{ $teacher->status === 'absent' ? '' : 'hidden' }}">
+                                                <select
+                                                    class="reason-select border border-red-300 bg-red-50 rounded-lg px-3 py-2 text-sm min-w-[180px] focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none">
+                                                    <option value="">Select Reason</option>
+                                                    <option value="Sick Leave" {{ $teacher->reason === 'Sick Leave' ? 'selected' : '' }}>
+                                                        Sick Leave
+                                                    </option>
+                                                    <option value="Casual Leave" {{ $teacher->reason === 'Casual Leave' ? 'selected' : '' }}>
+                                                        Casual Leave
+                                                    </option>
+                                                    <option value="Personal Work" {{ $teacher->reason === 'Personal Work' ? 'selected' : '' }}>
+                                                        Personal Work
+                                                    </option>
+                                                    <option value="Other" {{ $teacher->reason === 'Other' ? 'selected' : '' }}>
+                                                        Other
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <span class="reason-placeholder inline-flex items-center text-sm text-gray-400 {{ $teacher->status === 'absent' ? 'hidden' : '' }}">
+                                                —
+                                            </span>
+
+                                            <button type="button"
+                                                class="save-button inline-flex items-center gap-1 bg-primary-900 hover:bg-primary-800 text-white px-3 py-2 rounded-lg text-sm disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap">
+                                                ✔ Save
+                                            </button>
+
+                                            <span class="unsaved-indicator hidden text-xs font-medium text-amber-600 whitespace-nowrap">
+                                                Unsaved changes
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        const teacherRows = document.querySelectorAll('.teacher-row');
+        const presentCountElement = document.getElementById('presentCount');
+        const absentCountElement = document.getElementById('absentCount');
+
+        function updateCounts() {
+            let present = 0;
+            let absent = 0;
+
+            teacherRows.forEach((row) => {
+                const status = row.querySelector('.status-select').value;
+
+                if (status === 'present') {
+                    present += 1;
+                } else if (status === 'absent') {
+                    absent += 1;
+                }
+            });
+
+            presentCountElement.textContent = present;
+            absentCountElement.textContent = absent;
+        }
+
+        function updateRowUI(row) {
+            const statusSelect = row.querySelector('.status-select');
+            const reasonWrap = row.querySelector('.reason-wrap');
+            const reasonSelect = row.querySelector('.reason-select');
+            const reasonPlaceholder = row.querySelector('.reason-placeholder');
+            const statusBadge = row.querySelector('.status-badge');
+            const saveButton = row.querySelector('.save-button');
+            const unsavedIndicator = row.querySelector('.unsaved-indicator');
+
+            const currentStatus = statusSelect.value;
+            const isAbsent = currentStatus === 'absent';
+
+            if (isAbsent) {
+                reasonWrap.classList.remove('hidden');
+                reasonPlaceholder.classList.add('hidden');
+                reasonSelect.disabled = false;
+                reasonSelect.className =
+                    'reason-select border border-red-300 bg-red-50 rounded-lg px-3 py-2 text-sm min-w-[180px] focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none';
+                statusBadge.className =
+                    'status-badge inline-flex px-3 py-1 rounded-full text-xs font-semibold w-fit bg-red-100 text-red-700';
+                statusBadge.textContent = 'Absent';
+            } else {
+                reasonWrap.classList.add('hidden');
+                reasonPlaceholder.classList.remove('hidden');
+                reasonSelect.value = '';
+                reasonSelect.disabled = true;
+                reasonSelect.className =
+                    'reason-select border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm min-w-[180px] focus:ring-2 focus:ring-red-100 focus:border-red-400 outline-none';
+                statusBadge.className =
+                    'status-badge inline-flex px-3 py-1 rounded-full text-xs font-semibold w-fit bg-green-100 text-green-700';
+                statusBadge.textContent = 'Present';
+            }
+
+            const currentReason = isAbsent ? reasonSelect.value : '';
+            const isChanged = row.dataset.initialStatus !== currentStatus || row.dataset.initialReason !== currentReason;
+
+            row.classList.toggle('bg-amber-50', isChanged);
+            unsavedIndicator.classList.toggle('hidden', !isChanged);
+            saveButton.disabled = !isChanged;
+
+            updateCounts();
+        }
+
+        teacherRows.forEach((row) => {
+            const statusSelect = row.querySelector('.status-select');
+            const reasonSelect = row.querySelector('.reason-select');
+            const saveButton = row.querySelector('.save-button');
+
+            statusSelect.addEventListener('change', () => updateRowUI(row));
+            reasonSelect.addEventListener('change', () => updateRowUI(row));
+
+            saveButton.addEventListener('click', () => {
+                const status = statusSelect.value;
+                const reason = status === 'absent' ? reasonSelect.value : '';
+
+                console.log('Teacher attendance saved', {
+                    teacher_name: row.dataset.teacherName,
+                    status: status,
+                    reason: reason
+                });
+
+                row.dataset.initialStatus = status;
+                row.dataset.initialReason = reason;
+                updateRowUI(row);
+            });
+
+            updateRowUI(row);
+        });
+    </script>
 @endsection
