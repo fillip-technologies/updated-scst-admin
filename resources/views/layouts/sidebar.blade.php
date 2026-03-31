@@ -199,6 +199,14 @@
             Student Attendance
         </a>
 
+        <a href="{{ route('school.teacher.attendance') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+   {{ request()->routeIs('school.teacher.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+            <i class="fa-solid fa-user-check {{ request()->routeIs('school.teacher.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Teacher Attendance
+        </a>
+
         <a href="{{ route('school.student') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->is('school-management') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">

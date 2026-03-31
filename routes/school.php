@@ -27,6 +27,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/dashboard', [WebsiteCmsController::class, 'schoolDashboard'])->name('school.dashboard');
     Route::get('/logout', [LoginController::class, 'SchoolLogout'])->name('school.logout');
     Route::get('/attendance', [WebsiteCmsController::class, 'attandence'])->name('school.attendance');
+    Route::get('/teacher-attendance', [HomeController::class, 'teacherAttendance'])->name('school.teacher.attendance');
+    Route::get('/teacher-attendance/edit/{id}', [HomeController::class, 'editTeacherAttendance'])->name('school.teacher.attendance.edit');
     Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
     Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
     Route::get('/infra-info', [HomeController::class, 'infraInfo'])->name('school.infra.info');
