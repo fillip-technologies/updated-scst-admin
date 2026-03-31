@@ -11,19 +11,18 @@ use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
-use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
-
 Route::prefix('school')->middleware('school')->group(function () {
-    Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
-        Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
-    Route::post('create/campus/section/infrastructure', [InfrastructureController::class, 'SaveCampus'])->name('inf.save.campus');
+
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
+    Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
+    Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
+    Route::post('updatecls/acadmi/section/infrastructure', [InfrastructureController::class, 'UpdateAcademic'])->name('inf.update.acadmi');
     Route::post('create/leader/section/staff', [StaffController::class, 'SaveLeader'])->name('staff.save.leader');
     Route::post('create/teache/section/staff', [StaffController::class, 'SaveTeacher'])->name('staff.save.teacher');
     Route::post('create/notice/section/staff', [NoticeController::class, 'SaveNotice'])->name('notice.save');
-
+    Route::post('update/campus/section/infrastructure', [InfrastructureController::class, 'UpdateCampus'])->name('inf.update.campus');
     Route::get('/homepagedata', [ManageSchoolController::class, 'getHomepagedata']);
     Route::get('/dashboard', [WebsiteCmsController::class, 'schoolDashboard'])->name('school.dashboard');
     Route::get('/logout', [LoginController::class, 'SchoolLogout'])->name('school.logout');
@@ -33,13 +32,13 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/academics', [WebsiteCmsController::class, 'academics'])->name('school.academics');
     Route::get('/meal-reporting', [WebsiteCmsController::class, 'mealreporting'])->name('school.meal');
     Route::get('/infra-info', [HomeController::class, 'infraInfo'])->name('school.infra.info');
-
+    Route::post('create/campus/section/infrastructure', [InfrastructureController::class, 'SaveCampus'])->name('inf.save.campuse');
     Route::post('/infra-info/store', [ReportManageController::class, 'infrReportSave'])->name('infra.store');
     Route::get('/infra/edit/{id}', [HomeController::class, 'editInfraInfo'])
-    ->name('school.infra.edit');
+        ->name('school.infra.edit');
     Route::post('/infra-info/update/{id}', [ReportManageController::class, 'infrReportUpdate'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
-    Route::get('/create/createInfrastructure',[HomeController::class, 'createInfrastructure'])->name('school.infra.create');
+    Route::get('/create/createInfrastructure', [HomeController::class, 'createInfrastructure'])->name('school.infra.create');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
     Route::get('/reports', [WebsiteCmsController::class, 'reports'])->name('school.reports');
 
@@ -77,20 +76,22 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('attendance.status.update');
     Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
     Route::post('/report/send', [ReportManageController::class, 'ReportUpload'])->name('report.save');
-    Route::post('/meals/report',[ReportManageController::class, 'mealReport'])->name('meal.report');
+    Route::post('/meals/report', [ReportManageController::class, 'mealReport'])->name('meal.report');
+
     // RouteCms-Wedsite
-    Route::post('/update/school/faq',[ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
-     Route::delete('/update/school/faq/delete/index',[ManageSchoolUpdateController::class, 'DeleteFaqSection'])->name('faq.delete.index');
-     Route::post('/update/schoolcms/quize',[ManageSchoolUpdateController::class, 'QuizeUpdate'])->name('quize.update');
-      Route::post('/delete/schoolcms/quize',[ManageSchoolUpdateController::class, 'QuizeDelete'])->name('quize.delete');
+    Route::post('/update/school/faq', [ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
+    Route::delete('/update/school/faq/delete/index', [ManageSchoolUpdateController::class, 'DeleteFaqSection'])->name('faq.delete.index');
+    Route::post('/update/schoolcms/quize', [ManageSchoolUpdateController::class, 'QuizeUpdate'])->name('quize.update');
+    Route::post('/delete/schoolcms/quize', [ManageSchoolUpdateController::class, 'QuizeDelete'])->name('quize.delete');
     Route::get('/attendance/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
-      Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');
+    Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');
     Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('school.student');
     Route::get('/schoolmanagement/create', [StudentManageController::class, 'studentCreate'])->name('school.stud.create');
     Route::get('/schoolmanagement/bulk-upload', [StudentManageController::class, 'bulkUploadStudent'])->name('student.bulkupload');
     Route::get('/schoolmanagement/edit/{id}', [StudentManageController::class, 'studentEdit'])->name('school.stud.edit');
-    Route::post('/student/update/{id}',[StudentManageController::class, 'studentUpdate'])->name('student.update');
-    Route::delete('/student/delete/{id}',[StudentManageController::class, 'studentDelete'])->name('student.delete');
-    Route::get('/student/export',[StudentManageController::class, 'exportStudent'])->name('student.export');
-    Route::post('/student/import',[StudentManageController::class, 'importStudent'])->name('student.import');
+    Route::post('/student/update/{id}', [StudentManageController::class, 'studentUpdate'])->name('student.update');
+    Route::delete('/student/delete/{id}', [StudentManageController::class, 'studentDelete'])->name('student.delete');
+    Route::get('/student/export', [StudentManageController::class, 'exportStudent'])->name('student.export');
+    Route::post('/student/import', [StudentManageController::class, 'importStudent'])->name('student.import');
+
 });

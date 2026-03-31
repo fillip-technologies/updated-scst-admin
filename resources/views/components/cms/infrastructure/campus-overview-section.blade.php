@@ -1,6 +1,4 @@
-@php
-    print_r($compusdata);
-@endphp
+
 
 <div x-data="{
     form: {
@@ -37,9 +35,10 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ route('inf.save.campus') }}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{ isset($compusdata) ? route('inf.update.campus') :  route('inf.save.campuse') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+            <input type="hiddent" name="old_image" value="{{ $compusdata->campus_overview_image ?? "" }}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div class="md:col-span-2">
                     <label for="campus_overview_title" class="mb-2 block text-sm font-medium text-gray-700">Section
@@ -72,7 +71,8 @@
                             <div>
                                 <label for="campus_feature_1_title"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 1 Title</label>
-                                <input id="campus_feature_1_title" name="feature_1_title" type="text" value="{{ old('feature_1_title',$compusdata->feature_1_title ?? "") }}"
+                                <input id="campus_feature_1_title" name="feature_1_title" type="text"
+                                    value="{{ old('feature_1_title', $compusdata->feature_1_title ?? '') }}"
                                     class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                             </div>
 
@@ -80,7 +80,7 @@
                                 <label for="campus_feature_1_description"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 1 Description</label>
                                 <textarea id="campus_feature_1_description" name="feature_1_description" rows="4"
-                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_1_description',$compusdata->feature_1_description ?? "") }}</textarea>
+                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_1_description', $compusdata->feature_1_description ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -89,7 +89,8 @@
                             <div>
                                 <label for="campus_feature_2_title"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 2 Title</label>
-                                <input id="campus_feature_2_title" name="feature_2_title" type="text" value="{{ old('feature_2_title',$compusdata->feature_2_title ?? "") }}"
+                                <input id="campus_feature_2_title" name="feature_2_title" type="text"
+                                    value="{{ old('feature_2_title', $compusdata->feature_2_title ?? '') }}"
                                     class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                             </div>
 
@@ -97,7 +98,7 @@
                                 <label for="campus_feature_2_description"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 2 Description</label>
                                 <textarea id="campus_feature_2_description" name="feature_2_description" rows="4"
-                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_2_description',$compusdata->feature_2_description ?? "") }}</textarea>
+                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_2_description', $compusdata->feature_2_description ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -106,7 +107,8 @@
                             <div>
                                 <label for="campus_feature_3_title"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 3 Title</label>
-                                <input id="campus_feature_3_title" name="feature_3_title" type="text" value="{{ old('feature_3_title',$compusdata->feature_3_title ?? "") }}"
+                                <input id="campus_feature_3_title" name="feature_3_title" type="text"
+                                    value="{{ old('feature_3_title', $compusdata->feature_3_title ?? '') }}"
                                     class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                             </div>
 
@@ -114,7 +116,7 @@
                                 <label for="campus_feature_3_description"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 3 Description</label>
                                 <textarea id="campus_feature_3_description" name="feature_3_description" rows="4"
-                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_3_description',$compusdata->feature_3_description ?? "") }}</textarea>
+                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_3_description', $compusdata->feature_3_description ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -123,7 +125,8 @@
                             <div>
                                 <label for="campus_feature_4_title"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 4 Title</label>
-                                <input id="campus_feature_4_title" name="feature_4_title" type="text" value="{{ old('') }}"
+                                <input id="campus_feature_4_title" name="feature_4_title" type="text"
+                                    value="{{ old('feature_4_title', $compusdata->feature_4_title ?? '') }}"
                                     class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                             </div>
 
@@ -131,7 +134,7 @@
                                 <label for="campus_feature_4_description"
                                     class="mb-2 block text-sm font-medium text-gray-700">Feature 4 Description</label>
                                 <textarea id="campus_feature_4_description" name="feature_4_description" rows="4"
-                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
+                                    class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('feature_4_description', $compusdata->feature_4_description ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -144,8 +147,8 @@
                         class="rounded-2xl border border-dashed border-primary-800/20 bg-primary-900/5 p-5 transition hover:border-primary-700 hover:bg-primary-900/10">
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
-                                <img :src="form.image" alt="Campus overview preview"
-                                    class="h-48 w-full object-cover">
+                                <img src="{{ asset($compusdata->campus_overview_image ?? '') }}"
+                                    alt="Campus overview preview" class="h-48 w-full object-cover">
                             </div>
 
                             <div class="flex flex-col justify-center">
@@ -153,7 +156,8 @@
                                 <p class="mt-2 text-sm leading-6 text-gray-500">
                                     Upload the campus image displayed alongside the campus overview content.
                                 </p>
-
+                                <input type="hidden" name="old_image"
+                                    value="{{ $compusdata->campus_overview_image ?? '' }}">
                                 <input id="campus_overview_image" type="file" accept="image/*"
                                     name="campus_overview_image" @change="handleFileChange($event)"
                                     class="mt-4 block w-full rounded-xl border border-primary-800/20 bg-white px-4 py-3 text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-primary-800 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -170,7 +174,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    Save / Update
+                    {{ isset($compusdata) ? 'Update' : 'Save' }}
                 </button>
             </div>
         </form>
@@ -191,23 +195,33 @@
             <p class="mt-4 text-sm leading-6 text-gray-500" x-text="form.paragraph2"></p>
 
             <div class="mt-6 grid grid-cols-1 gap-3">
-                <template
-                    x-for="(feature, index) in [
-                    { title: form.feature1Title, description: form.feature1Description },
-                    { title: form.feature2Title, description: form.feature2Description },
-                    { title: form.feature3Title, description: form.feature3Description },
-                    { title: form.feature4Title, description: form.feature4Description }
-                ]"
-                    :key="index">
-                    <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
-                        <h4 class="text-sm font-semibold text-gray-800" x-text="feature.title"></h4>
-                        <p class="mt-2 text-sm leading-6 text-gray-500" x-text="feature.description"></p>
-                    </div>
-                </template>
+                {{-- Feature 1 --}}
+                <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
+                    <h4 class="text-sm font-semibold text-gray-800" >{{ $compusdata->feature_1_title ?? "" }}</h4>
+                    <p class="mt-2 text-sm leading-6 text-gray-500" >{{ $compusdata->feature_1_description ?? "" }}</p>
+                </div>
+
+                {{-- Feature 2 --}}
+                <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
+                    <h4 class="text-sm font-semibold text-gray-800">{{ $compusdata->feature_2_title ?? "" }}</h4>
+                    <p class="mt-2 text-sm leading-6 text-gray-500">{{ $compusdata->feature_2_description ?? "" }}</p>
+                </div>
+
+                {{-- Feature 3 --}}
+                <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
+                    <h4 class="text-sm font-semibold text-gray-800" >{{ $compusdata->feature_3_title ?? "" }}</h4>
+                    <p class="mt-2 text-sm leading-6 text-gray-500" >{{ $compusdata->feature_3_description ?? "" }}</p>
+                </div>
+
+                {{-- Feature 4 --}}
+                <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
+                    <h4 class="text-sm font-semibold text-gray-800">{{ $compusdata->feature_4_title ?? "" }}</h4>
+                    <p class="mt-2 text-sm leading-6 text-gray-500">{{ $compusdata->feature_4_description ?? "" }}</p>
+                </div>
             </div>
 
             <div class="mt-6 overflow-hidden rounded-3xl border border-primary-800/10 bg-white shadow-sm">
-                <img :src="form.image" alt="Campus overview image" class="h-64 w-full object-cover">
+                <img src="{{ asset( $compusdata->campus_overview_image ?? "") }}" alt="Campus overview image" class="h-64 w-full object-cover">
             </div>
         </div>
     </div>

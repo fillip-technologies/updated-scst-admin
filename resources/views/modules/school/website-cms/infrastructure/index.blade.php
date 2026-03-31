@@ -7,7 +7,7 @@
     $herosection = json_decode($infradatas->hero);
       $compussection = json_decode(stripslashes($infradatas->compus_overview));
     $academicsection = json_decode($infradatas->academic_infrastructure);
-  
+
 
 @endphp
 <div class="min-h-screen bg-gray-100 p-8" x-data="{
@@ -69,7 +69,7 @@
         </div>
 
         <div x-show="activeTab === 'academic_infrastructure'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.academic-infrastructure-section />
+            <x-cms.infrastructure.academic-infrastructure-section :academics="$academicsection" />
         </div>
     </div>
 </div>
