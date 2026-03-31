@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('school')->middleware('school')->group(function () {
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
+        Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
     Route::post('create/campus/section/infrastructure', [InfrastructureController::class, 'SaveCampus'])->name('inf.save.campus');
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
     Route::post('create/leader/section/staff', [StaffController::class, 'SaveLeader'])->name('staff.save.leader');
@@ -78,6 +79,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     // RouteCms-Wedsite
     Route::post('/update/school/faq',[ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
      Route::delete('/update/school/faq/delete/index',[ManageSchoolUpdateController::class, 'DeleteFaqSection'])->name('faq.delete.index');
+     Route::post('/update/schoolcms/quize',[ManageSchoolUpdateController::class, 'QuizeUpdate'])->name('quize.update');
+      Route::post('/delete/schoolcms/quize',[ManageSchoolUpdateController::class, 'QuizeDelete'])->name('quize.delete');
     Route::get('/attendance/classs/filter/', [ClassController::class, 'classFilter'])->name('class.filter');
       Route::get('/student/classs/filter/', [StudentManageController::class, 'studentclassFilter'])->name('student.class.filter');
     Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('school.student');

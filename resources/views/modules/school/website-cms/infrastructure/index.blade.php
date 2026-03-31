@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+
+    $herosection = json_decode($infradatas->hero);
+      $compussection = json_decode(stripslashes($infradatas->compus_overview));
+    $academicsection = json_decode($infradatas->academic_infrastructure);
+  
+
+@endphp
 <div class="min-h-screen bg-gray-100 p-8" x-data="{
     activeTab: 'hero',
     currentSectionLabel() {
@@ -52,11 +61,11 @@
         </div>
 
         <div x-show="activeTab === 'hero'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.hero-section />
+            <x-cms.infrastructure.hero-section :heros="$herosection" />
         </div>
 
         <div x-show="activeTab === 'campus_overview'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.campus-overview-section />
+            <x-cms.infrastructure.campus-overview-section :compusdata="$compussection" />
         </div>
 
         <div x-show="activeTab === 'academic_infrastructure'" x-transition.opacity.duration.200ms>

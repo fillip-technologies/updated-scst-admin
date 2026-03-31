@@ -150,45 +150,95 @@
                 </button>
             </div>
 
-            <form x-ref="faqForm"
+            <form x-ref="quizForm"
                 :action="editingIndex === null ?
-                    '{{ route('faq.save') }}' :
-                    '{{ route('faq.update') }}'"
-                method="POST">
+                    '{{ route('quiz.save') }}' :
+                    '{{ route('quize.update', ':id') }}'.replace(':id', form.id)"
+                method="POST" enctype="multipart/form-data">
                 @csrf
+
+                <!-- PUT method for edit -->
+                <template x-if="editingIndex !== null">
+                    <input type="hidden" name="_method" value="PUT">
+                </template>
+
+                <!-- Hidden fields -->
                 <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
-                <input type="hidden" name="faq_index" :value="editingIndex">
+                <input type="hidden" name="quiz_index" :value="editingIndex">
+
                 <div class="p-6 sm:p-8">
-                    <div class="grid grid-cols-1 gap-5">
+                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
 
-                        <!-- ✅ FIX -->
-                        <div>
-                            <label for="faq_question"
-                                class="mb-2 block text-sm font-medium text-gray-700">Question</label>
-                            <input id="faq_question" type="text" x-model="form.question" name="faq_question"
-                                class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
+                        <!-- IMAGE -->
+                        <div class="rounded-2xl border border-dashed border-primary-800/20 bg-primary-900/5 p-5">
+                            <label class="mb-2 block text-sm font-medium text-gray-700">
+                                Quiz Banner Image Upload
+                            </label>
+
+                            <input type="file" name="quiz_image" accept="image/*"
+                                @change="handleFileChange($event)"
+                                class="mt-4 block w-full rounded-xl border px-4 py-3 text-sm">
+
+                            <p class="mt-3 text-xs text-gray-500" x-text="form.fileName || 'No file selected'"></p>
+
+                            <div class="mt-4 overflow-hidden rounded-2xl border bg-white">
+                                <img :src="form.image ?
+                                    form.image :
+                                    (form.quiz_image ? '/' + form.quiz_image :
+                                        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80'
+                                        )"
+                                    class="h-52 w-full object-cover">
+                            </div>
                         </div>
 
-                        <!-- ✅ FIX -->
-                        <div>
-                            <label for="faq_answer"
-                                class="mb-2 block text-sm font-medium text-gray-700">Answer</label>
-                            <textarea id="faq_answer" rows="6" x-model="form.answer" name="faq_answer"
-                                class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20"></textarea>
-                        </div>
+                        <!-- FORM FIELDS -->
+                        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
-                        <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-                            <button type="button" @click="editorOpen = false"
-                                class="inline-flex items-center justify-center rounded-xl border border-primary-800/20 bg-white px-4 py-2.5 text-sm font-medium text-primary-900">
-                                Cancel
-                            </button>
+                            <!-- STATUS -->
+                            <div>
+                                <label class="mb-2 block text-sm font-medium text-gray-700">Status</label>
+                                <select name="quiz_status" x-model="form.quiz_status"
+                                    class="w-full rounded-xl border px-4 py-3 text-sm">
+                                    <option value="">Select Status</option>
+                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Upcoming">Upcoming</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
 
-                            <!-- ✅ FIX -->
-                            <button type="submit" @click="saveFaq()"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-medium text-white">
-                                <i class="fa-solid fa-floppy-disk text-xs"></i>
-                                Save
-                            </button>
+                            <!-- BUTTON TEXT -->
+                            <div>
+                                <label class="mb-2 block text-sm font-medium text-gray-700">Button Text</label>
+                                <input type="text" name="quiz_button_text" x-model="form.quiz_button_text"
+                                    class="w-full rounded-xl border px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- TITLE -->
+                            <div class="md:col-span-2">
+                                <label class="mb-2 block text-sm font-medium text-gray-700">Quiz Title</label>
+                                <input type="text" name="quiz_title" x-model="form.quiz_title"
+                                    class="w-full rounded-xl border px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- DESCRIPTION -->
+                            <div class="md:col-span-2">
+                                <label class="mb-2 block text-sm font-medium text-gray-700">Description</label>
+                                <textarea name="quiz_description" x-model="form.quiz_description" rows="5"
+                                    class="w-full rounded-xl border px-4 py-3 text-sm"></textarea>
+                            </div>
+
+                            <!-- ACTION BUTTONS -->
+                            <div class="md:col-span-2 flex justify-end gap-3">
+                                <button type="button" @click="editorOpen = false; resetForm()"
+                                    class="inline-flex items-center justify-center rounded-xl border border-primary-800/20 bg-white px-4 py-2.5 text-sm font-medium text-primary-900">
+                                    Cancel
+                                </button>
+
+                                <button type="submit" class="bg-primary-900 text-white px-4 py-2 rounded-xl">
+                                    Save
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 </div>

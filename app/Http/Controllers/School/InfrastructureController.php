@@ -145,7 +145,50 @@ class InfrastructureController extends Controller
                 'academic_infrastructure' => json_encode([$newActivity]),
             ]);
         }
+
         return redirect()->route('school.website-cms.infrastructure')
             ->with('success', 'Academic Infrastructure section saved successfully');
     }
+
+   
+
+    public function Updatehero(Request $request)
+{
+    $request->validate([
+        'school_id' => 'required',
+        'infra_hero_image' => 'nullable|image',
+        'infra_hero_title' => 'required',
+        'infra_hero_subtitle' => 'required',
+        'infra_breadcrumb' => 'required',
+    ]);
+
+    $getHero = Infrastructure::where('school_id', $request->school_id)->first();
+
+
+    $editdata = json_decode(stripslashes($getHero->hero));
+
+    if ($request->hasFile('infra_hero_image')) {
+
+
+        if (!empty($editdata->infra_hero_image) && file_exists(public_path($editdata->infra_hero_image))) {
+            unlink(public_path($editdata->infra_hero_image));
+        }
+
+
+        $file = $request->file('infra_hero_image');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $uploadPath = public_path('InfImage');
+        $file->move($uploadPath, $filename);
+        $editdata->infra_hero_image = 'InfImage/' . $filename;
+    }
+
+    $editdata->infra_hero_title = $request->infra_hero_title;
+    $editdata->infra_hero_subtitle = $request->infra_hero_subtitle;
+    $editdata->infra_breadcrumb = $request->infra_breadcrumb;
+
+    $getHero->hero = json_encode($editdata);
+    $getHero->save();
+
+    return back()->with('success', 'Hero Section Updated Successfully');
+}
 }

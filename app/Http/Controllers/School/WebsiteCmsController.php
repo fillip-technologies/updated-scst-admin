@@ -5,6 +5,7 @@ namespace App\Http\Controllers\School;
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Home;
+use App\Models\Infrastructure;
 use App\Models\Student;
 
 class WebsiteCmsController extends Controller
@@ -73,7 +74,9 @@ class WebsiteCmsController extends Controller
 
     public function cmsinfrastructureindex()
     {
-        return view('modules.school.website-cms.infrastructure.index');
+        $infradatas = Infrastructure::where('school_id',SchoolLogin()->id)->first();
+
+        return view('modules.school.website-cms.infrastructure.index',compact('infradatas'));
     }
 
     public function cmsstaffindex()
@@ -92,7 +95,7 @@ class WebsiteCmsController extends Controller
 
     $studentdata = Student::with(['attendance' => function($q){
         $q->whereDate('date', now());
-    }])->paginate(10); 
+    }])->paginate(10);
 
     return view('modules.school.attendance.index', compact('classes','studentdata'));
 }
