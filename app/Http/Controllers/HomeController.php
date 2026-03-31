@@ -152,6 +152,16 @@ class HomeController extends Controller
         return view('modules.school.infra-info.edit', compact('editData'));
     }
 
+    public function teacherAttendance()
+    {
+        return view('modules.school.teacher-attendance.listing');
+    }
+
+    public function editTeacherAttendance($id)
+    {
+        return view('modules.school.teacher-attendance.edit');
+    }
+
 
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
     {
