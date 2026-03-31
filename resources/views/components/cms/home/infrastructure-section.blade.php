@@ -1,4 +1,4 @@
-{{-- @php
+{{-- {{-- @php
     print_r($infrastructure->allfeatures);
 @endphp --}}
 
@@ -74,7 +74,7 @@
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
                     {{ isset($infrastructure) ? "Update" : "Save"}}
-                    
+
                 </button>
             </div>
         </form>
@@ -127,4 +127,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}

@@ -410,4 +410,80 @@ class ManageSchoolUpdateController extends Controller
 
         return back()->with('success', 'Faq deleted successfully');
     }
+
+   public function QuizeUpdate(Request $request)
+{
+    $request->validate([
+        'quiz_status' => 'required|string',
+        'quiz_title' => 'required|string|max:255',
+        'quiz_description' => 'required|string',
+        'quiz_button_text' => 'required|string|max:50',
+        'school_id' => 'required|integer',
+        'quiz_index' => 'required|integer',
+        'quiz_image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+    ]);
+
+    $index = $request->quiz_index;
+
+    $school = Home::where('school_id', $request->school_id)->firstOrFail();
+    $quizzes = json_decode($school->quiz, true);
+
+    if (!isset($quizzes[$index])) {
+        return redirect()->back()->with('error', 'Quiz not found at this index!');
+    }
+
+    if ($request->hasFile('quiz_image')) {
+        $file = $request->file('quiz_image');
+        $filename = time() . '_' . $file->getClientOriginalName(); // unique name
+        $destination = public_path('quizImage'); // folder: public/quizImage
+        $file->move($destination, $filename);
+
+
+        $quizzes[$index]['quiz_image'] = 'quizImage/' . $filename;
+    }
+
+
+    // Update other quiz fields
+    $quizzes[$index]['quiz_status'] = $request->quiz_status;
+    $quizzes[$index]['quiz_title'] = $request->quiz_title;
+    $quizzes[$index]['quiz_description'] = $request->quiz_description;
+    $quizzes[$index]['quiz_button_text'] = $request->quiz_button_text;
+
+    $school->quiz = json_encode($quizzes);
+    $school->save();
+
+    return redirect()->back()->with('success', 'Quiz updated successfully!');
+}
+
+
+public function QuizeDelete(Request $request)
+{
+    $request->validate([
+        'school_id' => 'required|integer',
+        'quiz_index' => 'required|integer',
+    ]);
+
+
+    $school = Home::where('school_id', $request->school_id)->firstOrFail();
+    $quizzes = json_decode($school->quiz, true); 
+
+    $index = $request->quiz_index;
+
+    if (!isset($quizzes[$index])) {
+        return redirect()->back()->with('error', 'Quiz not found at this index!');
+    }
+
+
+    if (!empty($quizzes[$index]['quiz_image']) && file_exists(public_path($quizzes[$index]['quiz_image']))) {
+        unlink(public_path($quizzes[$index]['quiz_image']));
+    }
+
+
+    array_splice($quizzes, $index, 1);
+
+    $school->quiz = json_encode($quizzes);
+    $school->save();
+
+    return redirect()->back()->with('success', 'Quiz deleted successfully!');
+}
 }
