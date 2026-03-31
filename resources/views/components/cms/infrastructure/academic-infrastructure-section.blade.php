@@ -72,12 +72,19 @@
                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                             Edit
                                         </button>
+                                        <form method="POST" action="{{ route('inf.delete.acadmi') }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                            <input type="hidden" name="infra_index" :value="index">
 
-                                        <button type="button" @click="deleteCard(index)"
-                                            class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-500 transition hover:bg-red-50">
-                                            <i class="fa-solid fa-trash text-[10px]"></i>
-                                            Delete
-                                        </button>
+                                            <button type="submit" @click="deleteCard(index)"
+                                                class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-500 transition hover:bg-red-50">
+                                                <i class="fa-solid fa-trash text-[10px]"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -102,16 +109,29 @@
             <p class="mt-3 text-sm leading-6 text-gray-500" x-text="sectionDescription"></p>
 
             <div class="mt-6 space-y-4">
-                <template x-for="(card, index) in cards" :key="`preview-${index}`">
+                <template x-for="(card, index) in cards" :key="index">
                     <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
-                        <img :src="'/' + card.image" :alt="card.title" class="h-36 w-full object-cover">
+
+                        <!-- IMAGE -->
+                        <img :src="card.infra_card_image ?
+                            '/' + card.infra_card_image :
+                            'https://images.unsplash.com/photo-1509062522246-3755977927d7'"
+                            :alt="card.infra_card_title" class="h-36 w-full object-cover">
+
                         <div class="p-4">
-                            <h4 class="text-sm font-semibold text-gray-800" x-text="card.title"></h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-500" x-text="card.description"></p>
-                            <template x-if="card.link">
+
+                            <!-- TITLE -->
+                            <h4 class="text-sm font-semibold text-gray-800" x-text="card.infra_card_title"></h4>
+
+                            <!-- DESCRIPTION -->
+                            <p class="mt-2 text-sm leading-6 text-gray-500" x-text="card.infra_card_description"></p>
+
+                            <!-- LINK -->
+                            <template x-if="card.infra_card_link">
                                 <div class="mt-3 inline-flex rounded-lg bg-primary-900/5 px-3 py-2 text-xs font-medium text-primary-900"
-                                    x-text="card.link"></div>
+                                    x-text="card.infra_card_link"></div>
                             </template>
+
                         </div>
                     </div>
                 </template>

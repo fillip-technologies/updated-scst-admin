@@ -18,8 +18,11 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
     Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
-    Route::post('updatecls/acadmi/section/infrastructure', [InfrastructureController::class, 'UpdateAcademic'])->name('inf.update.acadmi');
+    Route::post('update/acadmi/section/infrastructure', [InfrastructureController::class, 'UpdateAcademic'])->name('inf.update.acadmi');
+        Route::delete('delete/acadmi/section/infrastructure', [InfrastructureController::class, 'deleteAcademic'])->name('inf.delete.acadmi');
+
     Route::post('create/leader/section/staff', [StaffController::class, 'SaveLeader'])->name('staff.save.leader');
+       Route::post('update/leader/section/staff', [StaffController::class, 'UpdateLeader'])->name('staff.update.leader');
     Route::post('create/teache/section/staff', [StaffController::class, 'SaveTeacher'])->name('staff.save.teacher');
     Route::post('create/notice/section/staff', [NoticeController::class, 'SaveNotice'])->name('notice.save');
     Route::post('update/campus/section/infrastructure', [InfrastructureController::class, 'UpdateCampus'])->name('inf.update.campus');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Home;
 use App\Models\Infrastructure;
+use App\Models\Staff;
 use App\Models\Student;
 
 class WebsiteCmsController extends Controller
@@ -81,7 +82,9 @@ class WebsiteCmsController extends Controller
 
     public function cmsstaffindex()
     {
-        return view('modules.school.staff.index');
+        $staffdata = Staff::where('school_id',SchoolLogin()->id)->first();
+
+        return view('modules.school.staff.index',compact('staffdata'));
     }
 
     public function cmsnoticeindex()

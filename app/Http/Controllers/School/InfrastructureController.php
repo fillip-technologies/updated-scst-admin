@@ -208,12 +208,9 @@ class InfrastructureController extends Controller
 
         $compausedit = json_decode(stripslashes($getdata->compus_overview));
 
-
         $uploadImg = $compausedit->campus_overview_image ?? null;
 
-
         if ($request->hasFile('campus_overview_image')) {
-
 
             if (! empty($compausedit->campus_overview_image) && file_exists(public_path($compausedit->campus_overview_image))) {
                 unlink(public_path($compausedit->campus_overview_image));
@@ -226,7 +223,6 @@ class InfrastructureController extends Controller
 
             $uploadImg = 'CampusImage/'.$filename;
         }
-
 
         $compausedit->campus_overview_title = $request->campus_overview_title;
         $compausedit->campus_paragraph_1 = $request->campus_paragraph_1;
@@ -247,8 +243,89 @@ class InfrastructureController extends Controller
             ->with('success', 'Campus section Updated successfully');
     }
 
+    public function UpdateAcademic(Request $request)
+    {
+        $request->validate([
+            'infra_card_title' => 'required|string|max:255',
+            'infra_card_description' => 'required|string',
+            'infra_card_link' => 'nullable|string',
+            'infra_index' => 'required|integer',
+        ]);
 
-    public function UpdateAcademic(Request $request){
-        dd($request->all());
+        $model = Infrastructure::where('school_id', $request->school_id)->first();
+
+        $data = json_decode($model->academic_infrastructure, true) ?? [];
+
+        $index = $request->infra_index;
+
+        $oldImage = $request->old_infra_image;
+
+        if ($request->hasFile('infra_card_image')) {
+
+            $file = $request->file('infra_card_image');
+            $name = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
+            $destinationPath = public_path('acadmiImg');
+
+            if (! file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+            $file->move($destinationPath, $name);
+
+            if (! empty($oldImage) && file_exists(public_path($oldImage))) {
+                unlink(public_path($oldImage));
+            }
+
+            $imagePath = 'acadmiImg/'.$name;
+
+        } else {
+
+            $imagePath = $oldImage;
+        }
+
+        $data[$index] = [
+            'infra_card_title' => $request->infra_card_title,
+            'infra_card_description' => $request->infra_card_description,
+            'infra_card_link' => $request->infra_card_link,
+            'infra_card_image' => $imagePath,
+        ];
+
+        $model->academic_infrastructure = json_encode($data);
+        $model->save();
+
+        return back()->with('success', 'Infrastructure Updated Successfully ✅');
+    }
+
+    public function deleteAcademic(Request $request)
+    {
+        $request->validate([
+            'infra_index' => 'required|integer',
+            'school_id' => 'required',
+        ]);
+
+        $model = Infrastructure::where('school_id', $request->school_id)->first();
+
+        $data = json_decode($model->academic_infrastructure, true) ?? [];
+
+        $index = $request->infra_index;
+
+        if (! isset($data[$index])) {
+            return back()->with('error', 'Item not found');
+        }
+        $image = $data[$index]['infra_card_image'] ?? null;
+
+        if ($image && file_exists(public_path($image))) {
+            unlink(public_path($image));
+        }
+
+        // 🔥 remove item
+        unset($data[$index]);
+
+        $data = array_values($data);
+
+        $model->academic_infrastructure = json_encode($data);
+        $model->save();
+
+        return back()->with('success', 'Deleted successfully ✅');
     }
 }

@@ -42,7 +42,7 @@ class StaffController extends Controller
         ManageCrud::createdatas(Staff::class, $data);
 
         return redirect()->route('school.website-cms.staff')
-            ->with('success', 'Campus section saved successfully');
+            ->with('success', 'Leaders section saved successfully');
     }
 
     public function SaveTeacher(Request $request)
@@ -104,5 +104,54 @@ class StaffController extends Controller
 
         return redirect()->route('school.website-cms.staff')
             ->with('success', 'Teacher saved successfully');
+    }
+
+    public function UpdateLeader(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'leader_name' => 'required',
+            'leader_designation' => 'required',
+            'leader_bio' => 'required',
+        ]);
+
+        $dataget = Staff::where('school_id', $request->school_id)->firstOrFail();
+
+        $editdata = json_decode($dataget->leadership);
+
+        $oldImage = $request->old_image;
+        $uploadImage = $oldImage; // ✅ default old image
+
+        if ($request->hasFile('leader_image')) {
+
+            $file = $request->file('leader_image');
+
+            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
+            $destination = public_path('leaders');
+
+
+            if (! file_exists($destination)) {
+                mkdir($destination, 0777, true);
+            }
+
+            $file->move($destination, $filename);
+
+            if (! empty($oldImage) && file_exists(public_path($oldImage))) {
+                unlink(public_path($oldImage));
+            }
+            $uploadImage = 'leaders/'.$filename;
+        }
+
+        $editdata->leader_name = $request->leader_name;
+        $editdata->leader_designation = $request->leader_designation;
+        $editdata->leader_bio = $request->leader_bio;
+        $editdata->leader_image = $uploadImage;
+
+        $dataget->leadership = json_encode($editdata);
+        $dataget->save();
+
+        return redirect()->route('school.website-cms.staff')
+            ->with('success', 'Leaders section Updated successfully ✅');
     }
 }

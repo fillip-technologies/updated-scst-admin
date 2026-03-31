@@ -18,6 +18,12 @@
         ];
     @endphp
 
+    @php
+        $leasder = json_decode($staffdata->leadership);
+        $teachers = json_decode($staffdata->teacher_staff);
+       
+    @endphp
+
     <div class="mx-auto max-w-6xl">
         <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -50,7 +56,7 @@
         </div>
 
         <div x-show="activeTab === 'leadership'" x-transition.opacity.duration.200ms>
-            <x-cms.staff.leadership-section />
+            <x-cms.staff.leadership-section :leaders="$leasder" />
         </div>
 
         <div x-show="activeTab === 'teaching_staff'" x-transition.opacity.duration.200ms>
