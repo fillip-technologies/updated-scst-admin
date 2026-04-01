@@ -4,9 +4,9 @@
 
 @php
 
-    $herosection = json_decode($infradatas->hero);
-      $compussection = json_decode(stripslashes($infradatas->compus_overview));
-    $academicsection = json_decode($infradatas->academic_infrastructure);
+    $herosection = json_decode($infradatas->hero ?? '[]');
+      $compussection = json_decode(stripslashes($infradatas->compus_overview ?? '[]'));
+    $academicsection = json_decode($infradatas->academic_infrastructure ?? '[]');
 
 
 @endphp
@@ -61,15 +61,15 @@
         </div>
 
         <div x-show="activeTab === 'hero'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.hero-section :heros="$herosection" />
+            <x-cms.infrastructure.hero-section :heros="$herosection ?? []" />
         </div>
 
         <div x-show="activeTab === 'campus_overview'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.campus-overview-section :compusdata="$compussection" />
+            <x-cms.infrastructure.campus-overview-section :compusdata="$compussection ?? []" />
         </div>
 
         <div x-show="activeTab === 'academic_infrastructure'" x-transition.opacity.duration.200ms>
-            <x-cms.infrastructure.academic-infrastructure-section :academics="$academicsection" />
+            <x-cms.infrastructure.academic-infrastructure-section :academics="$academicsection ?? []" />
         </div>
     </div>
 </div>

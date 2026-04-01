@@ -20,7 +20,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ isset($glance) ? route('glance.update') : route('glance.save') }}" method="POST">
+        <form class="p-6 sm:p-8" action="{{ !empty($glance) ? route('glance.update') : route('glance.save') }}" method="POST">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -126,7 +126,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    {{ isset($glance) ? "Update" : "Save" }}
+                    {{ !empty($glance) ? "Update" : "Save" }}
 
                 </button>
             </div>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
                     <p class="text-3xl font-semibold text-gray-800">{{ $glance->stat_2_value ?? ""}}</p>
-                    <p class="mt-2 text-sm text-gray-500">{{ $glance->stat_2_label }}</p>
+                    <p class="mt-2 text-sm text-gray-500">{{ $glance->stat_2_label ?? "" }}</p>
                 </div>
                 <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
                     <p class="text-3xl font-semibold text-gray-800">{{ $glance->stat_3_value ?? "" }}</p>

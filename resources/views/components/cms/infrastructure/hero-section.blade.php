@@ -26,7 +26,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ isset($heros) ? route('inf.update.hero') : route('inf.save.hero') }}"
+        <form class="p-6 sm:p-8" action="{{ !empty($heros) ? route('inf.update.hero') : route('inf.save.hero') }}"
             method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
@@ -40,7 +40,7 @@
                         class="rounded-2xl border border-dashed border-primary-800/20 bg-primary-900/5 p-5 transition hover:border-primary-700 hover:bg-primary-900/10">
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
-                                <img src="{{ isset($heros) ? asset($heros->infra_hero_image) : '' }}"
+                                <img src="{{  asset($heros->infra_hero_image ?? "")  }}"
                                     alt="Infrastructure hero preview" class="h-48 w-full object-cover">
                             </div>
 
@@ -87,7 +87,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                   {{ isset($heros) ? "Update" : "Save" }}
+                   {{ !empty($heros) ? "Update" : "Save" }}
                 </button>
             </div>
         </form>
@@ -104,7 +104,7 @@
 
         <div class="mt-6 overflow-hidden rounded-3xl bg-primary-900 shadow-sm">
             <div class="relative min-h-[500px]">
-                <img src="{{ asset($heros->infra_hero_image) }}" alt="Infrastructure hero preview"
+                <img src="{{ asset($heros->infra_hero_image ?? "") }}" alt="Infrastructure hero preview"
                     class="absolute inset-0 h-full w-full object-cover opacity-35">
                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/85 to-primary-800/40">
                 </div>
@@ -113,13 +113,13 @@
                     <div
                         class="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
                         <i class="fa-solid fa-chevron-right text-xs text-accent-500"></i>
-                        <span x-text="form.breadcrumb || 'Infrastructure'">{{ $heros->infra_breadcrumb }}</span>
+                        <span x-text="form.breadcrumb || 'Infrastructure'">{{ $heros->infra_breadcrumb  ??  ""}}</span>
                     </div>
 
                     <h3 class="mt-6 text-3xl font-semibold leading-tight" x-text="form.title">
-                        {{ $heros->infra_hero_title }}</h3>
+                        {{ $heros->infra_hero_title ?? ""}}</h3>
                     <p class="mt-4 max-w-xl text-sm leading-6 text-gray-100" x-text="form.subtitle">
-                        {{ $heros->infra_hero_subtitle }}</p>
+                        {{ $heros->infra_hero_subtitle ?? ""}}</p>
                 </div>
             </div>
         </div>

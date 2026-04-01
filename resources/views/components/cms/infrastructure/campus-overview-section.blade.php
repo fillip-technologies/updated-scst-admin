@@ -35,7 +35,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{ isset($compusdata) ? route('inf.update.campus') :  route('inf.save.campuse') }}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{ !empty($compusdata) ? route('inf.update.campus') :  route('inf.save.campuse') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <input type="hiddent" name="old_image" value="{{ $compusdata->campus_overview_image ?? "" }}">
@@ -174,7 +174,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    {{ isset($compusdata) ? 'Update' : 'Save' }}
+                    {{ !empty($compusdata) ? 'Update' : 'Save' }}
                 </button>
             </div>
         </form>

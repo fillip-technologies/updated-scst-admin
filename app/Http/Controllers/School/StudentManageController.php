@@ -53,8 +53,8 @@ class StudentManageController extends Controller
 
     public function getallStudent()
     {
-        $studentdata = Student::with(['allclass'])->paginate(10);
-        $classes = AddClasses::all();
+        $studentdata = Student::with(['allclass'])->where('school_id',SchoolLogin()->id)->paginate(10);
+        $classes = AddClasses::where('school_id',SchoolLogin()->id)->get();
 
         return view('modules.school.school-management.index', compact('studentdata', 'classes'));
 

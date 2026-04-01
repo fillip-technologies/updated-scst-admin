@@ -55,7 +55,7 @@
                 <div class="md:col-span-2 rounded-2xl border border-primary-800/10 bg-gray-50 p-5">
                     <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Facility Features</h3>
                     <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                        @foreach ($infrastructure->allfeatures as $key=>  $data)
+                        @foreach ($infrastructure->allfeatures ?? [] as $key=>  $data)
                             <div class="rounded-2xl border border-primary-800/10 bg-white p-4 shadow-sm">
                                 <label for="feature" class="mb-2 block text-sm font-medium text-gray-700">
                                     Feature {{  $loop->iteration}} Title
@@ -73,7 +73,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    {{ isset($infrastructure) ? "Update" : "Save"}}
+                    {{ !empty($infrastructure) ? "Update" : "Save"}}
 
                 </button>
             </div>
@@ -112,13 +112,13 @@
             <p class="mt-4 text-sm leading-6 text-gray-500">{{ $infrastructure->infra_description ?? '' }}</p>
 
             <div class="mt-6 grid grid-cols-1 gap-3">
-                @forelse ($infrastructure->allfeatures as $feature)
+                @forelse ($infrastructure->allfeatures ?? [] as $feature)
                     <div
                         class="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-primary-800/10">
                         <span
                             class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-900 text-sm font-semibold text-white"
                             x-text="index + 1"></span>
-                        <p class="text-sm font-medium text-gray-700">{{ $feature }}</p>
+                        <p class="text-sm font-medium text-gray-700">{{ $feature ?? "" }}</p>
                     </div>
                 @empty
                 @endforelse
@@ -127,4 +127,4 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>

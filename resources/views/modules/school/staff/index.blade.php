@@ -19,9 +19,8 @@
     @endphp
 
     @php
-        $leasder = json_decode($staffdata->leadership);
-        $teachers = json_decode($staffdata->teacher_staff);
-       
+     $leasder = json_decode($staffdata->leadership ?? '[]');
+    $teachers = json_decode($staffdata->teacher_staff ?? '[]');
     @endphp
 
     <div class="mx-auto max-w-6xl">
@@ -60,7 +59,7 @@
         </div>
 
         <div x-show="activeTab === 'teaching_staff'" x-transition.opacity.duration.200ms>
-            <x-cms.staff.teaching-staff-section />
+            <x-cms.staff.teaching-staff-section :teacher="$teachers" />
         </div>
     </div>
 </div>

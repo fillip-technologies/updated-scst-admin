@@ -23,7 +23,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{isset($about) ?  route('about.update') :  route('about.save')}}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{!empty($about) ?  route('about.update') :  route('about.save')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -132,7 +132,7 @@
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
                                 <img
-                                    src="{{ asset($about->about_image) ?? '' }}"
+                                    src="{{ asset($about->about_image ?? '')  }}"
                                     alt="Campus image preview"
                                     class="h-44 w-full object-cover">
                             </div>
@@ -160,7 +160,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    {{ isset($about) ? "Update" : "Save" }}
+                    {{ !empty($about) ? "Update" : "Save" }}
                 </button>
             </div>
         </form>
@@ -216,7 +216,7 @@
 
             <div class="overflow-hidden rounded-3xl border border-primary-800/10 bg-white shadow-sm">
                 <img
-                    src="{{ asset($about->about_image) ?? ""}}"
+                    src="{{ asset($about->about_image ?? "") }}"
                     alt="Campus preview"
                     class="h-64 w-full object-cover">
             </div>

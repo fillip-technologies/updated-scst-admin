@@ -31,7 +31,7 @@
             </p>
         </div>
 
-        <form class="p-6 sm:p-8" action="{{isset($home) ? route('hero.update') :  route('hero.save') }}" method="POST" enctype="multipart/form-data">
+        <form class="p-6 sm:p-8" action="{{!empty($home) ? route('hero.update') : route('hero.save') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="school_id" value="{{SchoolLogin()->id}}">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -44,7 +44,7 @@
                         <div class="grid grid-cols-1 gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
                             <div class="overflow-hidden rounded-2xl border border-primary-800/10 bg-white shadow-sm">
                                 <img
-                                    src="{{ asset($home->bgimage) ?? "" }}"
+                                    src="{{ asset($home->bgimage ?? "") }}"
                                     alt="Hero background preview"
                                     class="h-48 w-full object-cover">
                             </div>
@@ -154,7 +154,7 @@
                 <button type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                     <i class="fa-solid fa-floppy-disk text-xs"></i>
-                    {{ isset($home) ? "Update" : "Save" }}
+                    {{ !empty($home) ? "Update" : "Save" }}
 
                 </button>
             </div>
@@ -174,7 +174,7 @@
         <div class="mt-6 overflow-hidden rounded-3xl bg-primary-900 shadow-sm">
             <div class="relative min-h-[520px]">
                 <img
-                    src="{{ asset($home->bgimage) ?? "" }}"
+                    src="{{ asset($home->bgimage ?? "" ) }}"
                     alt="Homepage hero preview"
                     class="absolute inset-0 h-full w-full object-cover opacity-35">
                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/85 to-primary-800/40"></div>

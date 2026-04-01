@@ -51,11 +51,27 @@ class School extends Authenticatable
         $this->hasMany(Report::class);
     }
 
-    public function mealreport(){
+    public function mealreport()
+    {
         return $this->hasMany(MealReport::class);
     }
 
-    public function infrareport(){
+    public function infrareport()
+    {
         return $this->hasMany(InfraReport::class);
+    }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasMany(Teacher::class);
+    }
+
+    public function teacherattent(){
+        return $this->hasMany(TeacherAttend::class);
     }
 }

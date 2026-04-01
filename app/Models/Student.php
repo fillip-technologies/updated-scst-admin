@@ -33,9 +33,13 @@ class Student extends Model
         return $this->hasMany(Attendance::class);
     }
 
-
     public function allclass()
     {
         return $this->belongsTo(AddClasses::class, 'class_id');
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }

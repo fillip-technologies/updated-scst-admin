@@ -48,22 +48,21 @@ class StaffController extends Controller
     public function SaveTeacher(Request $request)
     {
         $request->validate([
-            'staff_name' => 'required',
-            'staff_subject' => 'required',
+            'staff_name' => 'required|string|max:255',
+            'staff_subject' => 'required|string|max:255',
             'staff_email' => 'required|email',
-            'staff_image' => 'required|file',
-            'school_id' => 'required',
+            'staff_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'school_id' => 'required|integer',
         ]);
 
-        $teacherData = [];
         $imageUpload = null;
 
         if ($request->hasFile('staff_image')) {
             $file = $request->file('staff_image');
-            $filename = time().'.'.$file->getClientOriginalExtension();
+            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
             $uploadPath = public_path('teacher');
 
-            // folder create if not exists
             if (! file_exists($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
@@ -83,22 +82,23 @@ class StaffController extends Controller
 
         if ($section) {
 
-            $teachers = is_array($section->teacher_staff)
-                ? $section->teacher_staff
-                : json_decode($section->teacher_staff, true);
+            $teachers = json_decode($section->teacher_staff, true);
 
-            $teachers = $teachers ?? [];
+            if (! is_array($teachers)) {
+                $teachers = [];
+            }
+
             $teachers[] = $teacherData;
 
             $section->update([
-                'teacher_staff' => json_encode($teachers),
+                'teacher_staff' => json_encode($teachers, JSON_UNESCAPED_UNICODE),
             ]);
 
         } else {
 
             Staff::create([
                 'school_id' => $request->school_id,
-                'teacher_staff' => json_encode([$teacherData]),
+                'teacher_staff' => json_encode([$teacherData], JSON_UNESCAPED_UNICODE),
             ]);
         }
 
@@ -130,7 +130,6 @@ class StaffController extends Controller
 
             $destination = public_path('leaders');
 
-
             if (! file_exists($destination)) {
                 mkdir($destination, 0777, true);
             }
@@ -153,5 +152,84 @@ class StaffController extends Controller
 
         return redirect()->route('school.website-cms.staff')
             ->with('success', 'Leaders section Updated successfully ✅');
+    }
+
+    public function UpdateTeacher(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required|integer',
+            'staff_name' => 'required|string|max:255',
+            'staff_subject' => 'required|string|max:255',
+            'staff_email' => 'required|email|max:255',
+        ]);
+
+        $index = $request->index;
+
+        // Get existing staff JSON
+        $getdata = Staff::where('school_id', $request->school_id)->first();
+        if (! $getdata) {
+            return redirect()->back()->with('error', 'Staff data not found');
+        }
+
+        $editdata = json_decode($getdata->teacher_staff, true);
+
+        $uploadImg = $editdata[$index]['staff_image'] ?? null;
+        if ($request->hasFile('staff_image')) {
+
+            if (! empty($uploadImg) && file_exists(public_path($uploadImg))) {
+                unlink(public_path($uploadImg));
+            }
+
+            $file = $request->file('staff_image');
+            $filename = time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('teacher'), $filename);
+            $uploadImg = 'teacher/'.$filename;
+        }
+
+        $editdata[$index] = [
+            'staff_name' => $request->staff_name,
+            'staff_subject' => $request->staff_subject,
+            'staff_email' => $request->staff_email,
+            'staff_image' => $uploadImg,
+        ];
+
+        $getdata->teacher_staff = json_encode($editdata);
+        $getdata->save();
+
+        return redirect()->back()->with('success', 'Staff updated successfully');
+    }
+
+    public function DeleteTeacher(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required|integer',
+        ]);
+
+        $index = $request->index;
+
+
+        $getdata = Staff::where('school_id', $request->school_id)->first();
+        if (! $getdata) {
+            return redirect()->back()->with('error', 'Staff data not found');
+        }
+
+        $staffData = json_decode($getdata->teacher_staff, true); // decode as associative array
+
+        if (! isset($staffData[$index])) {
+            return redirect()->back()->with('error', 'Staff not found at this index');
+        }
+
+        if (! empty($staffData[$index]['staff_image']) && file_exists(public_path($staffData[$index]['staff_image']))) {
+            unlink(public_path($staffData[$index]['staff_image']));
+        }
+
+        array_splice($staffData, $index, 1);
+
+        $getdata->teacher_staff = json_encode($staffData);
+        $getdata->save();
+
+        return redirect()->back()->with('success', 'Staff deleted successfully');
     }
 }

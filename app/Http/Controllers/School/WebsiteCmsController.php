@@ -25,6 +25,7 @@ class WebsiteCmsController extends Controller
     {
         $homePage = Home::where('school_id', SchoolLogin()->id)->first();
 
+        // dd($homePage);
         return view('modules.school.website-cms.home.index', compact('homePage'));
     }
 
@@ -75,16 +76,16 @@ class WebsiteCmsController extends Controller
 
     public function cmsinfrastructureindex()
     {
-        $infradatas = Infrastructure::where('school_id',SchoolLogin()->id)->first();
+        $infradatas = Infrastructure::where('school_id', SchoolLogin()->id)->first();
 
-        return view('modules.school.website-cms.infrastructure.index',compact('infradatas'));
+        return view('modules.school.website-cms.infrastructure.index', compact('infradatas'));
     }
 
     public function cmsstaffindex()
     {
-        $staffdata = Staff::where('school_id',SchoolLogin()->id)->first();
+        $staffdata = Staff::where('school_id', SchoolLogin()->id)->first();
 
-        return view('modules.school.staff.index',compact('staffdata'));
+        return view('modules.school.staff.index', compact('staffdata'));
     }
 
     public function cmsnoticeindex()
@@ -92,16 +93,20 @@ class WebsiteCmsController extends Controller
         return view('modules.school.notices.index');
     }
 
-   public function attandence()
-{
-    $classes = AddClasses::all();
+    public function attandence()
+    {
+        $school_id = SchoolLogin()->id;
 
-    $studentdata = Student::with(['attendance' => function($q){
-        $q->whereDate('date', now());
-    }])->paginate(10);
+        $classes = AddClasses::where('school_id', $school_id)->get();
 
-    return view('modules.school.attendance.index', compact('classes','studentdata'));
-}
+        $studentdata = Student::where('school_id', $school_id)
+            ->with(['attendance' => function ($q) {
+                $q->whereDate('date', now());
+            }])
+            ->paginate(10);
+
+        return view('modules.school.attendance.index', compact('classes', 'studentdata'));
+    }
 
     public function academics()
     {

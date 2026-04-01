@@ -18,6 +18,7 @@ class HomeController extends Controller
     // Home page
     public function homePage()
     {
+      
         // User::create([
         //     'name'=>'Admin',
         //     'username'=>'admin@gmail.com',

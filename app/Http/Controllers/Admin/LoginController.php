@@ -105,7 +105,7 @@ class LoginController extends Controller
                     return redirect()->route('school.dashboard');
                 }
             } else {
-                return redirect()->back()->with('error', 'Invalide School Credaincials');
+                return redirect()->back()->with('error', 'Invalid School Credentials');
             }
         } else {
             $request->validate([
@@ -118,7 +118,7 @@ class LoginController extends Controller
                     return redirect()->route('admin.dashboard');
                 }
             } else {
-                return redirect()->back()->with('error', 'Invalide Department Credaincials');
+                return redirect()->back()->with('error', 'Invalid Department Credentials');
             }
         }
 

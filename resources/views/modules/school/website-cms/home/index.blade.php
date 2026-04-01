@@ -2,15 +2,15 @@
 
 @section('content')
 @php
-  $heroSection = json_decode($homePage->hero);
-  $gallerySection = json_decode($homePage->gallery);
-  $aboutSection = json_decode($homePage->about);
-  $activitiesSection = json_decode($homePage->activities);
-  $glanceSection = json_decode($homePage->school_at_a_glance);
-  $infrastureSection = json_decode($homePage->infrasture);
-  $quizSection = json_decode($homePage->quiz);
-  $alumniSection = json_decode($homePage->alumni);
-  $faqSection = json_decode($homePage->faq);
+  $heroSection = json_decode($homePage->hero ?? '[]');
+  $gallerySection = json_decode($homePage->gallery ?? '[]');
+  $aboutSection = json_decode($homePage->about ?? '[]');
+  $activitiesSection = json_decode($homePage->activities ?? '[]');
+  $glanceSection = json_decode($homePage->school_at_a_glance ?? '[]');
+  $infrastureSection = json_decode($homePage->infrasture ?? '[]');
+  $quizSection = json_decode($homePage->quiz ?? '[]');
+  $alumniSection = json_decode($homePage->alumni ?? '[]');
+  $faqSection = json_decode($homePage->faq ?? '[]');
 @endphp
 @php
     $homeSections = [
@@ -131,39 +131,39 @@
 
         <div class="mt-8 space-y-8">
             <div x-show="activeTab === 'hero'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.hero-section :home="$heroSection" />
+               <x-cms.home.hero-section :home="$heroSection ?? []" />
             </div>
 
             <div x-show="activeTab === 'gallery'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.gallery-section :gallery="$gallerySection" />
+                <x-cms.home.gallery-section :gallery="$gallerySection ?? []" />
             </div>
 
             <div x-show="activeTab === 'about'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.about-section :about="$aboutSection" />
+                <x-cms.home.about-section :about="$aboutSection ?? []" />
             </div>
 
             <div x-show="activeTab === 'glance'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.glance-section :glance="$glanceSection" />
+                <x-cms.home.glance-section :glance="$glanceSection ?? []" />
             </div>
 
             <div x-show="activeTab === 'infrastructure'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.infrastructure-section :infrastructure="$infrastureSection" />
+                <x-cms.home.infrastructure-section :infrastructure="$infrastureSection ?? []" />
             </div>
 
             <div x-show="activeTab === 'activities'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.activities-section :activities="$activitiesSection" />
+                <x-cms.home.activities-section :activities="$activitiesSection ?? []" />
             </div>
 
             <div x-show="activeTab === 'quiz'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.quiz-section :quizes="$quizSection"  />
+                <x-cms.home.quiz-section :quizes="$quizSection ?? []"  />
             </div>
 
             <div x-show="activeTab === 'alumni'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.alumni-section :alumnis="$alumniSection"/>
+                <x-cms.home.alumni-section :alumnis="$alumniSection ?? []"/>
             </div>
 
             <div x-show="activeTab === 'faq'" x-transition.opacity.duration.200ms style="display: none;">
-                <x-cms.home.faq-section :faqs="$faqSection" />
+                <x-cms.home.faq-section :faqs="$faqSection ?? []" />
             </div>
         </div>
     </div>
