@@ -112,9 +112,23 @@ if (! function_exists('infrastructureType')) {
     }
 }
 
-if(!function_exists('checkCandition')){
-    function checkCandition(){
-        return
-        ['Yes','No'];
+if (! function_exists('checkCandition')) {
+    function checkCandition()
+    {
+        return ['Yes', 'No'];
     }
 }
+
+if (! function_exists('gender')) {
+    function gender()
+    {
+        return [
+            'male',
+            'gender',
+            'other',
+        ];
+    }
+}
+
+
+

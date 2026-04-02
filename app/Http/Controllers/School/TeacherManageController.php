@@ -69,14 +69,21 @@ class TeacherManageController extends Controller
 
     }
 
-    public function UpdateTeacher(Request $request, $id)
+    public function UpdateTeacher(Request $request, $id, $schoolId)
     {
-        $getteacher = Teacher::where('school_id', $request->school_id)
+        $getteacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
             ->firstOrFail();
+        dd($getteacher);
     }
 
-    public function DeleteTeacher($id) {}
+    public function DeleteTeacher($id, $schoolId)
+    {
+        $getteacher = Teacher::where('school_id', $schoolId)
+            ->where('id', $id)
+            ->firstOrFail();
+        dd($getteacher);
+    }
 
     public function TeacheeExport() {}
 

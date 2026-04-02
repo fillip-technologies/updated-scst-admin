@@ -10,6 +10,7 @@ use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
+use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
@@ -98,5 +99,10 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::delete('/student/delete/{id}', [StudentManageController::class, 'studentDelete'])->name('student.delete');
     Route::get('/student/export', [StudentManageController::class, 'exportStudent'])->name('student.export');
     Route::post('/student/import', [StudentManageController::class, 'importStudent'])->name('student.import');
+    Route::post('/create/school/teacher', [TeacherManageController::class, 'SaveTeacher'])->name('school.teacher');
+    Route::get('/update/school/{id}/teacher/{schoolId}', [TeacherManageController::class, 'UpdateTeacher'])->name('teacher.update');
+    Route::get('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
+    Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
+    Route::post('/import/school/teacher', [TeacherManageController::class, 'TeacherImport'])->name('teacher.import');
 
 });

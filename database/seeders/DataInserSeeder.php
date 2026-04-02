@@ -2,27 +2,34 @@
 
 namespace Database\Seeders;
 
-use App\Models\Attendance;
+use App\Models\Teacher;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DataInserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        $subjects = ['Math', 'Science', 'English', 'Hindi', 'Computer', 'Physics'];
+        $educations = ['B.Ed', 'M.Ed', 'B.Sc', 'M.Sc', 'B.Tech', 'M.A'];
+        $skillsList = ['Teaching', 'Communication', 'Leadership', 'Time Management'];
+
         for ($i = 1; $i <= 50; $i++) {
 
-            Attendance::create([
-                'student_id' => rand(1, 50), 
-                'class_id' => rand(1, 12),
-                'date' => Carbon::today()->subDays(rand(0, 5)),
-                'status' => collect(['present', 'absent', 'late', 'excused'])->random(),
-                'remarks' => 'Auto generated',
-                'recorded_by' => 3,
+            Teacher::create([
+                'school_id'     => 3,
+                'name'          => 'Teacher ' . $i,
+                'email'         => 'teacher' . $i . '@gmail.com',
+                'phone'         => '98' . rand(10000000, 99999999),
+                'address'       => 'Address ' . $i,
+                'image'         => 'default.png',
+                'subject'       => $subjects[array_rand($subjects)],
+                'joining_date'  => Carbon::now()->subDays(rand(10, 1000)),
+                'education'     => $educations[array_rand($educations)],
+                'skills'        => implode(',', $skillsList),
+                'certificate'   => 'certificate_' . $i . '.pdf',
+                'gender'        => collect(['male', 'female'])->random(),
             ]);
         }
     }
