@@ -39,7 +39,7 @@ class ClassController extends Controller
         }])
             ->where('class_id', $classId)
             ->where('school_id', $schoolId)
-            ->get();
+            ->paginate(10);
 
         return view('modules.school.attendance.index', compact('classes', 'studentdata'));
     }

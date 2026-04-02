@@ -105,4 +105,10 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
     Route::post('/import/school/teacher', [TeacherManageController::class, 'TeacherImport'])->name('teacher.import');
 
+    // 
+    Route::get('/classes/create', [HomeController::class, 'createClass'])
+        ->name('school.classes.create');
+
+    Route::get('/teacher-attendance/create', [HomeController::class, 'createTeacher'])
+        ->name('teacher.create');
 });

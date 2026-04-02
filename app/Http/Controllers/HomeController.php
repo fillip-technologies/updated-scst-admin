@@ -18,7 +18,7 @@ class HomeController extends Controller
     // Home page
     public function homePage()
     {
-      
+
         // User::create([
         //     'name'=>'Admin',
         //     'username'=>'admin@gmail.com',
@@ -26,7 +26,6 @@ class HomeController extends Controller
         //     'role'=>'admin'
         // ]);
         return view('auth.login');
-
     }
 
     public function schoolMonitoring()
@@ -134,7 +133,8 @@ class HomeController extends Controller
         return view('modules.reports.index', compact('allSchools', 'reports', 'infrReports'));
     }
 
-    public function createInfrastructure(){
+    public function createInfrastructure()
+    {
         return view('modules.school.infra-info.index');
     }
 
@@ -142,8 +142,8 @@ class HomeController extends Controller
 
     public function infraInfo()
     {
-        $infrReports = InfraReport::with('school')->where('school_id',SchoolLogin()->id)->get();
-        return view('modules.school.infra-info.listing',compact('infrReports'));
+        $infrReports = InfraReport::with('school')->where('school_id', SchoolLogin()->id)->get();
+        return view('modules.school.infra-info.listing', compact('infrReports'));
     }
 
 
@@ -173,7 +173,7 @@ class HomeController extends Controller
         $performance = $request->filled('performance_filter') ? (float) $request->input('performance_filter') : null;
 
         return $schools->filter(function (array $school) use ($search, $district, $status, $dropout, $performance) {
-            if ($search !== '' && ! str_contains(strtolower($school['name'].' '.$school['district']), $search)) {
+            if ($search !== '' && ! str_contains(strtolower($school['name'] . ' ' . $school['district']), $search)) {
                 return false;
             }
 
@@ -309,4 +309,15 @@ class HomeController extends Controller
             'meals' => data_get($academic, 'meals', 'Data not available'),
         ];
     }
+
+    // 
+    public function createClass()
+{
+    return view('modules.school.attendance.create-class');
+}
+
+public function createTeacher()
+{
+  return view('modules.school.teacher-attendance.create-teacher');
+}
 }
