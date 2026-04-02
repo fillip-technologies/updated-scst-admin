@@ -312,12 +312,28 @@ class HomeController extends Controller
 
     // 
     public function createClass()
-{
-    return view('modules.school.attendance.create-class');
-}
+    {
+        return view('modules.school.attendance.create-class');
+    }
 
-public function createTeacher()
-{
-  return view('modules.school.teacher-attendance.create-teacher');
-}
+    public function createTeacher()
+    {
+        return view('modules.school.teacher-attendance.create-teacher');
+    }
+
+    // Admin
+    public function notices()
+    {
+        return view('modules.notices.index');
+    }
+    public function createNotice()
+    {
+        return view('modules.notices.create');
+    }
+
+    public function store(Request $request)
+    {
+        // abhi simple redirect
+        return redirect()->route('admin.notices.index');
+    }
 }

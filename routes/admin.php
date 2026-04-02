@@ -25,7 +25,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::post('/notice/create', [MainNoticeController::class, 'NoticeCreate'])->name('admin.notice.save');
     Route::post('/notice/update/{id}', [MainNoticeController::class, 'NoticeUpdate'])->name('admin.notice.update');
-    Route::get('/all/motice',[MainNoticeController::class, 'NoticeEdit'])->name('admin.notices');
+    Route::get('/all/motice', [MainNoticeController::class, 'NoticeEdit'])->name('admin.notices');
     Route::delete('/notice/delete/{id}', [MainNoticeController::class, 'NoticeDelete'])->name('admin.notice.delete');
     Route::get('/notice/export', [MainNoticeController::class, 'NoticeExport'])->name('admin.notice.export');
     Route::post('/notice/import', [MainNoticeController::class, 'NoticeImport'])->name('admin.notice.import');
@@ -60,4 +60,20 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('school.monitoring');
     Route::post('/send-notice', [HomeController::class, 'sendNotice'])
         ->name('school.monitoring.send-notice');
+
+    // 
+
+    Route::get('/admin/notices', [HomeController::class, 'notices'])
+        ->name('admin.notices.index');
+
+    Route::get('/admin/notices/create', [HomeController::class, 'createNotice'])
+        ->name('admin.notices.create');
+
+    Route::get('/admin/notices/edit/{id}', [HomeController::class, 'editNotice'])
+        ->name('admin.notices.edit');
+
+    Route::get('/admin/notices/delete/{id}', [HomeController::class, 'deleteNotice'])
+        ->name('admin.notices.delete');
+    Route::post('/admin/notices/store', [HomeController::class, 'store'])
+        ->name('admin.notices.store');
 });

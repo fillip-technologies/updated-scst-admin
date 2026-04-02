@@ -67,6 +67,18 @@
                 Manage School
             </a>
 
+            <a href="{{ route('admin.notices.index') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
+                    stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 11l18-5v12l-18-5v-2zM7 13v4a2 2 0 002 2h2" />
+                </svg>
+
+                Manage Notices
+            </a>
+
             <!-- Reports -->
             <a href="{{ route('report') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
@@ -76,6 +88,8 @@
                 </svg>
                 Reports
             </a>
+
+
 
             <!-- Rankings -->
             <a href="{{ route('rankings') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
@@ -190,7 +204,7 @@
             School Dashboard
         </a>
 
-        <!-- Student Attendance -->school.attendance
+        <!-- Student Attendance -->
         <a href="{{ route('school.attendance') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
