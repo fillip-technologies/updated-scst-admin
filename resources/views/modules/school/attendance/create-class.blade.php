@@ -62,7 +62,7 @@
             <div class="flex justify-between items-center mt-6">
 
                 <!-- Back -->
-                <a href="{{ route('#') }}"
+                <a href="{{ route('school.attendance') }}"
                     class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-sm">
                     ← Cancel
                 </a>

@@ -190,7 +190,7 @@
             School Dashboard
         </a>
 
-        <!-- Student Attendance -->
+        <!-- Student Attendance -->school.attendance
         <a href="{{ route('school.attendance') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
