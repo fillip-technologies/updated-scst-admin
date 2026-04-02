@@ -1,7 +1,6 @@
 @extends('layouts.login')
 
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div class="w-[900px] bg-white rounded-2xl shadow-2xl overflow-hidden flex">
 
         <!-- LEFT SIDE -->

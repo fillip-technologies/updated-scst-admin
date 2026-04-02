@@ -73,9 +73,10 @@ class TeacherManageController extends Controller
 
     public function UpdateTeacher(Request $request, $id, $schoolId)
     {
-        $getteacher = Teacher::where('school_id', $schoolId)
+        $teacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
             ->firstOrFail();
+
         $request->validate([
             'school_id' => 'required',
             'name' => 'required',
@@ -83,23 +84,31 @@ class TeacherManageController extends Controller
             'phone' => 'required',
             'designation' => 'required',
             'address' => 'required',
-            'photo' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'subject' => 'nullable',
             'class_id' => 'nullable',
             'joining_date' => 'required|date',
             'gender' => 'required',
         ]);
-        $uploadphoto = null;
-        if ($request->hasFile('photo')) {
-            if (file_exists(public_path($getteacher->photo))) {
-                unlink(public_path($getteacher->photo));
-            }
-            $file = $request->file('photo');
-            $filename = $request->name.'.'.$file->getClientOriginalExtension();
-            $upload = public_path('teacher');
-            $file->move($upload, $filename);
-            $uploadphoto = 'teacher/'.$filename;
 
+
+        $uploadphoto = $teacher->photo;
+
+        if ($request->hasFile('photo')) {
+
+            // Delete old photo safely
+            if (! empty($teacher->photo) && file_exists(public_path($teacher->photo))) {
+                unlink(public_path($teacher->photo));
+            }
+
+            $file = $request->file('photo');
+
+
+            $filename = time().'_'.$file->getClientOriginalName();
+
+            $file->move(public_path('teacher'), $filename);
+
+            $uploadphoto = 'teacher/'.$filename;
         }
 
         $data = [
@@ -109,21 +118,21 @@ class TeacherManageController extends Controller
             'phone' => $request->phone,
             'designation' => $request->designation,
             'address' => $request->address,
-            'photo' => $uploadphoto,
+            'photo' => $uploadphoto, // FIXED
             'subject' => $request->subject,
             'class_id' => $request->class_id,
             'joining_date' => $request->joining_date,
             'gender' => $request->gender,
         ];
 
-        $data = ManageCrud::updatedata(Teacher::class,$id, $data);
-        if ($data) {
-            return redirect('/school/teacher/list')->with('success', 'Teacher Update SuccessFul');
+        $update = ManageCrud::updatedata(Teacher::class, $id, $data);
+
+        if ($update) {
+            return redirect('/school/teacher/list')->with('success', 'Teacher Updated Successfully');
         } else {
-            return redirect('/school/teacher/list')->with('error', 'Somthing went wrong');
+            return redirect('/school/teacher/list')->with('error', 'Something went wrong');
         }
     }
-
     public function DeleteTeacher($id, $schoolId)
     {
         $getteacher = Teacher::where('school_id', $schoolId)
