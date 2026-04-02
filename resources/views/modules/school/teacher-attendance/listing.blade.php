@@ -44,11 +44,11 @@ $absent = $teacherRows->where('status', 'absent')->count();
         </div>
 
         <!-- Right Button -->
-        <a href="{{ route('teacher.create') }}"
+        <a href="{{ route('school.teacher.list') }}"
             class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm shadow-sm">
 
-            <span class="text-lg">+</span>
-            <span>Add Teacher</span>
+            {{-- <span class="text-lg">+</span> --}}
+            <span>Teacher List</span>
 
         </a>
 

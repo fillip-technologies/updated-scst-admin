@@ -71,7 +71,5 @@ class School extends Authenticatable
         return $this->hasMany(Teacher::class);
     }
 
-    public function teacherattent(){
-        return $this->hasMany(TeacherAttend::class);
-    }
+
 }

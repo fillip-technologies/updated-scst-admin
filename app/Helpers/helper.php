@@ -78,8 +78,7 @@ if (! function_exists('roll_number')) {
 if (! function_exists('getClass')) {
     function getClass()
     {
-        $classes = AddClasses::all();
-
+        $classes = AddClasses::where('school_id',SchoolLogin()->id)->get();
         return $classes;
     }
 }
@@ -124,7 +123,7 @@ if (! function_exists('gender')) {
     {
         return [
             'male',
-            'gender',
+            'female',
             'other',
         ];
     }

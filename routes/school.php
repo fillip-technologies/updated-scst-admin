@@ -15,7 +15,7 @@ use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('school')->middleware('school')->group(function () {
-
+    Route::get('/teacher/{id}/edit/{schoolId}', [TeacherManageController::class, 'editTeacher'])->name('edit.teacher');
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
     Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
@@ -100,15 +100,16 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/student/export', [StudentManageController::class, 'exportStudent'])->name('student.export');
     Route::post('/student/import', [StudentManageController::class, 'importStudent'])->name('student.import');
     Route::post('/create/school/teacher', [TeacherManageController::class, 'SaveTeacher'])->name('school.teacher');
-    Route::get('/update/school/{id}/teacher/{schoolId}', [TeacherManageController::class, 'UpdateTeacher'])->name('teacher.update');
+
+    Route::post('/update/school/{id}/teacher/{schoolId}', [TeacherManageController::class, 'UpdateTeacher'])->name('teacher.update');
     Route::get('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
     Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
     Route::post('/import/school/teacher', [TeacherManageController::class, 'TeacherImport'])->name('teacher.import');
 
-    // 
     Route::get('/classes/create', [HomeController::class, 'createClass'])
         ->name('school.classes.create');
+    Route::get('/teacher/list', [TeacherManageController::class, 'desplayTeacher'])->name('school.teacher.list');
 
-    Route::get('/teacher-attendance/create', [HomeController::class, 'createTeacher'])
+    Route::get('/teacher/create', [HomeController::class, 'createTeacher'])
         ->name('teacher.create');
 });

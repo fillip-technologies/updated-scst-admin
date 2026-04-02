@@ -1,134 +1,223 @@
 @extends('layouts.app')
 
 @section('content')
-    @php
-        $teacher = [
-            'id' => 2,
-            'teacher_name' => 'Teacher B',
-            'date' => now()->format('Y-m-d'),
-            'status' => 'Absent',
-            'reason' => 'Sick Leave',
-        ];
-    @endphp
+    <div class="p-8 bg-gray-100 min-h-screen">
 
-    <div class="min-h-screen bg-gray-100 p-6 md:p-8">
-        <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-                <h1 class="text-2xl font-semibold text-gray-800">Edit Teacher Attendance</h1>
-                <p class="mt-1 text-sm text-gray-500">Update teacher attendance status with a simple static form preview.</p>
-            </div>
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
 
-            <a href="{{ route('school.teacher.attendance') }}"
-                class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
-                Back
-            </a>
-        </div>
+            <h2 class="text-xl font-semibold mb-4">Add New Teacher</h2>
 
-        <div class="mx-auto max-w-4xl rounded-2xl border border-gray-100 bg-white p-6 shadow-sm md:p-8">
-            <div class="border-b border-gray-100 pb-4">
-                <h2 class="text-lg font-semibold text-gray-800">Attendance Details</h2>
-                <p class="mt-1 text-sm text-gray-500">Change the status and reason without leaving the page.</p>
-            </div>
+            <form method="POST"
+                action="{{ route('teacher.update', ['id' => $editdata->id, 'schoolId' => SchoolLogin()->id]) }}"
+                enctype="multipart/form-data">
 
-            <form class="mt-6 space-y-6">
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                @csrf
+               
+
+                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+
+                <div class="grid grid-cols-2 gap-4">
+
+                    <!-- Name -->
                     <div>
-                        <label for="teacher_name" class="mb-2 block text-sm font-medium text-gray-600">Teacher Name</label>
-                        <input
-                            id="teacher_name"
-                            type="text"
-                            value="{{ $teacher['teacher_name'] }}"
-                            readonly
-                            class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none">
+                        <label class="text-sm">Name</label>
+                        <input type="text" name="name" value="{{ old('name', $editdata->name) }}"
+                            class="w-full border px-3 py-2 rounded-lg @error('name') border-red-500 @enderror">
+
+                        @error('name')
+                            <p class="text-red-500 text-xs">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    <!-- Email -->
                     <div>
-                        <label for="attendance_date" class="mb-2 block text-sm font-medium text-gray-600">Date</label>
-                        <input
-                            id="attendance_date"
-                            type="date"
-                            value="{{ $teacher['date'] }}"
-                            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
+                        <label class="text-sm">Email</label>
+                        <input type="email" name="email" value="{{ old('email', $editdata->email) }}"
+                            class="w-full border px-3 py-2 rounded-lg @error('email') border-red-500 @enderror">
+
+                        @error('email')
+                            <p class="text-red-500 text-xs">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    <!-- Gender -->
                     <div>
-                        <label for="status" class="mb-2 block text-sm font-medium text-gray-600">Status</label>
-                        <select
-                            id="status"
-                            name="status"
-                            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
-                            <option value="Present" @selected($teacher['status'] === 'Present')>Present</option>
-                            <option value="Absent" @selected($teacher['status'] === 'Absent')>Absent</option>
+                        <label class="text-sm">Gender</label>
+                        <select name="gender"
+                            class="w-full border px-3 py-2 rounded-lg @error('gender') border-red-500 @enderror">
+
+                            <option value="">Select gender</option>
+                            @foreach (gender() as $g)
+                                <option value="{{ $g }}"
+                                    {{ old('gender', $editdata->gender) == $g ? 'selected' : '' }}>
+                                    {{ ucfirst($g) }}
+                                </option>
+                            @endforeach
                         </select>
+
+                        @error('gender')
+                            <p class="text-red-500 text-xs">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <div id="reason_wrapper">
-                        <label for="reason" class="mb-2 block text-sm font-medium text-gray-600">Reason</label>
-                        <select
-                            id="reason"
-                            name="reason"
-                            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-primary-900 focus:ring-2 focus:ring-primary-100">
-                            <option value="">Select Reason</option>
-                            <option value="Sick Leave" @selected($teacher['reason'] === 'Sick Leave')>Sick Leave</option>
-                            <option value="Casual Leave" @selected($teacher['reason'] === 'Casual Leave')>Casual Leave</option>
-                            <option value="Personal Work" @selected($teacher['reason'] === 'Personal Work')>Personal Work</option>
-                            <option value="Other" @selected($teacher['reason'] === 'Other')>Other</option>
-                        </select>
+                    <!-- Phone -->
+                    <div>
+                        <label class="text-sm">Phone</label>
+                        <input type="text" name="phone" value="{{ old('phone', $editdata->phone) }}"
+                            class="w-full border px-3 py-2 rounded-lg @error('phone') border-red-500 @enderror">
+
+                        @error('phone')
+                            <p class="text-red-500 text-xs">{{ $message }}</p>
+                        @enderror
                     </div>
+
                 </div>
 
-                <div class="rounded-2xl bg-gray-50 p-4">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-700">Current Status Preview</p>
-                            <p class="mt-1 text-sm text-gray-500">Absent status will keep the reason field visible.</p>
+                <!-- Address -->
+                <div class="mt-4">
+                    <label class="text-sm">Address</label>
+                    <textarea name="address" class="w-full border px-3 py-2 rounded-lg @error('address') border-red-500 @enderror">{{ old('address', $editdata->address) }}</textarea>
+
+                    @error('address')
+                        <p class="text-red-500 text-xs">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Photo -->
+                <!-- Photo -->
+                <div class="mt-6">
+                    <label class="text-sm font-medium text-gray-600">Photo</label>
+
+                    <div class="flex items-center gap-4 mt-2">
+
+                        <!-- Preview Box -->
+                        <div
+                            class="w-20 h-20 rounded-full border overflow-hidden flex items-center justify-center bg-gray-100">
+
+                            <!-- Old Image -->
+                            @if ($editdata->photo)
+                                <img id="oldImg" src="{{ asset( $editdata->photo) }}"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <span id="icon" class="text-gray-400 text-xl">📷</span>
+                            @endif
+
+                            <!-- New Preview -->
+                            <img id="previewImg" class="hidden w-full h-full object-cover">
                         </div>
 
-                        <span id="status_badge" class="inline-flex rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
-                            Absent
-                        </span>
+                        <!-- Upload Button -->
+                        <label class="cursor-pointer px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg border text-sm">
+                            Upload Photo
+                            <input type="file" name="photo" id="photoInput" class="hidden" accept="image/*">
+                        </label>
+
                     </div>
+
+                    @error('photo')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="flex flex-col gap-3 border-t border-gray-100 pt-6 sm:flex-row">
-                    <button
-                        type="button"
-                        class="inline-flex items-center justify-center rounded-lg bg-primary-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-primary-800">
-                        Update
-                    </button>
+                <!-- Designation -->
+                <div class="mt-4">
+                    <label class="text-sm">Designation</label>
+                    <select name="designation" id="designation"
+                        class="w-full border px-3 py-2 rounded-lg @error('designation') border-red-500 @enderror"
+                        onchange="handleDesignation()">
 
-                    <a href="{{ route('school.teacher.attendance') }}"
-                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
-                        Back
+                        <option value="">Select</option>
+                        <option value="teacher"
+                            {{ old('designation', $editdata->designation) == 'teacher' ? 'selected' : '' }}>
+                            Teacher
+                        </option>
+
+                        <option value="class_teacher"
+                            {{ old('designation', $editdata->designation) == 'class_teacher' ? 'selected' : '' }}>
+                            Class Teacher
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Subject -->
+                <div id="subjectField"
+                    class="mt-4 {{ old('designation', $editdata->designation) == 'teacher' ? '' : 'hidden' }}">
+
+                    <label>Subject</label>
+                    <input type="text" name="subject" value="{{ old('subject', $editdata->subject) }}"
+                        class="w-full border px-3 py-2 rounded-lg">
+                </div>
+
+                <!-- Class Teacher -->
+                <div id="classTeacherFields"
+                    class="mt-4 grid grid-cols-2 gap-4 {{ old('designation', $editdata->designation) == 'class_teacher' ? '' : 'hidden' }}">
+
+                    <div>
+                        <label>Class</label>
+                        <select name="class_id" class="w-full border px-3 py-2 rounded-lg">
+                            <option value="">Select</option>
+                            @foreach (getClass() as $class)
+                                <option value="{{ $class->id }}"
+                                    {{ old('class_id', $editdata->class_id) == $class->id ? 'selected' : '' }}>
+                                    {{ $class->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Subject</label>
+                        <input type="text" name="class_subject" value="{{ old('class_subject', $editdata->subject) }}"
+                            class="w-full border px-3 py-2 rounded-lg">
+                    </div>
+
+                </div>
+
+                <!-- Joining -->
+                <div class="mt-4">
+                    <label>Date of Joining</label>
+                    <input type="date" name="joining_date" value="{{ old('joining_date', $editdata->joining_date) }}"
+                        class="w-full border px-3 py-2 rounded-lg">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-between mt-6">
+                    <a href="{{ url()->previous() }}" class="bg-gray-200 px-4 py-2 rounded-lg">
+                        ← Cancel
                     </a>
+
+                    <button class="bg-blue-500 text-white px-5 py-2 rounded-lg">
+                        Update Teacher
+                    </button>
                 </div>
+
             </form>
         </div>
+
     </div>
 
     <script>
-        const statusField = document.getElementById('status');
-        const reasonWrapper = document.getElementById('reason_wrapper');
-        const reasonField = document.getElementById('reason');
-        const statusBadge = document.getElementById('status_badge');
+        function handleDesignation() {
+            let val = document.getElementById('designation').value;
 
-        function toggleReasonField() {
-            const isAbsent = statusField.value === 'Absent';
+            document.getElementById('subjectField').classList.add('hidden');
+            document.getElementById('classTeacherFields').classList.add('hidden');
 
-            reasonWrapper.style.display = isAbsent ? 'block' : 'none';
-            reasonField.disabled = !isAbsent;
-
-            statusBadge.textContent = statusField.value;
-            statusBadge.className = isAbsent ?
-                'inline-flex rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700' :
-                'inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700';
-
-            if (!isAbsent) {
-                reasonField.value = '';
+            if (val === 'teacher') {
+                document.getElementById('subjectField').classList.remove('hidden');
+            } else if (val === 'class_teacher') {
+                document.getElementById('classTeacherFields').classList.remove('hidden');
             }
         }
 
-        statusField.addEventListener('change', toggleReasonField);
-        toggleReasonField();
+        // image preview
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                let img = document.getElementById('previewImg');
+                img.src = URL.createObjectURL(file);
+                img.classList.remove('hidden');
+            }
+        });
     </script>
 @endsection
