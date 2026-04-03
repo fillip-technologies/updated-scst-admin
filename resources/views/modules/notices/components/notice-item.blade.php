@@ -48,13 +48,13 @@
         @endif
 
         {{-- EDIT --}}
-        <a href="{{ route('admin.notices.edit', $notice->id ?? 1) }}"
+        <a href="{{ route('admin.edit.notice', $notice->id ?? 1) }}"
            class="text-green-600 hover:underline text-sm">
             Edit
         </a>
 
         {{-- DELETE --}}
-        <a href="{{ route('admin.notices.delete', $notice->id ?? 1) }}"
+        <a href="{{ route('admin.notice.delete', $notice->id ?? 1) }}"
            onclick="return confirm('Are you sure?')"
            class="text-red-600 hover:underline text-sm">
             Delete

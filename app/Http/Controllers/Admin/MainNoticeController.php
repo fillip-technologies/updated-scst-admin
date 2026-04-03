@@ -40,7 +40,7 @@ class MainNoticeController extends Controller
 
         $savedata = ManageCrud::createdatas(MainNotice::class, $data);
         if ($savedata) {
-            return redirect()->back()->with('success', 'Notice Created SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Created SuccessFul');
         } else {
             return redirect()->back()->with('error', 'Notice Created Failed');
 
@@ -53,7 +53,7 @@ class MainNoticeController extends Controller
         $request->validate([
             'title' => 'required',
             'date' => 'required|date',
-            'notice_badge' => 'required',
+            'file'=>'nullable|file',
             'description' => 'required|string',
             'notice_type' => 'required',
         ]);
@@ -65,7 +65,7 @@ class MainNoticeController extends Controller
                 unlink(public_path($edidata->file));
             }
             $file = $request->file('file');
-            $filename = $request->name.'.'.$file->getClientOriginalExtension();
+            $filename = $request->title.'.'.$file->getClientOriginalExtension();
             $upload = public_path('notice');
             $file->move($upload, $filename);
             $uplaodImage = 'notice/'.$filename;
@@ -74,7 +74,6 @@ class MainNoticeController extends Controller
         $data = [
             'title' => $request->title,
             'date' => $request->date,
-            'notice_badge' => $request->notice_badge,
             'file' => $uplaodImage,
             'description' => $request->description,
             'notice_type' => $request->notice_type,
@@ -82,7 +81,7 @@ class MainNoticeController extends Controller
 
         $savedata = ManageCrud::updatedata(MainNotice::class, $id, $data);
         if ($savedata) {
-            return redirect()->back()->with('success', 'Notice Update SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Update SuccessFul');
         } else {
             return redirect()->back()->with('error', 'Notice Updation Failed');
 
@@ -92,6 +91,7 @@ class MainNoticeController extends Controller
     public function NoticeEdit($id)
     {
         $notice = MainNotice::findOrFail($id);
+        return view('modules.notices.edit',compact('notice'));
 
     }
 
@@ -101,7 +101,7 @@ class MainNoticeController extends Controller
         if ($notice) {
             $notice->delete();
 
-            return redirect()->back()->with('success', 'Notice Delete SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Delete SuccessFul');
         } else {
             return redirect()->back('error', 'Something Went Wrong');
         }
