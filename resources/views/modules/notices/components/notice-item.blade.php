@@ -2,7 +2,7 @@
 
     {{-- LEFT --}}
     <div class="flex items-start gap-4">
-        
+
         {{-- Icon --}}
         <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center">
             📄
@@ -10,7 +10,7 @@
 
         <div>
             <div class="flex items-center gap-2">
-                
+
                 <h3 class="font-semibold text-gray-800">
                     {{ $notice->title ?? 'Sample Notice Title' }}
                 </h3>
@@ -39,7 +39,7 @@
 
         {{-- VIEW PDF --}}
         @if(!empty($notice->file))
-            <a href="{{ asset('storage/' . $notice->file) }}" target="_blank"
+            <a href="{{ asset($notice->file) }}" target="_blank"
                class="text-blue-600 hover:underline text-sm">
                 View
             </a>
@@ -63,3 +63,4 @@
     </div>
 
 </div>
+

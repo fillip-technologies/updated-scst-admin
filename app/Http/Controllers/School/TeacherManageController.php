@@ -5,13 +5,45 @@ namespace App\Http\Controllers\School;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
+use App\Models\TeacherAttend;
 use Illuminate\Http\Request;
 
 class TeacherManageController extends Controller
 {
+    public function attend_teacher(Request $request)
+    {
+
+        $request->validate([
+            'leave_type' => 'nullable',
+            'status' => 'required',
+            'school_id' => 'required',
+            'teacher_id' => 'required',
+            'date' => 'required|date',
+        ]);
+
+        $data = [
+            'leave_type' => $request->leave_type,
+            'status' => $request->status,
+            'school_id' => $request->school_id,
+            'teacher_id' => $request->teacher_id,
+            'date' => $request->date,
+        ];
+        $currentdata = TeacherAttend::where('teacher_id', $request->teacher_id)->whereDate('date', $request->date)->first();
+        if ($currentdata) {
+            $currentdata->update([
+                'leave_type' => $request->leave_type,
+                'status' => $request->status,
+            ]);
+        } else {
+            ManageCrud::createdatas(TeacherAttend::class, $data);
+        }
+
+        return back()->with('success', 'Attendance Saved Successfully');
+    }
+
     public function desplayTeacher()
     {
-        $teachers = Teacher::with(['addclass', 'school'])->where('school_id', SchoolLogin()->id)->get();
+        $teachers = Teacher::with(['addclass', 'school'])->where('school_id', SchoolLogin()->id)->paginate(8);
 
         return view('modules.school.teacher-attendance.display', compact('teachers'));
     }
@@ -91,7 +123,6 @@ class TeacherManageController extends Controller
             'gender' => 'required',
         ]);
 
-
         $uploadphoto = $teacher->photo;
 
         if ($request->hasFile('photo')) {
@@ -102,7 +133,6 @@ class TeacherManageController extends Controller
             }
 
             $file = $request->file('photo');
-
 
             $filename = time().'_'.$file->getClientOriginalName();
 
@@ -133,12 +163,19 @@ class TeacherManageController extends Controller
             return redirect('/school/teacher/list')->with('error', 'Something went wrong');
         }
     }
+
     public function DeleteTeacher($id, $schoolId)
     {
         $getteacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
             ->firstOrFail();
-        dd($getteacher);
+        if ($getteacher) {
+            $getteacher->delete();
+
+            return redirect('/school/teacher/list')->with('success', 'Teacher Deleted Successfully');
+        } else {
+            return redirect('/school/teacher/list')->with('error', 'Something went wrong');
+        }
     }
 
     public function TeacheeExport() {}

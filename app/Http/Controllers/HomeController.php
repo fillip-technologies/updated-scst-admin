@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
 use App\Models\InfraReport;
+use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\School;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+
+use function Symfony\Component\Clock\now;
 
 class HomeController extends Controller
 {
@@ -138,31 +142,36 @@ class HomeController extends Controller
         return view('modules.school.infra-info.index');
     }
 
-
-
     public function infraInfo()
     {
         $infrReports = InfraReport::with('school')->where('school_id', SchoolLogin()->id)->get();
+
         return view('modules.school.infra-info.listing', compact('infrReports'));
     }
-
 
     public function editInfraInfo($id)
     {
         $editData = InfraReport::with('school')->findOrFail($id);
+
         return view('modules.school.infra-info.edit', compact('editData'));
     }
 
     public function teacherAttendance()
     {
-        return view('modules.school.teacher-attendance.listing');
+        $teachers = Teacher::with(['teacherattend' => function ($query) {
+            $query->whereDate('date', now());
+        }])
+            ->where('school_id', SchoolLogin()->id)
+            ->paginate(8);
+
+
+        return view('modules.school.teacher-attendance.listing', compact('teachers'));
     }
 
     public function editTeacherAttendance($id)
     {
         return view('modules.school.teacher-attendance.edit');
     }
-
 
     private function applyMonitoringFilters(Collection $schools, Request $request): Collection
     {
@@ -173,7 +182,7 @@ class HomeController extends Controller
         $performance = $request->filled('performance_filter') ? (float) $request->input('performance_filter') : null;
 
         return $schools->filter(function (array $school) use ($search, $district, $status, $dropout, $performance) {
-            if ($search !== '' && ! str_contains(strtolower($school['name'] . ' ' . $school['district']), $search)) {
+            if ($search !== '' && ! str_contains(strtolower($school['name'].' '.$school['district']), $search)) {
                 return false;
             }
 
@@ -310,7 +319,7 @@ class HomeController extends Controller
         ];
     }
 
-    // 
+    //
     public function createClass()
     {
         return view('modules.school.attendance.create-class');
@@ -324,8 +333,11 @@ class HomeController extends Controller
     // Admin
     public function notices()
     {
-        return view('modules.notices.index');
+        $notices = MainNotice::all();
+
+        return view('modules.notices.index',compact('notices'));
     }
+
     public function createNotice()
     {
         return view('modules.notices.create');

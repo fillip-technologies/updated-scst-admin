@@ -14,3 +14,4 @@ Route::get('/school/home/{school_id}', [HomeSectionController::class, 'getHomeSc
 Route::get('/school/infrastructur/{school_id}', [HomeSectionController::class, 'getInfrastructurData']);
 Route::get('/school/staff/{school_id}', [HomeSectionController::class, 'getStaffData']);
 Route::get('/school/notice/{school_id}', [HomeSectionController::class, 'getNoticelData']);
+Route::get('/all/notice',[HomeSectionController::class,'mainnotice']);

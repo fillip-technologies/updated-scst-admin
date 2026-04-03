@@ -16,16 +16,24 @@ class MainNoticeController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'file'=>'nullable|file',
             'date' => 'required|date',
-            'notice_badge' => 'required',
             'description' => 'required|string',
             'notice_type' => 'required',
         ]);
 
+        $uplaodImage = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = $request->title.'.'.$file->getClientOriginalExtension();
+            $upload = public_path('notice');
+            $file->move($upload, $filename);
+            $uplaodImage = 'notice/'.$filename;
+        }
         $data = [
             'title' => $request->title,
             'date' => $request->date,
-            'notice_badge' => $request->notice_badge,
+            'file' => $uplaodImage,
             'description' => $request->description,
             'notice_type' => $request->notice_type,
         ];
@@ -41,6 +49,7 @@ class MainNoticeController extends Controller
 
     public function NoticeUpdate(Request $request, $id)
     {
+
         $request->validate([
             'title' => 'required',
             'date' => 'required|date',
@@ -48,11 +57,25 @@ class MainNoticeController extends Controller
             'description' => 'required|string',
             'notice_type' => 'required',
         ]);
+        $edidata = MainNotice::findOrFail($id);
+        $uplaodImage = $edidata->file;
+        if ($request->hasFile('file')) {
+
+            if (file_exists(public_path($edidata->file))) {
+                unlink(public_path($edidata->file));
+            }
+            $file = $request->file('file');
+            $filename = $request->name.'.'.$file->getClientOriginalExtension();
+            $upload = public_path('notice');
+            $file->move($upload, $filename);
+            $uplaodImage = 'notice/'.$filename;
+        }
 
         $data = [
             'title' => $request->title,
             'date' => $request->date,
             'notice_badge' => $request->notice_badge,
+            'file' => $uplaodImage,
             'description' => $request->description,
             'notice_type' => $request->notice_type,
         ];
@@ -96,6 +119,7 @@ class MainNoticeController extends Controller
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
         Excel::import(new NoticeImport, $request->file('file'));
+
         return back()->with('success', 'Notices Imported Successfully!');
     }
 }

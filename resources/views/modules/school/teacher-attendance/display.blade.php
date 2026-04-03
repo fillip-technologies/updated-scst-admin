@@ -11,6 +11,17 @@
                 showConfirmButton: false
             });
         </script>
+
+        @elseif (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
     @endif
 
     <div class="bg-gray-100 min-h-screen py-8">
@@ -76,7 +87,7 @@
 
                                 <!-- Photo -->
                                 <td class="py-2 px-4">
-                                    <img src="{{ $teacher->photo ? asset($teacher->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) }}"
+                                    <img src="{{ asset($teacher->photo ?? "teacher/Abhishek.jpg") }}"
                                         class="w-10 h-10 rounded-full mx-auto object-cover border">
                                 </td>
 
@@ -130,7 +141,7 @@
                                         Edit
                                     </a>
 
-                                    <form action="" method="POST" class="inline">
+                                    <form action="{{ route('delete.teacher',['id' => $teacher->id , 'schoolId'=>SchoolLogin()->id]) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
 
@@ -162,7 +173,7 @@
 
             <!-- Pagination -->
             <div class="mt-4">
-
+{{ $teachers->links() }}
             </div>
 
         </div>

@@ -13,7 +13,7 @@
     <div class="bg-white rounded-2xl shadow p-6">
 
         @include('modules.notices.components.form', [
-            'action' => route('admin.notices.store'),
+            'action' => route('admin.notice.save'),
             'method' => 'POST',
             'notice' => null
         ])

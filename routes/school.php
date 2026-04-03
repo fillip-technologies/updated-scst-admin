@@ -14,7 +14,8 @@ use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('school')->middleware('school')->group(function () {
+    Route::prefix('school')->middleware('school')->group(function () {
+    Route::post('teacher/update/attendance',[TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
     Route::get('/teacher/{id}/edit/{schoolId}', [TeacherManageController::class, 'editTeacher'])->name('edit.teacher');
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
@@ -102,7 +103,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/school/teacher', [TeacherManageController::class, 'SaveTeacher'])->name('school.teacher');
 
     Route::post('/update/school/{id}/teacher/{schoolId}', [TeacherManageController::class, 'UpdateTeacher'])->name('teacher.update');
-    Route::get('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
+    Route::delete('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
     Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
     Route::post('/import/school/teacher', [TeacherManageController::class, 'TeacherImport'])->name('teacher.import');
 
