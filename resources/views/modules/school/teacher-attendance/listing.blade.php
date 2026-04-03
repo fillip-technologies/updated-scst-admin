@@ -12,14 +12,13 @@
             });
         </script>
     @endif
-    @php
-        // print_r($teachers);
+   @php
+    $teacherRows = collect($teachers)->where('school_id', SchoolLogin()->id);
 
-        $teacherRows = collect($teachers);
-        $total = $teacherRows->count();
-        $present = $teacherRows->where('status', 'present')->count();
-        $absent = $teacherRows->where('status', 'absent')->count();
-    @endphp
+    $total = $teacherRows->count();
+    $present = $teacherRows->where('status', 'present')->count();
+    $absent = $teacherRows->where('status', 'absent')->count();
+@endphp
 
 
     <div class="p-8 bg-gray-100 min-h-screen">
