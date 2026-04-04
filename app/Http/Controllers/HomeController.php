@@ -24,7 +24,7 @@ class HomeController extends Controller
     // Home page
     public function homePage()
     {
-        dd(Hash::make('123456'));
+       
 
         // User::create([
         //     'name'=>'Admin',

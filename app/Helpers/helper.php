@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AddClasses;
+use App\Models\School;
 
 if (! function_exists('districts')) {
 
@@ -139,5 +140,12 @@ if (! function_exists('leaveType')) {
             'Casual Leave',
             'Unpaid Leave',
         ];
+    }
+}
+
+if(!function_exists('getDisc')){
+    function getDisc(){
+        $disdata = School::select('id','district')->get();
+        return $disdata;
     }
 }
