@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
+use App\Models\AddClasses;
 use App\Models\InfraReport;
 use App\Models\MainNotice;
 use App\Models\Notices;
@@ -164,7 +165,6 @@ class HomeController extends Controller
             ->where('school_id', SchoolLogin()->id)
             ->paginate(8);
 
-
         return view('modules.school.teacher-attendance.listing', compact('teachers'));
     }
 
@@ -322,7 +322,9 @@ class HomeController extends Controller
     //
     public function createClass()
     {
-        return view('modules.school.attendance.create-class');
+
+        $classdata = AddClasses::where('school_id', SchoolLogin()->id)->get();
+        return view('modules.school.attendance.create-class', compact('classdata'));
     }
 
     public function createTeacher()
@@ -335,7 +337,7 @@ class HomeController extends Controller
     {
         $notices = MainNotice::all();
 
-        return view('modules.notices.index',compact('notices'));
+        return view('modules.notices.index', compact('notices'));
     }
 
     public function createNotice()

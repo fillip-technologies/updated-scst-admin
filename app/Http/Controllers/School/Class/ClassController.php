@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\School\Class;
 
+use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Attendance;
-use App\Models\Report;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -78,5 +78,73 @@ class ClassController extends Controller
         return back()->with('success', 'Attendance Saved');
     }
 
+    public function addClass(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'class_name' => 'required',
+            'section' => 'nullable',
+        ]);
 
+        $data = [
+            'name' => 'Class'.$request->class_name,
+            'school_id' => $request->school_id,
+            'class' => $request->class_name,
+        ];
+
+        if ($data) {
+            ManageCrud::createdatas(AddClasses::class, $data);
+
+            return back()->with('success', 'Class Created SuccessFul');
+        } else {
+            return back()->with('error', 'Somwthing Went wrong');
+        }
+    }
+
+    public function editclass($id)
+    {
+        $editdata = AddClasses::findOrFail($id);
+        $classdata = AddClasses::where('school_id', SchoolLogin()->id)->get();
+
+        return view('modules.school.attendance.create-class', compact('classdata', 'editdata'));
+    }
+
+    public function updateClass(Request $request, $id)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'class_name' => 'required',
+            'section' => 'nullable',
+        ]);
+
+        $getdata = AddClasses::where('school_id', $request->school_id)->where('id', $id)->firstOrFail();
+
+        if ($getdata) {
+            $data = [
+                'name' => 'Class '.$request->class_name,
+                'school_id' => $request->school_id,
+                'class' => $request->class_name,
+            ];
+            if ($data) {
+                ManageCrud::updatedata(AddClasses::class, $id, $data);
+
+                return back()->with('success', 'Class Updated SuccessFul');
+            } else {
+                return back()->with('error', 'Somwthing Went wrong');
+            }
+        } else {
+            return back()->with('success', 'Not Found data');
+        }
+    }
+
+    public function deleteclass(Request $request, $id)
+    {
+        $getdata = AddClasses::where('school_id', $request->school_id)->where('id', $id)->firstOrFail();
+        if ($getdata) {
+            $getdata->delete();
+            return back()->with('success', 'Class deleted SuccessFul');
+        } else {
+            return back()->with('error', 'Somwthing Went wrong');
+        }
+    }
 }

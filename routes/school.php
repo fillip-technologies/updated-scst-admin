@@ -14,8 +14,8 @@ use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use Illuminate\Support\Facades\Route;
 
-    Route::prefix('school')->middleware('school')->group(function () {
-    Route::post('teacher/update/attendance',[TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
+Route::prefix('school')->middleware('school')->group(function () {
+    Route::post('teacher/update/attendance', [TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
     Route::get('/teacher/{id}/edit/{schoolId}', [TeacherManageController::class, 'editTeacher'])->name('edit.teacher');
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
     Route::post('create/hero/section/infrastructure', [InfrastructureController::class, 'Savehero'])->name('inf.save.hero');
@@ -106,6 +106,10 @@ use Illuminate\Support\Facades\Route;
     Route::delete('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
     Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
     Route::post('/import/school/teacher', [TeacherManageController::class, 'TeacherImport'])->name('teacher.import');
+    Route::post('/add/class', [ClassController::class, 'addClass'])->name('school.add.class');
+    Route::get('/edit/class/{id}', [ClassController::class, 'editclass'])->name('school.edit.class');
+    Route::post('/update/class/{id}', [ClassController::class, 'updateclass'])->name('school.update.class');
+    Route::delete('/delete/class/{id}', [ClassController::class, 'deleteclass'])->name('school.delete.class');
 
     Route::get('/classes/create', [HomeController::class, 'createClass'])
         ->name('school.classes.create');
