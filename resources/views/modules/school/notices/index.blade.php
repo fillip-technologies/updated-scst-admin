@@ -12,7 +12,7 @@
                 </p>
             </div>
         </div>
-        <x-cms.notices.latest-announcements-section />
+        <x-cms.notices.latest-announcements-section :notices="$notice" />
     </div>
 </div>
 @endsection

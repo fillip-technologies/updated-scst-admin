@@ -8,5 +8,5 @@ class MainNotice extends Model
 {
     protected $primaryKey = 'id';
     protected $table = "main_notices";
-    protected $fillable = ['title','date','notice_badge','notice_type','description'];
+    protected $fillable = ['title','date','notice_badge','notice_type','description','file'];
 }

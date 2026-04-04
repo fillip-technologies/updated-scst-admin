@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Home;
 use App\Models\Infrastructure;
+use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Staff;
+use Exception;
 
 class HomeSectionController extends Controller
 {
@@ -47,6 +49,18 @@ class HomeSectionController extends Controller
         $data->academic_infrastructure = json_decode($data->academic_infrastructure, true);
 
         return SuccessResponse(200, 'Infrastructure Page all data found', $data);
+    }
+
+    public function mainnotice()
+    {
+        try {
+            $allnotice = MainNotice::all();
+
+            return SuccessResponse(200, ' Find All Notices', $allnotice);
+        } catch (Exception $e) {
+            return ErrorResponse(400, 'Somthing Went Wrong', $e->getMessage());
+        }
+
     }
 
     public function getStaffData($school_id)

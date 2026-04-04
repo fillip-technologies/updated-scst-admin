@@ -16,23 +16,31 @@ class MainNoticeController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'file'=>'nullable|file',
             'date' => 'required|date',
-            'notice_badge' => 'required',
             'description' => 'required|string',
             'notice_type' => 'required',
         ]);
 
+        $uplaodImage = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = $request->title.'.'.$file->getClientOriginalExtension();
+            $upload = public_path('notice');
+            $file->move($upload, $filename);
+            $uplaodImage = 'notice/'.$filename;
+        }
         $data = [
             'title' => $request->title,
             'date' => $request->date,
-            'notice_badge' => $request->notice_badge,
+            'file' => $uplaodImage,
             'description' => $request->description,
             'notice_type' => $request->notice_type,
         ];
 
         $savedata = ManageCrud::createdatas(MainNotice::class, $data);
         if ($savedata) {
-            return redirect()->back()->with('success', 'Notice Created SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Created SuccessFul');
         } else {
             return redirect()->back()->with('error', 'Notice Created Failed');
 
@@ -41,25 +49,39 @@ class MainNoticeController extends Controller
 
     public function NoticeUpdate(Request $request, $id)
     {
+
         $request->validate([
             'title' => 'required',
             'date' => 'required|date',
-            'notice_badge' => 'required',
+            'file'=>'nullable|file',
             'description' => 'required|string',
             'notice_type' => 'required',
         ]);
+        $edidata = MainNotice::findOrFail($id);
+        $uplaodImage = $edidata->file;
+        if ($request->hasFile('file')) {
+
+            if (file_exists(public_path($edidata->file))) {
+                unlink(public_path($edidata->file));
+            }
+            $file = $request->file('file');
+            $filename = $request->title.'.'.$file->getClientOriginalExtension();
+            $upload = public_path('notice');
+            $file->move($upload, $filename);
+            $uplaodImage = 'notice/'.$filename;
+        }
 
         $data = [
             'title' => $request->title,
             'date' => $request->date,
-            'notice_badge' => $request->notice_badge,
+            'file' => $uplaodImage,
             'description' => $request->description,
             'notice_type' => $request->notice_type,
         ];
 
         $savedata = ManageCrud::updatedata(MainNotice::class, $id, $data);
         if ($savedata) {
-            return redirect()->back()->with('success', 'Notice Update SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Update SuccessFul');
         } else {
             return redirect()->back()->with('error', 'Notice Updation Failed');
 
@@ -69,6 +91,7 @@ class MainNoticeController extends Controller
     public function NoticeEdit($id)
     {
         $notice = MainNotice::findOrFail($id);
+        return view('modules.notices.edit',compact('notice'));
 
     }
 
@@ -78,7 +101,7 @@ class MainNoticeController extends Controller
         if ($notice) {
             $notice->delete();
 
-            return redirect()->back()->with('success', 'Notice Delete SuccessFul');
+            return redirect()->route('admin.notices.index')->with('success', 'Notice Delete SuccessFul');
         } else {
             return redirect()->back('error', 'Something Went Wrong');
         }
@@ -96,6 +119,7 @@ class MainNoticeController extends Controller
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
         Excel::import(new NoticeImport, $request->file('file'));
+
         return back()->with('success', 'Notices Imported Successfully!');
     }
 }

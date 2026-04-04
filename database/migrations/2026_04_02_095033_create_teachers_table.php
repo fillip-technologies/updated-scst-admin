@@ -13,28 +13,18 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
-
+            $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
-
-            $table->string('image')->nullable();
-
+            $table->string('email');
+            $table->string('phone');
+            $table->longText('address');
+            $table->date('joining_date');
+            $table->string('designation');
+            $table->string('photo');
+            $table->enum('gender',['male','female','other']);
             $table->string('subject')->nullable();
-            $table->date('joining_date')->nullable();
-            $table->string('education')->nullable();
-            $table->text('skills')->nullable();
-            $table->string('certificate')->nullable();
-
-
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
-
+            $table->foreignId('class_id')->constrained('add_classes')->cascadeOnDelete();
             $table->timestamps();
-
-
         });
     }
 

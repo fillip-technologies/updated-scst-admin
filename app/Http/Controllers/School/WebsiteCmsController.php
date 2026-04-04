@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Home;
 use App\Models\Infrastructure;
+use App\Models\Notice;
+use App\Models\Notices;
 use App\Models\Staff;
 use App\Models\Student;
 
@@ -90,7 +92,8 @@ class WebsiteCmsController extends Controller
 
     public function cmsnoticeindex()
     {
-        return view('modules.school.notices.index');
+       $notice = Notices::where('school_id', SchoolLogin()->id)->get();
+        return view('modules.school.notices.index',compact('notice'));
     }
 
     public function attandence()

@@ -2,26 +2,29 @@
 
 namespace Database\Seeders;
 
-use App\Models\MainNotice;
+use App\Models\Teacher;
+use App\Models\TeacherAttend;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-
 
 class DataInserSeeder extends Seeder
 {
    public function run(): void
     {
-        $badges = ['New', 'Important', 'Urgent', 'Update'];
-        $types = ['Exam', 'Holiday', 'Event', 'General'];
+        $leaveTypes = ['Sick Leave', 'Casual Leave', 'Emergency Leave', 'Paid Leave'];
+        $statuses = ['present', 'absent', 'late', 'leave'];
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
 
-            MainNotice::create([
-                'title'         => 'Notice Title ' . $i,
-                'date'          => Carbon::now()->subDays(rand(1, 100)),
-                'notice_badge'  => $badges[array_rand($badges)],
-                'notice_type'   => $types[array_rand($types)],
-                'description'   => 'This is a sample description for notice ' . $i,
+            TeacherAttend::create([
+                'school_id'   => 3,
+                'teacher_id'  => rand(1, 10), // must exist in teachers table
+                'date'        => Carbon::now()->subDays(rand(1, 30)),
+                'leave_type'  => $leaveTypes[array_rand($leaveTypes)],
+                'reason'      => 'Sample reason for leave ' . $i,
+                'status'      => $statuses[array_rand($statuses)],
+                'created_at'  => now(),
+                'updated_at'  => now(),
             ]);
         }
     }

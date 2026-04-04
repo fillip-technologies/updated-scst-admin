@@ -29,7 +29,8 @@
             }
         }
     </script>
-
+<script src="{{ asset('sweetalert/sweetalert.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('sweetalert/sweetalert.css') }}">
     @php
     $bg = asset('images/bars1.webp');
     @endphp

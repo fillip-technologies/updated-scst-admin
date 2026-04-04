@@ -1,3 +1,17 @@
+
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "{{ session('success') }}",
+        timer: 2000,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+
 <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
     @csrf
 
@@ -29,12 +43,13 @@
     {{-- Category --}}
     <div class="mb-4">
         <label class="block mb-1 font-medium">Category</label>
-        <select name="category"
+        <select name="notice_type"
             class="w-full border rounded-lg px-4 py-2">
             <option value="">Select Category</option>
             <option value="Admission" {{ ($notice->category ?? '') == 'Admission' ? 'selected' : '' }}>Admission</option>
             <option value="Events" {{ ($notice->category ?? '') == 'Events' ? 'selected' : '' }}>Events</option>
             <option value="Academic" {{ ($notice->category ?? '') == 'Academic' ? 'selected' : '' }}>Academic</option>
+             <option value="New" {{ ($notice->category ?? '') == 'New' ? 'selected' : '' }}>New</option>
         </select>
     </div>
 
