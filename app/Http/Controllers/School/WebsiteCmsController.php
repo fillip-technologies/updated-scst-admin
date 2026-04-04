@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\Home;
 use App\Models\Infrastructure;
-use App\Models\Notice;
 use App\Models\Notices;
 use App\Models\Staff;
 use App\Models\Student;
@@ -15,7 +14,38 @@ class WebsiteCmsController extends Controller
 {
     public function schoolDashboard()
     {
-        return view('modules.school.dashboard.index');
+
+        $classes = Student::select('class_id')->where('school_id',SchoolLogin()->id)
+            ->groupBy('class_id')
+            ->get();
+
+        $data = [];
+
+        foreach ($classes as $class) {
+
+            $total = Student::where('class_id', $class->class_id)->count();
+
+            $present = Student::where('class_id', $class->class_id)
+                ->whereHas('attendance', function ($q) {
+                    $q->where('status', 'present');
+                })
+                ->count();
+
+            $absent = Student::where('class_id', $class->class_id)
+                ->whereHas('attendance', function ($q) {
+                    $q->where('status', 'absent');
+                })
+                ->count();
+
+            $data[] = [
+                'class' => $class->class_id,
+                'total' => $total,
+                'present' => $present,
+                'absent' => $absent,
+            ];
+        }
+
+        return view('modules.school.dashboard.index', compact('data'));
     }
 
     public function cmsIndex()
@@ -92,8 +122,9 @@ class WebsiteCmsController extends Controller
 
     public function cmsnoticeindex()
     {
-       $notice = Notices::where('school_id', SchoolLogin()->id)->get();
-        return view('modules.school.notices.index',compact('notice'));
+      $notice = Notices::where('school_id', SchoolLogin()->id)->get();
+
+        return view('modules.school.notices.index', compact('notice'));
     }
 
     public function attandence()

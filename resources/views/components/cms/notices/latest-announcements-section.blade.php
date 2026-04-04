@@ -1,4 +1,8 @@
-<div x-data="" class="relative">
+{{-- @php
+    print_r($notice);
+@endphp --}}
+
+<div x-data="noticeManager()"  class="relative">
     <div class="rounded-3xl border border-primary-800/10 bg-white shadow-sm">
         <div
             class="flex flex-col gap-4 border-b border-primary-800/10 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
@@ -28,45 +32,65 @@
 
             <div class="space-y-4">
                 <template x-for="(notice, index) in notices" :key="`${notice.title}-${index}`">
-                    <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm">
+                    <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4">
+
                         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+
+                            <!-- LEFT -->
                             <div class="min-w-0">
+
+                                <!-- TITLE + CATEGORY + BADGE -->
                                 <div class="flex flex-wrap items-center gap-3">
                                     <h3 class="text-base font-semibold text-gray-800" x-text="notice.title"></h3>
+
                                     <span class="rounded-full px-3 py-1 text-xs font-semibold"
                                         :class="categoryClass(notice.category)" x-text="notice.category"></span>
+
                                     <template x-if="notice.badge === 'New'">
                                         <span class="rounded-full px-3 py-1 text-xs font-semibold"
                                             :class="badgeClass(notice.badge)" x-text="notice.badge"></span>
                                     </template>
                                 </div>
 
+                                <!-- DESCRIPTION -->
+                                <p class="mt-3 text-sm text-gray-600 line-clamp-2" x-text="notice.description"></p>
+
+                                <!-- META -->
                                 <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+
+                                    <!-- DATE -->
                                     <span class="inline-flex items-center gap-2">
                                         <i class="fa-regular fa-calendar"></i>
-                                        <span x-text="notice.publishDate"></span>
+                                        <span x-text="new Date(notice.publishDate).toLocaleDateString()"></span>
                                     </span>
+
+                                    <!-- ATTACHMENT -->
                                     <template x-if="notice.attachmentName">
-                                        <span class="inline-flex items-center gap-2">
+                                        <a :href="`/storage/${notice.attachmentFile}`" target="_blank"
+                                            class="inline-flex items-center gap-2 text-primary-700 hover:underline">
                                             <i class="fa-regular fa-file-lines"></i>
                                             <span x-text="notice.attachmentName"></span>
-                                        </span>
+                                        </a>
                                     </template>
+
                                 </div>
                             </div>
 
+                            <!-- RIGHT ACTIONS -->
                             <div class="flex flex-wrap items-center gap-3">
-                                <button type="button" @click="openEdit(index)"
-                                    class="inline-flex items-center gap-2 rounded-lg border border-primary-800/20 bg-white px-3 py-2 text-xs font-medium text-primary-900 transition hover:border-primary-700 hover:bg-primary-900/5">
-                                    <i class="fa-solid fa-pen text-[10px]"></i>
+
+                                <button @click="openEdit(index)"
+                                    class="px-3 py-2 text-xs border rounded-lg text-primary-900">
                                     Edit
                                 </button>
-                                <button type="button" @click="deleteNotice(index)"
-                                    class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-500 transition hover:bg-red-50">
-                                    <i class="fa-solid fa-trash text-[10px]"></i>
+
+                                <button @click="deleteNotice(index)"
+                                    class="px-3 py-2 text-xs border rounded-lg text-red-500">
                                     Delete
                                 </button>
+
                             </div>
+
                         </div>
                     </div>
                 </template>
@@ -177,3 +201,100 @@
         </div>
     </div>
 </div>
+<script>
+function noticeManager() {
+    return {
+        // ✅ Backend → Frontend mapping
+        notices: (@json($notice ?? [])).map(item => ({
+            title: item.notice_title,
+            description: item.notice_description,
+            category: item.notice_category,
+            publishDate: item.notice_publish_date,
+            badge: item.notice_badge === 'Nnew' ? 'New' : item.notice_badge,
+            attachmentName: item.notice_attachment ? item.notice_attachment.split('/').pop() : '',
+            attachmentFile: item.notice_attachment
+        })),
+
+        editorOpen: false,
+        editingIndex: null,
+
+        form: {
+            title: '',
+            description: '',
+            category: 'General',
+            publishDate: '',
+            badge: 'None',
+            attachmentName: '',
+            attachmentFile: ''
+        },
+
+        openCreate() {
+            this.editingIndex = null;
+            this.resetForm();
+            this.editorOpen = true;
+        },
+
+        openEdit(index) {
+            this.editingIndex = index;
+            this.form = { ...this.notices[index] };
+            this.editorOpen = true;
+        },
+
+        resetForm() {
+            this.form = {
+                title: '',
+                description: '',
+                category: 'General',
+                publishDate: '',
+                badge: 'None',
+                attachmentName: '',
+                attachmentFile: ''
+            };
+        },
+
+        handleAttachmentChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            this.form.attachmentName = file.name;
+            this.form.attachmentFile = file; // ✅ correct
+        },
+
+        saveNotice() {
+            const payload = { ...this.form };
+
+            if (this.editingIndex === null) {
+                this.notices.unshift(payload);
+            } else {
+                this.notices[this.editingIndex] = payload;
+            }
+
+            this.editorOpen = false;
+        },
+
+        deleteNotice(index) {
+            this.notices.splice(index, 1);
+
+            if (this.editingIndex === index) {
+                this.editorOpen = false;
+            }
+        },
+
+        badgeClass(value) {
+            return value === 'New'
+                ? 'bg-accent-500 text-black'
+                : 'bg-primary-900/10 text-primary-900';
+        },
+
+        categoryClass(value) {
+            const map = {
+                Admission: 'bg-primary-900 text-white',
+                Events: 'bg-accent-500 text-black',
+                Academic: 'bg-primary-700 text-white',
+                General: 'bg-primary-900/10 text-primary-900'
+            };
+            return map[value] || map.General;
+        }
+    }
+}
+</script>

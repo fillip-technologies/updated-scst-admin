@@ -16,9 +16,10 @@
             <!-- Attendance -->
             <div class="bg-white rounded-xl shadow-sm p-6 flex justify-between items-center">
                 <div>
-                    <p class="text-sm text-gray-500">Today's Attendance</p>
+                    <p class="text-sm text-gray-500">Totals Teacher's</p>
                     <h2 class="text-2xl font-bold text-gray-800">
-                        385 <span class="text-sm text-gray-400">/ 450</span>
+                        {{ App\Models\Teacher::where('school_id', SchoolLogin()->id)->count() }} <span
+                            class="text-sm text-gray-400">/ 450</span>
                     </h2>
                 </div>
                 <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
@@ -29,12 +30,14 @@
             <!-- Meal Status -->
             <div class="bg-white rounded-xl shadow-sm p-6 flex justify-between items-center">
                 <div>
-                    <p class="text-sm text-gray-500">Meal Status</p>
-                    <h2 class="text-xl font-semibold text-orange-500">Pending</h2>
-                    <p class="text-xs text-gray-400">Lunch (12:30 PM)</p>
+                    <p class="text-sm text-gray-500">Total Student's</p>
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        {{ App\Models\Student::where('school_id', SchoolLogin()->id)->count() }} <span
+                            class="text-sm text-gray-400">/ 450</span>
+                    </h2>
                 </div>
-                <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-truck"></i>
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-users"></i>
                 </div>
             </div>
 
@@ -75,7 +78,7 @@
                         Class-wise Attendance Entry
                     </h2>
                     <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-md">
-                        3/2/2026
+                        {{ date('d-m-Y') }}
                     </span>
                 </div>
 
@@ -92,29 +95,40 @@
 
                     <tbody class="divide-y">
 
-                        @for ($i = 1; $i <= 5; $i++)
+                        @forelse ($data as $row)
                             <tr>
-                                <td class="py-3 px-4">Class {{ $i }}</td>
-                                <td class="py-3 px-4">45</td>
+                                <td class="py-3 px-4">Class {{ $row['class'] ?? "" }}</td>
+
+                                <td class="py-3 px-4">{{ $row['total'] ?? "" }}</td>
+
                                 <td class="py-3 px-4">
-                                    <input type="number" value="40" class="w-16 border rounded-md px-2 py-1 text-sm">
+                                    <input type="number" value="{{ $row['present'] ?? "" }}"
+                                        class="w-16 border rounded-md px-2 py-1 text-sm">
                                 </td>
-                                <td class="py-3 px-4 text-red-500">5</td>
+
+                                <td class="py-3 px-4 text-red-500">
+                                    {{ $row['absent'] ?? "" }}
+                                </td>
+
                                 <td class="py-3 px-4 text-blue-600 text-sm cursor-pointer">
                                     Verify
                                 </td>
                             </tr>
-                        @endfor
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4">No Data Found</td>
+                            </tr>
+                        @endforelse
 
                     </tbody>
                 </table>
 
-                <div class="flex justify-end gap-4 mt-6">
+                {{-- <div class="flex justify-end gap-4 mt-6">
                     <button class="text-gray-500 text-sm">Reset</button>
                     <button class="bg-primary-700 hover:bg-primary-800 text-white px-5 py-2 rounded-lg text-sm">
                         Save Attendance
                     </button>
-                </div>
+                </div> --}}
 
             </div>
 

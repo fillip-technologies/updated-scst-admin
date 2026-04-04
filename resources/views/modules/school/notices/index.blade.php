@@ -12,7 +12,11 @@
                 </p>
             </div>
         </div>
-        <x-cms.notices.latest-announcements-section :notices="$notice" />
+
+        {{-- @php
+            dd($notice['notice_manage']);
+        @endphp --}}
+        <x-cms.notices.latest-announcements-section :notice="$notice" />
     </div>
 </div>
 @endsection

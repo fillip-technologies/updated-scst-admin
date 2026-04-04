@@ -11,18 +11,20 @@ use App\Models\Report;
 use App\Models\School;
 use App\Models\Teacher;
 use App\Models\User;
+use Carbon\Carbon;
+use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
-
-use function Symfony\Component\Clock\now;
 
 class HomeController extends Controller
 {
     // Home page
     public function homePage()
     {
+        dd(Hash::make('123456'));
 
         // User::create([
         //     'name'=>'Admin',
@@ -47,7 +49,9 @@ class HomeController extends Controller
             $passPercentage = (float) ($school->pass_percentage ?? 0);
             $attendancePercentage = (float) ($school->attendance_percentage ?? 0);
             $reportingStatus = $school->reporting_status ?? $this->deriveReportingStatus($school);
-            $lastReportTime = $school->last_report_time ?? now()->subMinutes(($school->id ?? 1) * 7)->format('Y-m-d H:i:s');
+            $lastReportTime = $school->last_report_time ?? Carbon::now()
+                ->subMinutes(($school->id ?? 1) * 7)
+                ->format('Y-m-d H:i:s');
             $issuesCount = (int) ($school->issues_count ?? ($dropoutCount > 0 ? 1 : 0));
             $stockInfo = $this->extractStockInfo($school);
             $issues = $this->buildIssues($school, $dropoutCount, $passPercentage, $attendancePercentage, $reportingStatus);
@@ -324,6 +328,7 @@ class HomeController extends Controller
     {
 
         $classdata = AddClasses::where('school_id', SchoolLogin()->id)->get();
+
         return view('modules.school.attendance.create-class', compact('classdata'));
     }
 

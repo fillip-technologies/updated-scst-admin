@@ -8,6 +8,7 @@ use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\ReportManageController;
+use App\Http\Controllers\School\SearchManageController;
 use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\TeacherManageController;
@@ -117,4 +118,11 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::get('/teacher/create', [HomeController::class, 'createTeacher'])
         ->name('teacher.create');
+
+        //filter datas
+
+        Route::get('/search/date/attendence',[SearchManageController::class,'attendanceSerach'])->name('search.attendance');
+
+
+
 });
