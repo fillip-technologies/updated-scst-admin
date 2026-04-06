@@ -10,6 +10,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::get('/schools',[SchoolApiController::class,'index']);
+Route::get('/school/header/{school_id}',[HomeSectionController::class, 'getHeader']);
 Route::get('/school/home/{school_id}', [HomeSectionController::class, 'getHomeSchoolData']);
 Route::get('/school/infrastructur/{school_id}', [HomeSectionController::class, 'getInfrastructurData']);
 Route::get('/school/staff/{school_id}', [HomeSectionController::class, 'getStaffData']);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
+use App\Http\Controllers\School\ExcelReportController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
@@ -119,10 +120,8 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/teacher/create', [HomeController::class, 'createTeacher'])
         ->name('teacher.create');
 
-        //filter datas
-
-        Route::get('/search/date/attendence',[SearchManageController::class,'attendanceSerach'])->name('search.attendance');
-
-
+    // filter datas
+    Route::post('/report/download', [ExcelReportController::class, 'RepotDownload'])->name('report.download');
+    Route::get('/search/date/attendence', [SearchManageController::class, 'attendanceSerach'])->name('search.attendance');
 
 });

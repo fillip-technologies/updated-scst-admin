@@ -7,6 +7,7 @@ use App\Models\Home;
 use App\Models\Infrastructure;
 use App\Models\MainNotice;
 use App\Models\Notices;
+use App\Models\School;
 use App\Models\Staff;
 use Exception;
 
@@ -15,6 +16,16 @@ class HomeSectionController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function getHeader($school_id)
+    {
+        $headerdata = School::select('district','official_email','school_phone')->where('id', $school_id)->first();
+        if ($headerdata) {
+            return SuccessResponse(200, 'School Header data find', $headerdata);
+        } else {
+            return ErrorResponse(400, 'Not found', 'Something went wrong');
+        }
+    }
+
     public function getHomeSchoolData($school_id)
     {
         $data = Home::where('school_id', $school_id)->first();

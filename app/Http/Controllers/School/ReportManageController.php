@@ -185,5 +185,6 @@ class ReportManageController extends Controller
             return redirect()->route('school.infra.info')
                 ->with('error', 'Something Went Wrong');
         }
+
     }
 }
