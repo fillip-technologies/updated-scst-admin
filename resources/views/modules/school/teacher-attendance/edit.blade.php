@@ -12,7 +12,7 @@
                 enctype="multipart/form-data">
 
                 @csrf
-               
+
 
                 <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
 
@@ -167,7 +167,7 @@
 
                     <div>
                         <label>Subject</label>
-                        <input type="text" name="class_subject" value="{{ old('class_subject', $editdata->subject) }}"
+                        <input type="text" name="subject" value="{{ old('subject', $editdata->subject) }}"
                             class="w-full border px-3 py-2 rounded-lg">
                     </div>
 

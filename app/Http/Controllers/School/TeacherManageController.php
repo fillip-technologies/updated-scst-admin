@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Exports\TeacherExport;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
+use App\Imports\TeacherImport;
 use App\Models\Teacher;
 use App\Models\TeacherAttend;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherManageController extends Controller
 {
@@ -105,6 +108,8 @@ class TeacherManageController extends Controller
 
     public function UpdateTeacher(Request $request, $id, $schoolId)
     {
+
+   
         $teacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
             ->firstOrFail();
@@ -178,7 +183,20 @@ class TeacherManageController extends Controller
         }
     }
 
-    public function TeacheeExport() {}
+    public function TeacheeExport()
+    {
 
-    public function TeacherImport() {}
+        return Excel::download(new TeacherExport, 'teachers.xlsx');
+    }
+
+    public function TeacherImport(Request $request)
+    {
+        $request->validate([
+            'file' => 'required',
+        ]);
+
+        Excel::import(new TeacherImport, $request->file('file'));
+
+        return redirect('/school/teacher/list')->with('success', 'Teacher Importted Successfully');
+    }
 }

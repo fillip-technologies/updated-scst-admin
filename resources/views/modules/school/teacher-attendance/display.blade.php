@@ -11,8 +11,7 @@
                 showConfirmButton: false
             });
         </script>
-
-        @elseif (session('error'))
+    @elseif (session('error'))
         <script>
             Swal.fire({
                 icon: 'error',
@@ -29,18 +28,63 @@
         <!-- Header -->
         <div class="max-w-6xl mx-auto mb-6 px-4">
             <div class="flex justify-between items-center">
+
+                <!-- Title -->
                 <div>
                     <h1 class="text-xl font-semibold text-gray-800">Teacher Management</h1>
                     <p class="text-sm text-gray-500">Manage teacher records</p>
                 </div>
 
-                <a href="{{ route('teacher.create') }}"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                    + Add Teacher
-                </a>
+                <!-- Buttons -->
+                <div class="flex gap-3">
+                    <button onclick="openModal()"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2">
+                        📥 Import Excel
+                    </button>
+                    <a href="{{ route('teacher.create') }}"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                        + Add Teacher
+                    </a>
+
+                    <a href="{{ route('export.teacher') }}"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2">
+                        📥 Export Excel
+                    </a>
+
+                </div>
             </div>
         </div>
+        <!-- Modal Background -->
+        <div id="importModal" style="display:none;"
+            class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
 
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+
+                <h2 class="text-lg font-semibold mb-4">Import Teachers</h2>
+
+                <form action="{{ route('teacher.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <input type="file" name="file" required class="w-full border rounded-lg p-2 mb-4">
+                    <span>
+                        <a href="{{ asset('sampledata/teachers.xlsx') }}" class="text-blue-500 hover:underline">
+                            Download Sample
+                        </a>
+                    </span>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-400 text-white rounded-lg">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
         <!-- Table Card -->
         <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-sm p-4">
 
@@ -87,7 +131,7 @@
 
                                 <!-- Photo -->
                                 <td class="py-2 px-4">
-                                    <img src="{{ asset($teacher->photo ?? "teacher/Abhishek.jpg") }}"
+                                    <img src="{{ asset($teacher->photo ?? 'teacher/Abhishek.jpg') }}"
                                         class="w-10 h-10 rounded-full mx-auto object-cover border">
                                 </td>
 
@@ -141,7 +185,9 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('delete.teacher',['id' => $teacher->id , 'schoolId'=>SchoolLogin()->id]) }}" method="POST" class="inline">
+                                    <form
+                                        action="{{ route('delete.teacher', ['id' => $teacher->id, 'schoolId' => SchoolLogin()->id]) }}"
+                                        method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
 
@@ -173,10 +219,20 @@
 
             <!-- Pagination -->
             <div class="mt-4">
-{{ $teachers->links() }}
+                {{ $teachers->links() }}
             </div>
 
         </div>
 
     </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('importModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('importModal').style.display = 'none';
+        }
+    </script>
 @endsection
