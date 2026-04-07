@@ -77,10 +77,13 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/admin/notices/store', [HomeController::class, 'store'])
         ->name('admin.notices.store');
 
-        // 
-        Route::get('/admin/stock/edit', [HomeController::class, 'editStock'])
-    ->name('admin.stock.edit');
+    // 
+    Route::get('/admin/stock/edit', [HomeController::class, 'editStock'])
+        ->name('admin.stock.edit');
 
-Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
-    ->name('admin.stock.update');
+    Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
+        ->name('admin.stock.update');
+
+    // 
+    
 });

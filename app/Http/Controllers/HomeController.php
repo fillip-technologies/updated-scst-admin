@@ -352,7 +352,46 @@ class HomeController extends Controller
 
     public function store(Request $request)
     {
-        // abhi simple redirect
+       
         return redirect()->route('admin.notices.index');
     }
+
+    // ================= RESULT MODULE =================
+
+// Dashboard
+public function manageResult()
+{
+   return view('modules.manage-result.upload');
+}
+
+// Upload Page
+public function createResult()
+{
+    return view('modules.school.manage-result.upload');
+}
+
+// Store
+public function storeResult()
+{
+    // simple for now
+    return redirect()->back();
+}
+
+// Edit
+public function editResult($id)
+{
+    return view('modules.school.manage-result.upload');
+}
+
+// Update
+public function updateResult($id)
+{
+    return redirect()->back();
+}
+
+// Delete
+public function deleteResult($id)
+{
+    return redirect()->back();
+}
 }

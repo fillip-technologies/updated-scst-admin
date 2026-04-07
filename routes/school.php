@@ -120,8 +120,26 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/teacher/create', [HomeController::class, 'createTeacher'])
         ->name('teacher.create');
 
-    // filter datas
+    // filter data
     Route::post('/report/download', [ExcelReportController::class, 'RepotDownload'])->name('report.download');
     Route::get('/search/date/attendence', [SearchManageController::class, 'attendanceSerach'])->name('search.attendance');
 
+    // Result Dashboard
+    Route::get('/school/manage-result', [HomeController::class, 'manageResult'])
+        ->name('school.manage-result');
+
+    Route::get('/school/manage-result/upload', [HomeController::class, 'createResult'])
+        ->name('school.manage-result.upload');
+
+    Route::post('/school/manage-result/store', [HomeController::class, 'storeResult'])
+        ->name('school.manage-result.store');
+
+    Route::get('/school/manage-result/edit/{id}', [HomeController::class, 'editResult'])
+        ->name('school.manage-result.edit');
+
+    Route::post('/school/manage-result/update/{id}', [HomeController::class, 'updateResult'])
+        ->name('school.manage-result.update');
+
+    Route::get('/school/manage-result/delete/{id}', [HomeController::class, 'deleteResult'])
+        ->name('school.manage-result.delete');
 });
