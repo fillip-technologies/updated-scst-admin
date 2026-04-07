@@ -1,120 +1,166 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-6">
+<div class="p-6 max-w-7xl mx-auto">
 
     <!-- HEADER -->
     <div class="mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800">
-            Manage Results
+        <h1 class="text-2xl font-bold text-gray-800">
+            Upload Student Results
         </h1>
-        <p class="text-sm text-gray-500">
-            Upload class-wise result files
+        <p class="text-gray-500 text-sm">
+            Select term and enter subject-wise marks
         </p>
     </div>
 
-    <!-- UPLOAD CARD -->
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <form class="grid md:grid-cols-4 gap-4">
-
-            <!-- TERM -->
-            <select name="term" class="border rounded-xl px-4 py-2">
-                <option value="">Select Term</option>
+    <!-- TERM SELECT -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6 flex items-center justify-between">
+        <div>
+            <p class="text-sm text-gray-500 mb-1">Select Term</p>
+            <select id="termSelect"
+                name="term"
+                class="border rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-400">
+                <option value="">Choose Term</option>
                 <option value="half">Half Yearly</option>
                 <option value="third">Third Terminal</option>
                 <option value="final">Final</option>
             </select>
-
-            <!-- CLASS -->
-            <select name="class" id="classSelect"
-                class="border rounded-xl px-4 py-2">
-                <option value="">Select Class</option>
-                <option value="10">Class 10</option>
-                <option value="9">Class 9</option>
-            </select>
-
-            <!-- TEACHER -->
-            <input type="text"
-                   name="teacher"
-                   id="teacherName"
-                   placeholder="Class Teacher"
-                   class="border rounded-xl px-4 py-2 bg-gray-100"
-                   readonly>
-
-            <!-- FILE -->
-            <input type="file"
-                   name="file"
-                   placeholder="Upload Result File"
-                   class="border rounded-xl px-2 py-2">
-
-        </form>
-
-        <!-- BUTTON -->
-        <div class="mt-4 text-right">
-            <button class="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700">
-                Upload
-            </button>
         </div>
 
+        <div class="text-sm text-gray-400">
+            Class: <span class="font-medium text-gray-700">10 (Assigned)</span>
+        </div>
     </div>
 
-    <!-- LIST -->
-    <div class="bg-white rounded-2xl shadow p-6">
+    <!-- STUDENT SECTION -->
+    <form id="resultForm">
+        <div id="studentSection" class="hidden space-y-6"></div>
 
-        <h2 class="font-semibold text-gray-700 mb-4">
-            Uploaded Results
-        </h2>
-
-        <table class="w-full text-sm">
-
-            <thead>
-                <tr class="text-left text-gray-500 border-b">
-                    <th class="py-3">Term</th>
-                    <th>Class</th>
-                    <th>Teacher</th>
-                    <th>File</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <tr class="border-b hover:bg-gray-50">
-                    <td class="py-3">Half Yearly</td>
-                    <td>Class 10</td>
-                    <td>Mr. Sharma</td>
-                    <td>📄 result10.xlsx</td>
-                    <td>10 Apr 2026</td>
-                </tr>
-
-                <tr>
-                    <td class="py-3">Final</td>
-                    <td>Class 9</td>
-                    <td>Ms. Priya</td>
-                    <td>📄 result9.pdf</td>
-                    <td>12 Apr 2026</td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
+        <!-- SAVE BUTTON -->
+        <div id="saveBar" class="hidden mt-6 flex justify-end">
+            <button type="submit"
+                class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition">
+                Save Results
+            </button>
+        </div>
+    </form>
 
 </div>
 
 <!-- JS -->
 <script>
-    const teachers = {
-        "10": "Mr. Sharma",
-        "9": "Ms. Priya"
-    };
 
-    document.getElementById("classSelect").addEventListener("change", function() {
-        let value = this.value;
-        document.getElementById("teacherName").value = teachers[value] || "";
+// ================= JSON DATA =================
+const students = [
+    { id: 1, name: "Manish Kumar", roll: "01" },
+    { id: 2, name: "Ravi Kumar", roll: "02" }
+];
+
+const subjects = ["Hindi", "English", "Math"];
+
+// ================= RENDER =================
+const container = document.getElementById("studentSection");
+
+function renderStudents() {
+    container.innerHTML = "";
+
+    students.forEach(student => {
+
+        let subjectHTML = "";
+
+        subjects.forEach(sub => {
+            let key = sub.toLowerCase() + "_" + student.id;
+
+            subjectHTML += `
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow transition">
+
+                    <p class="font-medium text-gray-700 mb-2">${sub}</p>
+
+                    <!-- MARKS -->
+                    <input type="number"
+                        name="marks_${key}"
+                        placeholder="Enter Marks"
+                        class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400 outline-none">
+
+                    <!-- CUSTOM FILE -->
+                    <label class="flex justify-between items-center border border-dashed border-gray-300 rounded-lg px-3 py-2 cursor-pointer hover:border-blue-400 transition">
+
+                        <span id="file_${key}" class="text-sm text-gray-500">
+                            Upload Copy
+                        </span>
+
+                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                            Choose
+                        </span>
+
+                        <input type="file"
+                            name="file_${key}"
+                            class="hidden"
+                            onchange="updateFileName(this, 'file_${key}')">
+                    </label>
+
+                </div>
+            `;
+        });
+
+        container.innerHTML += `
+            <div class="bg-white rounded-2xl shadow p-6">
+
+                <!-- HEADER -->
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-semibold text-lg text-gray-800">
+                        👨‍🎓 ${student.name}
+                    </h2>
+
+                    <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                        Roll No: ${student.roll}
+                    </span>
+                </div>
+
+                <!-- SUBJECTS -->
+                <div class="grid md:grid-cols-3 gap-5">
+                    ${subjectHTML}
+                </div>
+
+            </div>
+        `;
     });
+}
+
+// ================= FILE NAME UPDATE =================
+function updateFileName(input, id) {
+    const fileName = input.files[0]?.name || "Upload Copy";
+    document.getElementById(id).innerText = fileName;
+}
+
+// ================= TERM CHANGE =================
+const termSelect = document.getElementById("termSelect");
+const saveBar = document.getElementById("saveBar");
+
+termSelect.addEventListener("change", function () {
+    if (this.value !== "") {
+        container.classList.remove("hidden");
+        saveBar.classList.remove("hidden");
+        renderStudents();
+    }
+});
+
+// ================= FORM SUBMIT (FRONTEND ONLY) =================
+document.getElementById("resultForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    let data = {};
+
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    console.log("FINAL DATA:", data);
+    alert("Data captured in console 🔥");
+});
+
 </script>
 
 @endsection
