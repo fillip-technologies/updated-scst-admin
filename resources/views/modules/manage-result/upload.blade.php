@@ -49,29 +49,35 @@
 
 <!-- JS -->
 <script>
+    // ================= JSON DATA =================
+    const students = [{
+            id: 1,
+            name: "Manish Kumar",
+            roll: "01"
+        },
+        {
+            id: 2,
+            name: "Ravi Kumar",
+            roll: "02"
+        }
+    ];
 
-// ================= JSON DATA =================
-const students = [
-    { id: 1, name: "Manish Kumar", roll: "01" },
-    { id: 2, name: "Ravi Kumar", roll: "02" }
-];
+    const subjects = ["Hindi", "English", "Math"];
 
-const subjects = ["Hindi", "English", "Math"];
+    // ================= RENDER =================
+    const container = document.getElementById("studentSection");
 
-// ================= RENDER =================
-const container = document.getElementById("studentSection");
+    function renderStudents() {
+        container.innerHTML = "";
 
-function renderStudents() {
-    container.innerHTML = "";
+        students.forEach(student => {
 
-    students.forEach(student => {
+            let subjectHTML = "";
 
-        let subjectHTML = "";
+            subjects.forEach(sub => {
+                let key = sub.toLowerCase() + "_" + student.id;
 
-        subjects.forEach(sub => {
-            let key = sub.toLowerCase() + "_" + student.id;
-
-            subjectHTML += `
+                subjectHTML += `
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow transition">
 
                     <p class="font-medium text-gray-700 mb-2">${sub}</p>
@@ -101,9 +107,9 @@ function renderStudents() {
 
                 </div>
             `;
-        });
+            });
 
-        container.innerHTML += `
+            container.innerHTML += `
             <div class="bg-white rounded-2xl shadow p-6">
 
                 <!-- HEADER -->
@@ -124,43 +130,42 @@ function renderStudents() {
 
             </div>
         `;
+        });
+    }
+
+    // ================= FILE NAME UPDATE =================
+    function updateFileName(input, id) {
+        const fileName = input.files[0]?.name || "Upload Copy";
+        document.getElementById(id).innerText = fileName;
+    }
+
+    // ================= TERM CHANGE =================
+    const termSelect = document.getElementById("termSelect");
+    const saveBar = document.getElementById("saveBar");
+
+    termSelect.addEventListener("change", function() {
+        if (this.value !== "") {
+            container.classList.remove("hidden");
+            saveBar.classList.remove("hidden");
+            renderStudents();
+        }
     });
-}
 
-// ================= FILE NAME UPDATE =================
-function updateFileName(input, id) {
-    const fileName = input.files[0]?.name || "Upload Copy";
-    document.getElementById(id).innerText = fileName;
-}
+    // ================= FORM SUBMIT (FRONTEND ONLY) =================
+    document.getElementById("resultForm").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-// ================= TERM CHANGE =================
-const termSelect = document.getElementById("termSelect");
-const saveBar = document.getElementById("saveBar");
+        const formData = new FormData(this);
 
-termSelect.addEventListener("change", function () {
-    if (this.value !== "") {
-        container.classList.remove("hidden");
-        saveBar.classList.remove("hidden");
-        renderStudents();
-    }
-});
+        let data = {};
 
-// ================= FORM SUBMIT (FRONTEND ONLY) =================
-document.getElementById("resultForm").addEventListener("submit", function(e){
-    e.preventDefault();
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
 
-    const formData = new FormData(this);
-
-    let data = {};
-
-    for (let [key, value] of formData.entries()) {
-        data[key] = value;
-    }
-
-    console.log("FINAL DATA:", data);
-    alert("Data captured in console 🔥");
-});
-
+        console.log("FINAL DATA:", data);
+        alert("Data captured in console ");
+    });
 </script>
 
 @endsection
