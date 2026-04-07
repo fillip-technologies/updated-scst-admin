@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AddClasses;
+use App\Models\School;
 
 if (! function_exists('districts')) {
 
@@ -138,6 +139,27 @@ if (! function_exists('leaveType')) {
             'Sick Leave',
             'Casual Leave',
             'Unpaid Leave',
+        ];
+    }
+}
+
+if (! function_exists('getDisc')) {
+    function getDisc()
+    {
+        $disdata = School::select('id', 'district')->get();
+
+        return $disdata;
+    }
+}
+
+if (! function_exists('dateRange')) {
+    function dateRange()
+    {
+        return [
+            '1' => 'Last 7 Days',
+            '2' => 'Last 30 Days',
+            '3' => 'This Month',
+            
         ];
     }
 }

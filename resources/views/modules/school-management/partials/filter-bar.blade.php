@@ -9,8 +9,7 @@
                 <i class="fa-solid fa-magnifying-glass text-sm"></i>
             </span>
 
-            <input type="text"
-                placeholder="Search by name, code or principal..."
+            <input type="text" placeholder="Search by name, code or principal..."
                 class="w-full pl-11 pr-4 py-3 rounded-xl
                        border border-gray-300 bg-gray-50
                        text-sm text-gray-700 placeholder-gray-400
@@ -26,6 +25,9 @@
                        text-sm text-gray-700
                        focus:outline-none focus:ring-2 focus:ring-primary-600 focus:bg-white transition">
                 <option>All Districts</option>
+                @foreach (getDisc() as $d)
+                    <option value="{{ $d->district }}">{{ $d->district }}</option>
+                @endforeach
             </select>
 
             <select
