@@ -24,7 +24,7 @@ class HomeController extends Controller
     // Home page
     public function homePage()
     {
-        dd(Hash::make('123456'));
+
 
         // User::create([
         //     'name'=>'Admin',
@@ -186,7 +186,7 @@ class HomeController extends Controller
         $performance = $request->filled('performance_filter') ? (float) $request->input('performance_filter') : null;
 
         return $schools->filter(function (array $school) use ($search, $district, $status, $dropout, $performance) {
-            if ($search !== '' && ! str_contains(strtolower($school['name'].' '.$school['district']), $search)) {
+            if ($search !== '' && ! str_contains(strtolower($school['name'] . ' ' . $school['district']), $search)) {
                 return false;
             }
 
