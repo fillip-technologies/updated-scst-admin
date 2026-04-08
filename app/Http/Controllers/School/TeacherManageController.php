@@ -9,6 +9,8 @@ use App\Imports\TeacherImport;
 use App\Models\Teacher;
 use App\Models\TeacherAttend;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherManageController extends Controller
@@ -65,6 +67,7 @@ class TeacherManageController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
+            'password'=>'required|min:6',
             'designation' => 'required',
             'address' => 'required',
             'photo' => 'required|file|mimes:jpg,jpeg,png,webp',
@@ -98,6 +101,14 @@ class TeacherManageController extends Controller
         ];
 
         $data = ManageCrud::createdatas(Teacher::class, $data);
+
+        User::create([
+            'name'=>$data->name,
+            'username'=>$data->email,
+            'password'=> Hash::make($request->password),
+            'school_id'=> SchoolLogin()->id,
+            'role'=>'staff'
+        ]);
         if ($data) {
             return redirect('/school/teacher/list')->with('success', 'Teacher Added SuccessFul');
         } else {
@@ -109,7 +120,7 @@ class TeacherManageController extends Controller
     public function UpdateTeacher(Request $request, $id, $schoolId)
     {
 
-   
+
         $teacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
             ->firstOrFail();

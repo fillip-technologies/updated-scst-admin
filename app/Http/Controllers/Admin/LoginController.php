@@ -127,7 +127,7 @@ class LoginController extends Controller
                 $loginUser = Auth::user();
 
                 if ($loginUser->role === 'staff') {
-                   
+
                     return redirect()->route('staff.dashboard');
                 }
 
@@ -168,6 +168,12 @@ class LoginController extends Controller
     public function AdminLogout()
     {
         Auth::guard('admin')->logout();
+
+        return redirect()->route('login');
+    }
+    public function StaffLogout()
+    {
+        Auth::guard('staff')->logout();
 
         return redirect()->route('login');
     }

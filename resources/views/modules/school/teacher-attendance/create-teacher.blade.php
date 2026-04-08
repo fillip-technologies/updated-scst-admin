@@ -70,7 +70,16 @@
                     </div>
 
                 </div>
+                <div class="mt-4">
+                    <label class="text-sm">Password</label>
+                    <input type="text" name="password" value="{{ old('password') }}"
+                        class="w-full border px-3 py-2 rounded-lg @error('password') border-red-500 @enderror"
+                        placeholder="Enter full name">
 
+                    @error('password')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
                 <!-- Address -->
                 <div class="mt-4">
                     <label class="text-sm">Address</label>
@@ -119,7 +128,7 @@
 
                         <option value="">Select designation</option>
                         <option value="teacher">Teacher</option>
-                        <option value="class_teacher" >Class Teacher
+                        <option value="class_teacher">Class Teacher
                         </option>
                     </select>
 
