@@ -18,7 +18,7 @@ Route::get('/', [HomeController::class, 'homePage'])->name('login');
 Route::post('/system/login', [LoginController::class, 'SystemLogin'])->name('system.login');
 // Signup
 Route::view('/signup', 'auth.signup')->name('signup');
-
+Route::view('/staff/login','auth.teacher')->name('teacher.singup');
 // Dashboard
 /*
 |--------------------------------------------------------------------------

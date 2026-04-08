@@ -93,35 +93,68 @@ class LoginController extends Controller
 
     public function SystemLogin(Request $request)
     {
+        // SCHOOL LOGIN
         if ($request->login_type === 'school') {
+
             $request->validate([
                 'schoolCode' => 'required',
                 'password' => 'required',
             ]);
 
             if (Auth::attempt(['schoolCode' => $request->schoolCode, 'password' => $request->password])) {
+
                 $loginUser = Auth::user();
+
                 if ($loginUser->role === 'school_admin') {
                     return redirect()->route('school.dashboard');
                 }
+
             } else {
                 return redirect()->back()->with('error', 'Invalid School Credentials');
             }
-        } else {
+        }
+
+        // STAFF LOGIN
+        elseif ($request->login_type === 'staff') {
+
             $request->validate([
                 'username' => 'required',
                 'password' => 'required',
             ]);
+
             if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+
                 $loginUser = Auth::user();
+
+                if ($loginUser->role === 'staff') {
+                    // return redirect()->route('staff.dashboard');
+                }
+
+            } else {
+                return redirect()->back()->with('error', 'Invalid Staff Credentials');
+            }
+        }
+        else {
+
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+            ]);
+
+            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+
+                $loginUser = Auth::user();
+
                 if ($loginUser->role === 'admin') {
                     return redirect()->route('admin.dashboard');
                 }
+
             } else {
-                return redirect()->back()->with('error', 'Invalid Department Credentials');
+                return redirect()->back()->with('error', 'Invalid Admin Credentials');
             }
         }
 
+        return redirect()->back()->with('error', 'Unauthorized Access');
     }
 
     public function SchoolLogout()
