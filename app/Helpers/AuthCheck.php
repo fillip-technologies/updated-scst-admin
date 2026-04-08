@@ -25,3 +25,15 @@ if (! function_exists('AdminLogin')) {
         return null;
     }
 }
+
+if (! function_exists('TeacherLog')) {
+    function TeacherLog()
+    {
+        $admin = Auth::user();
+        if ($admin && $admin->role === 'staff') {
+            return $admin;
+        }
+
+        return null;
+    }
+}

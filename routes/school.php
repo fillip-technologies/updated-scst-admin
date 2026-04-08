@@ -153,9 +153,9 @@ Route::prefix('school')->middleware('school')->group(function () {
         return view('modules.manage-result.edit');
     })->name('school.manage-result.edit2');
 
-
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('subjects');
 
-        Route::post('/create/subject',[SubjectManageController::class, 'createSubject'])->name('create.subject');
+    Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
+     Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
 });

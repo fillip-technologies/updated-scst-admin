@@ -9,6 +9,7 @@ use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\School;
+use App\Models\SubjectAdd;
 use App\Models\Teacher;
 use App\Models\User;
 use Carbon\Carbon;
@@ -369,26 +370,26 @@ class HomeController extends Controller
         return view('modules.school.manage-result.upload');
     }
 
-    // Store
+
     public function storeResult()
     {
-        // simple for now
+
         return redirect()->back();
     }
 
-    // Edit
+
     public function editResult($id)
     {
         return view('modules.school.manage-result.upload');
     }
 
-    // Update
+
     public function updateResult($id)
     {
         return redirect()->back();
     }
 
-    // Delete
+
     public function deleteResult($id)
     {
         return redirect()->back();
@@ -403,6 +404,7 @@ class HomeController extends Controller
     // Subjects
     public function subjects()
     {
-        return view('modules.subjects.index');
+        $subject = SubjectAdd::where('teacher_id',17)->where('school_id',3)->where('class_id',8)->get();
+        return view('modules.subjects.index',compact('subject'));
     }
 }

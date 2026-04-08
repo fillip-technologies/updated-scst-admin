@@ -10,7 +10,7 @@ class SubjectAdd extends Model
 
     protected $table = 'subject_adds';
 
-    protected $fillable = ['school_id', 'teacher_id', 'class_id', 'subject'];
+    protected $fillable = ['school_id', 'teacher_id', 'class_id', 'subjects'];
 
     public function allclass()
     {
