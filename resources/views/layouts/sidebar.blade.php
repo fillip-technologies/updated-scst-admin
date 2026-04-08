@@ -229,15 +229,26 @@
             Students Management
         </a>
 
+       
+
+        <a href="{{ route('subjects') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl 
+   {{ request()->routeIs('subjects') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+            <i class="fa-solid fa-book {{ request()->routeIs('school.academics') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+
+            Manage Subjects
+        </a>
+
         <a href="{{ route('school.manage-result') }}"
-   class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
    {{ request()->routeIs('school.manage-result*') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
-    <i class="fa-solid fa-chart-line 
+            <i class="fa-solid fa-chart-line 
     {{ request()->routeIs('school.manage-result*') ? 'text-accent-500' : 'text-gray-400' }}"></i>
 
-    Manage Result
-</a>
+            Manage Result
+        </a>
 
         <!-- Academic Activities -->
         <a href="{{ route('school.academics') }}"

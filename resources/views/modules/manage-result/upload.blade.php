@@ -62,12 +62,21 @@
         }
     ];
 
-    const subjects = ["Hindi", "English", "Math"];
+    const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
     // ================= RENDER =================
     const container = document.getElementById("studentSection");
 
     function renderStudents() {
+
+        if (subjects.length === 0) {
+            container.innerHTML = `
+            <div class="text-center text-gray-400 p-10">
+                No subjects added. Please add subjects first.
+            </div>
+        `;
+            return;
+        }
         container.innerHTML = "";
 
         students.forEach(student => {

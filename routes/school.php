@@ -125,7 +125,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/search/date/attendence', [SearchManageController::class, 'attendanceSerach'])->name('search.attendance');
 
     // Result Dashboard
-    Route::get('/school/manage-result', [HomeController::class, 'manageResult'])
+    Route::get('/manage-result', [HomeController::class, 'manageResult'])
         ->name('school.manage-result');
 
     Route::get('/school/manage-result/upload', [HomeController::class, 'createResult'])
@@ -142,4 +142,7 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::get('/school/manage-result/delete/{id}', [HomeController::class, 'deleteResult'])
         ->name('school.manage-result.delete');
+
+    Route::get('/subjects', [HomeController::class, 'subjects'])
+        ->name('subjects');
 });
