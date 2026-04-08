@@ -14,7 +14,9 @@ use App\Http\Controllers\School\StaffController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
+use App\Http\Controllers\SubjectManageController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('school')->middleware('school')->group(function () {
     Route::post('teacher/update/attendance', [TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
@@ -154,4 +156,6 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('subjects');
+
+        Route::post('/create/subject',[SubjectManageController::class, 'createSubject'])->name('create.subject');
 });
