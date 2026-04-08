@@ -7,6 +7,7 @@ use App\Http\Controllers\School\ExcelReportController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
+use App\Http\Controllers\School\ManageStaffController;
 use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
@@ -158,4 +159,9 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
      Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
+});
+
+
+Route::prefix('staff')->middleware('staff')->group(function(){
+Route::get('/staf/dashboard',[ManageStaffController::class,'index']);
 });

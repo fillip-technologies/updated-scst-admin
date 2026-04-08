@@ -127,7 +127,8 @@ class LoginController extends Controller
                 $loginUser = Auth::user();
 
                 if ($loginUser->role === 'staff') {
-                    // return redirect()->route('staff.dashboard');
+                   
+                    return redirect()->route('staff.dashboard');
                 }
 
             } else {

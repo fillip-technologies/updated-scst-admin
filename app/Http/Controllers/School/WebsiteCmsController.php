@@ -129,7 +129,7 @@ class WebsiteCmsController extends Controller
 
     public function attandence()
     {
-        $school_id = SchoolLogin()->id;
+        $school_id = SchoolLogin()->id ?? TeacherLog()->school_id;
 
         $classes = AddClasses::where('school_id', $school_id)->get();
 

@@ -69,7 +69,7 @@
                 <form id="classForm" action="{{ route('class.filter') }}" method="GET">
 
                     <input type="hidden" name="class" id="selectedClass">
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
 
 
                     @php
@@ -162,8 +162,8 @@
                             <!-- Form -->
                             <form action="{{ route('report.save') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
-                                <input type="hidden" name="district" value="{{ SchoolLogin()->district }}">
+                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+                                <input type="hidden" name="district" value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">Report Type</label>
                                     <select name="report_type" id="report_type"
@@ -254,7 +254,7 @@
 
                                                 <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                 <input type="hidden" name="class_id" value="{{ $student->class_id }}">
-                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
                                                 <input type="hidden" name="date" value="{{ date('Y-m-d') }}">
 
                                                 <select name="status" onchange="this.form.submit()"
