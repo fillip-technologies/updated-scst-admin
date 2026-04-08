@@ -394,6 +394,12 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
+    // 🔹 EDIT PAGE
+    public function editManageResult($id)
+    {
+        return view('modules.manage-result.edit');
+    }
+
     // Subjects
     public function subjects()
     {

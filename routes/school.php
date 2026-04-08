@@ -143,6 +143,15 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/school/manage-result/delete/{id}', [HomeController::class, 'deleteResult'])
         ->name('school.manage-result.delete');
 
+    Route::get('/school/manage-result/edit/{id}', function ($id) {
+        return view('modules.manage-result.edit');
+    })->name('school.manage-result.edit');
+
+    Route::get('/manage-result/edit/{id}', function ($id) {
+        return view('modules.manage-result.edit');
+    })->name('school.manage-result.edit2');
+
+
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('subjects');
 });

@@ -32,14 +32,14 @@
         </div>
     </div>
 
-    <!-- STUDENT SECTION -->
+    <!-- STUDENTS -->
     <form id="resultForm">
         <div id="studentSection" class="hidden space-y-6"></div>
 
-        <!-- SAVE BUTTON -->
+        <!-- SAVE -->
         <div id="saveBar" class="hidden mt-6 flex justify-end">
             <button type="submit"
-                class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition">
+                class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700">
                 Save Results
             </button>
         </div>
@@ -47,9 +47,8 @@
 
 </div>
 
-<!-- JS -->
 <script>
-    // ================= JSON DATA =================
+    // ================= DATA =================
     const students = [{
             id: 1,
             name: "Manish Kumar",
@@ -77,6 +76,7 @@
         `;
             return;
         }
+
         container.innerHTML = "";
 
         students.forEach(student => {
@@ -87,19 +87,30 @@
                 let key = sub.toLowerCase() + "_" + student.id;
 
                 subjectHTML += `
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow transition">
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
 
-                    <p class="font-medium text-gray-700 mb-2">${sub}</p>
+                    <!-- HEADER -->
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="font-medium text-gray-700">${sub}</p>
+
+                        <label class="text-xs flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox"
+                                name="absent_${key}"
+                                onchange="toggleAbsent('${key}')">
+                            Absent
+                        </label>
+                    </div>
 
                     <!-- MARKS -->
                     <input type="number"
+                        id="marks_${key}"
                         name="marks_${key}"
                         placeholder="Enter Marks"
-                        class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400 outline-none">
+                        disabled
+                        class="w-full border rounded-lg px-3 py-2 mb-3">
 
-                    <!-- CUSTOM FILE -->
-                    <label class="flex justify-between items-center border border-dashed border-gray-300 rounded-lg px-3 py-2 cursor-pointer hover:border-blue-400 transition">
-
+                    <!-- FILE -->
+                    <label class="flex justify-between items-center border border-dashed rounded-lg px-3 py-2 cursor-pointer">
                         <span id="file_${key}" class="text-sm text-gray-500">
                             Upload Copy
                         </span>
@@ -111,6 +122,7 @@
                         <input type="file"
                             name="file_${key}"
                             class="hidden"
+                            disabled
                             onchange="updateFileName(this, 'file_${key}')">
                     </label>
 
@@ -127,9 +139,16 @@
                         👨‍🎓 ${student.name}
                     </h2>
 
-                    <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                        Roll No: ${student.roll}
-                    </span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                            Roll No: ${student.roll}
+                        </span>
+
+                       <a href="/school/manage-result/edit/${student.id}"
+   class="bg-blue-100 text-blue-600 px-3 py-1 rounded text-xs">
+   Edit
+</a>
+                    </div>
                 </div>
 
                 <!-- SUBJECTS -->
@@ -137,18 +156,49 @@
                     ${subjectHTML}
                 </div>
 
+                <!-- SAVE BUTTON -->
+<div class="flex justify-end mt-4">
+    <button type="button"
+        onclick="saveStudent(${student.id})"
+        class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700">
+        Save Result
+    </button>
+</div>
+
             </div>
         `;
         });
     }
 
-    // ================= FILE NAME UPDATE =================
+    // ================= EDIT =================
+    function toggleEdit(studentId) {
+        const inputs = document.querySelectorAll(`[name*="_${studentId}"]`);
+
+        inputs.forEach(input => {
+            input.disabled = !input.disabled;
+        });
+    }
+
+    // ================= ABSENT =================
+    function toggleAbsent(key) {
+        const input = document.getElementById("marks_" + key);
+
+        if (input.disabled) {
+            input.disabled = false;
+            input.value = "";
+        } else {
+            input.disabled = true;
+            input.value = "";
+        }
+    }
+
+    // ================= FILE NAME =================
     function updateFileName(input, id) {
         const fileName = input.files[0]?.name || "Upload Copy";
         document.getElementById(id).innerText = fileName;
     }
 
-    // ================= TERM CHANGE =================
+    // ================= TERM =================
     const termSelect = document.getElementById("termSelect");
     const saveBar = document.getElementById("saveBar");
 
@@ -160,12 +210,11 @@
         }
     });
 
-    // ================= FORM SUBMIT (FRONTEND ONLY) =================
+    // ================= SUBMIT =================
     document.getElementById("resultForm").addEventListener("submit", function(e) {
         e.preventDefault();
 
         const formData = new FormData(this);
-
         let data = {};
 
         for (let [key, value] of formData.entries()) {
@@ -173,8 +222,28 @@
         }
 
         console.log("FINAL DATA:", data);
-        alert("Data captured in console ");
+        alert("Data ready (check console)");
     });
+
+    function saveStudent(studentId) {
+
+        const inputs = document.querySelectorAll(`[name*="_${studentId}"]`);
+        let studentData = {};
+
+        inputs.forEach(input => {
+            if (input.type === "checkbox") {
+                studentData[input.name] = input.checked;
+            } else if (input.type === "file") {
+                studentData[input.name] = input.files[0]?.name || null;
+            } else {
+                studentData[input.name] = input.value;
+            }
+        });
+
+        console.log("Student Saved:", studentData);
+
+        alert("Result saved for student ID: " + studentId);
+    }
 </script>
 
 @endsection
