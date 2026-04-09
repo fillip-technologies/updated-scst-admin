@@ -26,7 +26,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/notice/create', [MainNoticeController::class, 'NoticeCreate'])->name('admin.notice.save');
     Route::post('/notice/update/{id}', [MainNoticeController::class, 'NoticeUpdate'])->name('admin.notice.update');
     Route::get('/edit/notice/{id}', [MainNoticeController::class, 'NoticeEdit'])->name('admin.edit.notice');
-    Route::delete('/notice/delete/{id}', [MainNoticeController::class, 'NoticeDelete'])->name('admin.notice.delete');
+    Route::get('/notice/delete/{id}', [MainNoticeController::class, 'NoticeDelete'])->name('admin.notice.delete');
     Route::get('/notice/export', [MainNoticeController::class, 'NoticeExport'])->name('admin.notice.export');
     Route::post('/notice/import', [MainNoticeController::class, 'NoticeImport'])->name('admin.notice.import');
 
@@ -85,5 +85,5 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('admin.stock.update');
 
     // 
-    
+
 });

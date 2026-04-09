@@ -204,7 +204,7 @@
 <script>
 function noticeManager() {
     return {
-        // ✅ Backend → Frontend mapping
+        // 
         notices: (@json($notice ?? [])).map(item => ({
             title: item.notice_title,
             description: item.notice_description,
