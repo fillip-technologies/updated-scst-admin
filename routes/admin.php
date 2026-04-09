@@ -77,13 +77,20 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/admin/notices/store', [HomeController::class, 'store'])
         ->name('admin.notices.store');
 
-    // 
+    //
     Route::get('/admin/stock/edit', [HomeController::class, 'editStock'])
         ->name('admin.stock.edit');
 
     Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
         ->name('admin.stock.update');
 
+<<<<<<< HEAD
+    //
+=======
     // 
+<<<<<<< Updated upstream
+=======
+>>>>>>> e0eea7fc010ac13242d4bcba4cfca92063b5ad6c
+>>>>>>> Stashed changes
 
 });

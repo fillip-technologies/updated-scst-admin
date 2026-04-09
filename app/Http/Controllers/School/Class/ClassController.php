@@ -104,7 +104,7 @@ class ClassController extends Controller
     public function editclass($id)
     {
         $editdata = AddClasses::findOrFail($id);
-        $classdata = AddClasses::where('school_id', SchoolLogin()->id)->get();
+        $classdata = AddClasses::where('school_id', SchoolLogin()->id  ?? TeacherLog()->school_id)->get();
 
         return view('modules.school.attendance.create-class', compact('classdata', 'editdata'));
     }

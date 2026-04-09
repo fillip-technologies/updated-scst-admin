@@ -1,249 +1,177 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-6 max-w-7xl mx-auto">
-
-    <!-- HEADER -->
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">
-            Upload Student Results
-        </h1>
-        <p class="text-gray-500 text-sm">
-            Select term and enter subject-wise marks
-        </p>
-    </div>
-
-    <!-- TERM SELECT -->
-    <div class="bg-white rounded-2xl shadow p-6 mb-6 flex items-center justify-between">
-        <div>
-            <p class="text-sm text-gray-500 mb-1">Select Term</p>
-            <select id="termSelect"
-                name="term"
-                class="border rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-400">
-                <option value="">Choose Term</option>
-                <option value="half">Half Yearly</option>
-                <option value="third">Third Terminal</option>
-                <option value="final">Final</option>
-            </select>
-        </div>
-
-        <div class="text-sm text-gray-400">
-            Class: <span class="font-medium text-gray-700">10 (Assigned)</span>
-        </div>
-    </div>
-
-    <!-- STUDENTS -->
-    <form id="resultForm">
-        <div id="studentSection" class="hidden space-y-6"></div>
-
-        <!-- SAVE -->
-        <div id="saveBar" class="hidden mt-6 flex justify-end">
-            <button type="submit"
-                class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700">
-                Save Results
-            </button>
-        </div>
-    </form>
-
-</div>
-
-<script>
-    // ================= DATA =================
-    const students = [{
-            id: 1,
-            name: "Manish Kumar",
-            roll: "01"
-        },
-        {
-            id: 2,
-            name: "Ravi Kumar",
-            roll: "02"
-        }
-    ];
-
-    const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
-
-    // ================= RENDER =================
-    const container = document.getElementById("studentSection");
-
-    function renderStudents() {
-
-        if (subjects.length === 0) {
-            container.innerHTML = `
-            <div class="text-center text-gray-400 p-10">
-                No subjects added. Please add subjects first.
-            </div>
-        `;
-            return;
-        }
-
-        container.innerHTML = "";
-
-        students.forEach(student => {
-
-            let subjectHTML = "";
-
-            subjects.forEach(sub => {
-                let key = sub.toLowerCase() + "_" + student.id;
-
-                subjectHTML += `
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
-
-                    <!-- HEADER -->
-                    <div class="flex justify-between items-center mb-2">
-                        <p class="font-medium text-gray-700">${sub}</p>
-
-                        <label class="text-xs flex items-center gap-1 cursor-pointer">
-                            <input type="checkbox"
-                                name="absent_${key}"
-                                onchange="toggleAbsent('${key}')">
-                            Absent
-                        </label>
-                    </div>
-
-                    <!-- MARKS -->
-                    <input type="number"
-                        id="marks_${key}"
-                        name="marks_${key}"
-                        placeholder="Enter Marks"
-                        disabled
-                        class="w-full border rounded-lg px-3 py-2 mb-3">
-
-                    <!-- FILE -->
-                    <label class="flex justify-between items-center border border-dashed rounded-lg px-3 py-2 cursor-pointer">
-                        <span id="file_${key}" class="text-sm text-gray-500">
-                            Upload Copy
-                        </span>
-
-                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                            Choose
-                        </span>
-
-                        <input type="file"
-                            name="file_${key}"
-                            class="hidden"
-                            disabled
-                            onchange="updateFileName(this, 'file_${key}')">
-                    </label>
-
-                </div>
-            `;
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `
+                <ul style="text-align:center;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            `
             });
+        </script>
+    @endif
 
-            container.innerHTML += `
-            <div class="bg-white rounded-2xl shadow p-6">
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+    <div class="p-6 max-w-7xl mx-auto">
 
-                <!-- HEADER -->
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-semibold text-lg text-gray-800">
-                        👨‍🎓 ${student.name}
-                    </h2>
+        <!-- HEADER -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">
+                Upload Student Results
+            </h1>
+            <p class="text-gray-500 text-sm">
+                Select term and enter subject-wise marks
+            </p>
+        </div>
 
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                            Roll No: ${student.roll}
-                        </span>
+        <!-- TERM SELECT -->
+        <form action="{{ route('staff.get.result') }}" method="GET">
+            <div class="bg-white rounded-2xl shadow p-6 mb-6 flex items-center justify-between gap-5">
+                <input type="hidden" name="teacher_id" value="{{ TeacherLog()->staff_id ?? SchoolLogin()->id }}">
+                <input type="hidden" name="school_id" value="{{ TeacherLog()->school_id ?? SchoolLogin()->id }}">
+                <!-- LEFT SIDE (Filters) -->
+                <div class="flex gap-4">
 
-                       <a href="/school/manage-result/edit/${student.id}"
-   class="bg-blue-100 text-blue-600 px-3 py-1 rounded text-xs">
-   Edit
-</a>
+                    <!-- Term Select -->
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Select Term</p>
+                        <select name="term" class="border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 w-70">
+                            <option value="">Choose Term</option>
+                            <option value="half">Half Yearly</option>
+                            <option value="third">Third Terminal</option>
+                            <option value="final">Final</option>
+                        </select>
                     </div>
+
+                    <!-- Class Select -->
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Select Class</p>
+
+                        <select name="class_id" class="border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 w-70">
+
+                            <option value="">Choose Class</option>
+
+                            @foreach (getClass() as $class)
+                                <option value="{{ $class->id }}" @selected(getClassID() == $class->id)>
+                                    {{ $class->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
                 </div>
 
-                <!-- SUBJECTS -->
-                <div class="grid md:grid-cols-3 gap-5">
-                    ${subjectHTML}
+                <!-- RIGHT SIDE (Filter Button) -->
+                <div>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+                        Filter
+                    </button>
+                    <a href="{{ TeacherLog() ? route('staff.school.manage-result') : route('school.manage-result') }}"
+                        class="bg-orange-500 text-white px-6 py-2 rounded-xl shadow hover:bg-orange-700 transition">Refresh
+                    </a>
                 </div>
-
-                <!-- SAVE BUTTON -->
-<div class="flex justify-end mt-4">
-    <button type="button"
-        onclick="saveStudent(${student.id})"
-        class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700">
-        Save Result
-    </button>
-</div>
 
             </div>
-        `;
-        });
-    }
+        </form>
 
-    // ================= EDIT =================
-    function toggleEdit(studentId) {
-        const inputs = document.querySelectorAll(`[name*="_${studentId}"]`);
 
-        inputs.forEach(input => {
-            input.disabled = !input.disabled;
-        });
-    }
+        <!-- STUDENTS -->
+        <form id="resultForm" action="{{ route('staff.result.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div id="studentSection" class="space-y-6">
 
-    // ================= ABSENT =================
-    function toggleAbsent(key) {
-        const input = document.getElementById("marks_" + key);
+                @foreach ($studentdata ?? [] as $student)
+                    <div class="bg-white rounded-2xl shadow p-6">
 
-        if (input.disabled) {
-            input.disabled = false;
-            input.value = "";
-        } else {
-            input.disabled = true;
-            input.value = "";
-        }
-    }
+                        <!-- HEADER -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="font-semibold text-lg text-gray-800">
+                                👨‍🎓 {{ $student->name }}
+                            </h2>
 
-    // ================= FILE NAME =================
-    function updateFileName(input, id) {
-        const fileName = input.files[0]?.name || "Upload Copy";
-        document.getElementById(id).innerText = fileName;
-    }
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                                    Roll No: {{ $student->roll_no }}
+                                </span>
 
-    // ================= TERM =================
-    const termSelect = document.getElementById("termSelect");
-    const saveBar = document.getElementById("saveBar");
+                                <a href="#" class="bg-blue-100 text-blue-600 px-3 py-1 rounded text-xs">
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
 
-    termSelect.addEventListener("change", function() {
-        if (this.value !== "") {
-            container.classList.remove("hidden");
-            saveBar.classList.remove("hidden");
-            renderStudents();
-        }
-    });
+                        <!-- SUBJECTS -->
+                        <div class="grid md:grid-cols-3 gap-5">
 
-    // ================= SUBMIT =================
-    document.getElementById("resultForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+                            @foreach ($subjectdata ?? [] as $subject)
+                                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
 
-        const formData = new FormData(this);
-        let data = {};
+                                    <!-- SUBJECT HEADER -->
+                                    <div class="flex justify-between items-center mb-2">
+                                        <p class="font-medium text-gray-700">
+                                            {{ $subject->subjects }}
+                                        </p>
 
-        for (let [key, value] of formData.entries()) {
-            data[key] = value;
-        }
+                                        <label class="text-xs flex items-center gap-1 cursor-pointer">
+                                            <input type="checkbox"
+                                                name="results[{{ $student->id }}][{{ $subject->id }}][absent]">
+                                            Absent
+                                        </label>
+                                    </div>
 
-        console.log("FINAL DATA:", data);
-        alert("Data ready (check console)");
-    });
+                                    <!-- MARKS -->
+                                    <input type="number" name="results[{{ $student->id }}][{{ $subject->id }}][marks]"
+                                        placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3">
 
-    function saveStudent(studentId) {
+                                    <!-- FILE -->
+                                    <label
+                                        class="flex justify-between items-center border border-dashed rounded-lg px-3 py-2 cursor-pointer">
+                                        <span class="text-sm text-gray-500">
+                                            Upload Copy
+                                        </span>
 
-        const inputs = document.querySelectorAll(`[name*="_${studentId}"]`);
-        let studentData = {};
+                                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                                            Choose
+                                        </span>
 
-        inputs.forEach(input => {
-            if (input.type === "checkbox") {
-                studentData[input.name] = input.checked;
-            } else if (input.type === "file") {
-                studentData[input.name] = input.files[0]?.name || null;
-            } else {
-                studentData[input.name] = input.value;
-            }
-        });
+                                        <input type="file"
+                                            name="results[{{ $student->id }}][{{ $subject->id }}][file]" class="hidden">
+                                    </label>
 
-        console.log("Student Saved:", studentData);
+                                </div>
+                            @endforeach
 
-        alert("Result saved for student ID: " + studentId);
-    }
-</script>
+                        </div>
+                    </div>
+                @endforeach
 
+                <!-- SAVE -->
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700">
+                        Save Results
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
 @endsection

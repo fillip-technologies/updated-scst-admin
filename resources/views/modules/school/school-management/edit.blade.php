@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+ @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <div class="bg-gray-100 min-h-screen">
         <div class="mb-6">
             <h1 class="text-xl font-semibold text-gray-800">Edit Student</h1>
@@ -19,34 +30,23 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('student.update',$editStud->id) }}" class="p-6 space-y-6">
+                <form method="POST" action="{{ SchoolLogin() ?  route('student.update',$editStud->id) : route('staff.student.update',$editStud->id) }}" class="p-6 space-y-6">
                     @csrf
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
-                    <input type="hidden" name="roll_number" value="{{ $editStud->roll_number }}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
+                    <input type="hidden" name="roll_number" value="{{ $editStud->roll_number ?? "" }}">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
-                            <input type="text" name="name" placeholder="Enter Student Name"
-                                value="{{ old('name', $editStud->name) }}"
+                            <input type="text" name="name" placeholder="Enter Student Name" value="{{ old('name',$editStud->name ?? "") }}"
                                 class="w-full border rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-200">
 
-                            @error('name')
+                            @error("name")
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <!-- Roll Number -->
-                        {{-- <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Roll Number</label>
-                            <input type="text" name="roll_number" placeholder="Enter Roll Number"
-                                class="w-full border rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-green-200">
-                                 @error('name')
-                                <span class="text-red-500">{{ $message }}</span>
-                            @enderror
-                        </div> --}}
 
-                        <!-- DOB -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date Of Birth</label>
                             <input type="date" name="dob" value="{{ old('name', $editStud->dob) }}"

@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
@@ -328,7 +328,7 @@ class HomeController extends Controller
     public function createClass()
     {
 
-        $classdata = AddClasses::where('school_id', SchoolLogin()->id)->get();
+        $classdata = AddClasses::where('school_id', SchoolLogin()->id ?? TeacherLog()->school_id)->get();
 
         return view('modules.school.attendance.create-class', compact('classdata'));
     }
@@ -361,12 +361,15 @@ class HomeController extends Controller
 
     public function manageResult()
     {
-        return view('modules.manage-result.upload');
+       $studentdata = null;
+       $subjectdata = null;
+        return view('modules.manage-result.upload',compact('studentdata','subjectdata'));
     }
 
     // Upload Page
     public function createResult()
     {
+
         return view('modules.school.manage-result.upload');
     }
 

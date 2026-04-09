@@ -47,14 +47,14 @@ class StudentManageController extends Controller
 
         ManageCrud::createdatas(Student::class, $data);
 
-        return redirect()->route('school.student')->with('success', 'Student Admission Successfully');
+        return back()->with('success', 'Student Admission Successfully');
 
     }
 
     public function getallStudent()
     {
-        $studentdata = Student::with(['allclass'])->where('school_id',SchoolLogin()->id)->paginate(10);
-        $classes = AddClasses::where('school_id',SchoolLogin()->id)->get();
+        $studentdata = Student::with(['allclass'])->where('school_id',SchoolLogin()->id ?? TeacherLog()->school_id)->paginate(10);
+        $classes = AddClasses::where('school_id',SchoolLogin()->id ?? TeacherLog()->school_id)->get();
 
         return view('modules.school.school-management.index', compact('studentdata', 'classes'));
 
@@ -109,7 +109,7 @@ class StudentManageController extends Controller
 
         ManageCrud::updatedata(Student::class, $id, $data);
 
-        return redirect()->route('school.student')->with('success', 'Student Updated Successfully');
+        return back()->with('success', 'Student Updated Successfully');
     }
 
     public function studentDelete($id)
@@ -117,7 +117,7 @@ class StudentManageController extends Controller
         $id = trim($id);
         ManageCrud::deletedata(Student::class, $id);
 
-        return redirect()->route('school.student')->with('success', 'Student deleted Successfully');
+        return back()->with('success', 'Student deleted Successfully');
 
     }
 
@@ -156,7 +156,7 @@ class StudentManageController extends Controller
 
         Excel::import(new StudentImport, $request->file('upload_file'));
 
-        return redirect()->route('school.student')->with('success', 'Students Imported Successfully');
+        return back()->with('success', 'Students Imported Successfully');
 
     }
 }

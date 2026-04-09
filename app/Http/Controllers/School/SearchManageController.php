@@ -11,8 +11,8 @@ class SearchManageController extends Controller
 {
     public function attendanceSerach(Request $request)
     {
-        $school_id = SchoolLogin()->id;
-        $date = $request->date; 
+        $school_id = SchoolLogin()->id ?? TeacherLog()->school_id;
+        $date = $request->date;
         $classes = AddClasses::where('school_id', $school_id)->get();
 
         $studentdata = Student::where('school_id', $school_id)

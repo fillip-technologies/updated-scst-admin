@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('SchoolLogin')) {
@@ -35,5 +36,16 @@ if (! function_exists('TeacherLog')) {
         }
 
         return null;
+    }
+}
+
+if (! function_exists('getClassID')) {
+    function getClassID()
+    {
+        $teacherID = TeacherLog()->staff_id;
+        $data = Teacher::where('id', $teacherID)->value('class_id');
+
+        return $data;
+
     }
 }

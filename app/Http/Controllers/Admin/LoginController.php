@@ -175,6 +175,6 @@ class LoginController extends Controller
     {
         Auth::guard('staff')->logout();
 
-        return redirect()->route('login');
+        return redirect()->route('teacher.singup');
     }
 }

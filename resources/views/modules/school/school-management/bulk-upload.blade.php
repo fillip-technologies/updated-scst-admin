@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+ @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <div class="bg-gray-100 min-h-screen">
         <div class="mb-6">
             <h1 class="text-xl font-semibold text-gray-800">Bulk Upload</h1>
@@ -13,7 +24,7 @@
                     <h2 class="font-semibold text-gray-700">Upload Student Excel</h2>
                 </div>
 
-                <form class="p-6 space-y-6" action="{{ route('student.import') }}" method="POST"
+                <form class="p-6 space-y-6" action="{{ SchoolLogin() ?  route('student.import') : route('staff.student.import') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     {{-- <div>

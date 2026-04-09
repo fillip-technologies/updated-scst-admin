@@ -26,4 +26,9 @@ class SubjectAdd extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public function result()
+    {
+        return $this->hasMany(Result::class);
+    }
 }

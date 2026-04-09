@@ -26,9 +26,9 @@
                     <h2 class="font-semibold text-gray-700">Student Information</h2>
                 </div>
 
-                <form method="POST" action="{{ route('addmition.student') }}" class="p-6 space-y-6">
+                <form method="POST" action="{{ SchoolLogin() ?  route('addmition.student') : route('staff.addmition.student') }}" class="p-6 space-y-6">
                     @csrf
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 

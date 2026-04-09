@@ -41,14 +41,7 @@
                 </p>
             </div>
 
-            <!-- Right Button -->
-            <!-- <a href="{{ route('school.classes.create') }}"
-                class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm shadow-sm transition">
 
-                <span class="text-lg">+</span>
-                <span>Add Class</span>
-
-            </a> -->
 
         </div>
 
@@ -60,13 +53,13 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-sm font-semibold text-gray-600">Select Class</h2>
 
-                    <a href="{{ route('school.classes.create') }}"
+                    <a href="{{ SchoolLogin() ?  route('school.classes.create') : route('staff.classes.create') }}"
                         class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs">
                         + Add
                     </a>
                 </div>
 
-                <form id="classForm" action="{{ route('class.filter') }}" method="GET">
+                <form id="classForm" action="{{ SchoolLogin() ? route('class.filter')  : route('staff.class.filter')}}" method="GET">
 
                     <input type="hidden" name="class" id="selectedClass">
                     <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
@@ -126,7 +119,7 @@
                     </div>
                     <div class="flex items-center gap-3">
 
-                        <form action="{{ route('search.attendance') }}" method="GET" class="flex items-center gap-3">
+                        <form action="{{ SchoolLogin() ?  route('search.attendance') : route('staff.search.attendance')  }}" method="GET" class="flex items-center gap-3">
 
                             <input type="date" name="date"
                                 onchange="this.form.submit()"
@@ -160,7 +153,7 @@
                             <h2 class="text-lg font-semibold mb-4">Upload Report</h2>
 
                             <!-- Form -->
-                            <form action="{{ route('report.save') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ SchoolLogin() ?  route('report.save') :  route('staff.report.save')  }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
                                 <input type="hidden" name="district" value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">

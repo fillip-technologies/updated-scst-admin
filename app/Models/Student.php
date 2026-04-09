@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use LDAP\Result;
 
 class Student extends Model
 {
@@ -42,4 +43,11 @@ class Student extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function result()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    
 }

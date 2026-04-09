@@ -2,6 +2,7 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
+use App\Models\Teacher;
 
 if (! function_exists('districts')) {
 
@@ -79,7 +80,7 @@ if (! function_exists('roll_number')) {
 if (! function_exists('getClass')) {
     function getClass()
     {
-        $classes = AddClasses::where('school_id', SchoolLogin()->id)->get();
+        $classes = AddClasses::where('school_id', SchoolLogin()->id ?? TeacherLog()->school_id)->get();
 
         return $classes;
     }
@@ -159,7 +160,7 @@ if (! function_exists('dateRange')) {
             '1' => 'Last 7 Days',
             '2' => 'Last 30 Days',
             '3' => 'This Month',
-            
+
         ];
     }
 }

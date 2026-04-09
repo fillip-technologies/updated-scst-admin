@@ -34,7 +34,7 @@
 
         <!-- ADD SUBJECT -->
 
-        <form action="{{ route('create.subject') }}" method="POST">
+        <form action="{{SchoolLogin() ?  route('create.subject') :  route('staff.create.subject')  }}" method="POST">
             @csrf
             <div class="flex gap-2 mb-6">
                 <input name="subject" type="text" placeholder="Enter Subject Name" class="border px-4 py-2 rounded w-full">
@@ -52,7 +52,7 @@
                 <div class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center gap-2">
 
                     {{ $sub->subjects }}
-                    <form action="{{ route('delete.subject', $sub->id) }}" method="POST">
+                    <form action="{{SchoolLogin() ?  route('delete.subject', $sub->id) : route('staff.delete.subject', $sub->id)  }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500 font-bold">
