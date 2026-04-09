@@ -10,15 +10,16 @@ class SubjectManageController extends Controller
 {
     public function createSubject(Request $request)
     {
-        // $request->validate([
-        //     'subject' => 'required|string',
-        //     'teacher_id' => 'required',
-        //     'class_id' => 'required',
-        // ]);
+        $request->validate([
+            'subject' => 'required|string',
+            'teacher_id' => 'required',
+
+        ]);
+
         $data = [
-            'school_id' => 3,
-            'teacher_id' => 17,
-            'class_id' => 8,
+            'school_id' => $request->school_id,
+            'teacher_id' => $request->teacher_id,
+            'class_id' => getClassID(),
             'subjects' => $request->subject,
         ];
 

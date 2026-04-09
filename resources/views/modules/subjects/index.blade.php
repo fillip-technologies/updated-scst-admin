@@ -36,6 +36,8 @@
 
         <form action="{{SchoolLogin() ?  route('create.subject') :  route('staff.create.subject')  }}" method="POST">
             @csrf
+            <input type="hidden" name="school_id" value="{{ TeacherLog()->school_id ?? SchoolLogin()->id }}">
+            <input type="hidden" name="teacher_id" value="{{ TeacherLog()->staff_id  ?? 0 }}">
             <div class="flex gap-2 mb-6">
                 <input name="subject" type="text" placeholder="Enter Subject Name" class="border px-4 py-2 rounded w-full">
 

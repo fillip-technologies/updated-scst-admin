@@ -407,7 +407,7 @@ class HomeController extends Controller
     // Subjects
     public function subjects()
     {
-        $subject = SubjectAdd::where('teacher_id',17)->where('school_id',3)->where('class_id',8)->get();
+        $subject = SubjectAdd::where('teacher_id',TeacherLog()->staff_id)->where('school_id',TeacherLog()->school_id)->where('class_id',getClassID())->get();
         return view('modules.subjects.index',compact('subject'));
     }
 }
