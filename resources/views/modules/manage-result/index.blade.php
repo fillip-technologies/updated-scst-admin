@@ -15,7 +15,7 @@
                 </h2>
 
                 <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                    Roll: {{ $studentResults->first()->student->roll_no }}
+                    Roll: {{ $studentResults->first()->student->id }}
                 </span>
             </div>
 
