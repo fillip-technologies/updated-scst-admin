@@ -231,7 +231,7 @@
 
 
 
-            <a href="{{ route('subjects') }}"
+            {{-- <a href="{{ route('subjects') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl
    {{ request()->routeIs('subjects') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
@@ -250,7 +250,7 @@
     {{ request()->routeIs('school.manage-result*') ? 'text-accent-500' : 'text-gray-400' }}"></i>
 
                 Manage Result
-            </a>
+            </a> --}}
 
             <!-- Academic Activities -->
             <a href="{{ route('school.academics') }}"
