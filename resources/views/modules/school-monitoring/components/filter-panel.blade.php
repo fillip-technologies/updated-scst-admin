@@ -5,8 +5,8 @@
 <div class="grid gap-3 md:grid-cols-4 xl:grid-cols-5">
     <select name="district" class="rounded-md border border-gray-300 px-3 py-2 text-sm" data-filter-district>
         <option value="">Select district</option>
-        @foreach ($districtOptions as $district)
-            <option value="{{ $district }}" @selected(request('district') === $district)>{{ $district }}</option>
+        @foreach (getDisc() as $dis)
+            <option value="{{ $dis->district }}" @selected(request('district') === $dis->district)>{{ $dis->district }}</option>
         @endforeach
     </select>
 

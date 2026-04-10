@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\MainNoticeController;
 use App\Http\Controllers\Admin\SchoolManageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\ReportManageController;
+use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
@@ -83,6 +85,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
         ->name('admin.stock.update');
-
+      Route::get('/search/data',[SearchManageController::class, 'schoolSearch'])->name('search.school');
 
 });

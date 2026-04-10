@@ -1,5 +1,5 @@
 <section class="bg-white border border-gray-200 rounded-lg p-4">
-    <div class="flex flex-wrap gap-2">
+    {{-- <div class="flex flex-wrap gap-2">
         @foreach ($alerts as $alert)
             <button
                 type="button"
@@ -9,5 +9,5 @@
                 {{ $alert['label'] }}
             </button>
         @endforeach
-    </div>
+    </div> --}}
 </section>

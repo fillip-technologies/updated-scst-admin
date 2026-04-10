@@ -26,13 +26,6 @@ class HomeController extends Controller
     public function homePage()
     {
 
-
-        // User::create([
-        //     'name'=>'Admin',
-        //     'username'=>'admin@gmail.com',
-        //     'password'=>Hash::make('admin@123'),
-        //     'role'=>'admin'
-        // ]);
         return view('auth.login');
     }
 
