@@ -75,16 +75,16 @@
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
-                <!-- <div>
+                <div>
                     <label for="rating_value" class="mb-2 block text-sm font-medium text-gray-700">Rating Value</label>
                     <input
                         id="rating_value"
                         type="text"
                         name="rating_value"
-                          value="{{ old('rating_value',$home->rating_value ?? "") }}"
+                        value="{{ old('rating_value',$home->rating_value ?? "") }}"
                         placeholder="4.6"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
-                </div> -->
+                </div>
 
                 <div class="md:col-span-2">
                     <label for="school_title" class="mb-2 block text-sm font-medium text-gray-700">School Title</label>
@@ -130,7 +130,7 @@
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
-                <!-- <div>
+                <div>
                     <label for="back_button_text" class="mb-2 block text-sm font-medium text-gray-700">Back Button Text</label>
                     <input
                         id="back_button_text"
@@ -139,7 +139,7 @@
                         name="back_button_text"
                         placeholder="Back to Schools"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
-                </div> -->
+                </div>
             </div>
 
             <div class="mt-8 flex flex-col-reverse gap-3 border-t border-primary-800/10 pt-6 sm:flex-row sm:justify-end">
