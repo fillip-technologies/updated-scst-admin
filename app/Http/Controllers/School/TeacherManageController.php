@@ -108,7 +108,7 @@ class TeacherManageController extends Controller
             'password'=> Hash::make($request->password),
             'school_id'=> SchoolLogin()->id,
             'role'=>'staff',
-            'staff_id' => $data->staff_id
+            'staff_id' => $data->id
         ]);
         if ($data) {
             return redirect('/school/teacher/list')->with('success', 'Teacher Added SuccessFul');
