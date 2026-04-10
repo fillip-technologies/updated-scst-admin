@@ -4,6 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -22,5 +23,16 @@ class SearchManageController extends Controller
             ->paginate(10);
 
         return view('modules.school.attendance.index', compact('classes', 'studentdata'));
+    }
+
+    public function schoolSearch()
+    {
+        $search = request('search');
+        $schools = School::where('school_name', 'LIKE', "%{$search}%")
+            ->orWhere('district', 'LIKE', "%{$search}%")
+            ->orWhere('school_code', 'LIKE', "%{$search}%")->orWhere('principle_name','LIKE',"{% $search %}")
+            ->get();
+
+        return view('modules.school-management.index', compact('schools'));
     }
 }

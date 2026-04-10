@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script src="{{ asset('sweetalert/sweetalert.js') }}"></script>
+<script src="{{ asset('staticfils/jquery.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('sweetalert/sweetalert.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
