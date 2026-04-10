@@ -28,6 +28,7 @@
                     <label for="glance_title" class="mb-2 block text-sm font-medium text-gray-700">Section Title</label>
                     <input type="text" name="glance_title"
                         value="{{ old('glance_title', $glance->glance_title ?? '') }}"
+
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
@@ -49,13 +50,16 @@
                                         class="mb-2 block text-sm font-medium text-gray-700">Value</label>
                                     <input type="text" value="{{ old('stat_1_value', $glance->stat_1_value ?? '') }}"
                                         name="stat_1_value"
+
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                                 <div>
                                     <label for="stat_1_label"
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
                                     <input type="text" name="stat_1_label"
+
                                         value="{{ old('stat_1_label', $glance->stat_1_label ?? '') }}"
+                                        readonly
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>
@@ -69,6 +73,7 @@
                                         class="mb-2 block text-sm font-medium text-gray-700">Value</label>
                                     <input value="{{ old('stat_2_value', $glance->stat_2_value ?? '') }}" type="text"
                                         name="stat_2_value"
+
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                                 <div>
@@ -76,6 +81,7 @@
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
                                     <input type="text" name="stat_2_label"
                                         value="{{ old('stat_2_value', $glance->stat_2_label ?? '') }}"
+                                        readonly
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>
@@ -96,6 +102,7 @@
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
                                     <input type="text" name="stat_3_label"
                                         value="{{ old('stat_3_label', $glance->stat_3_label ?? '') }}"
+
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>
@@ -107,13 +114,14 @@
                                 <div>
                                     <label for="stat_4_value"
                                         class="mb-2 block text-sm font-medium text-gray-700">Value</label>
-                                    <input type="text" name="stat_4_value"  value="{{ old('stat_4_value', $glance->stat_4_value ?? '') }}"
+                                    <input type="text" name="stat_4_value" value="{{ old('stat_4_value', $glance->stat_4_value ?? '') }}"
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                                 <div>
                                     <label for="stat_4_label"
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
-                                    <input type="text" name="stat_4_label"  value="{{ old('stat_4_label', $glance->stat_4_label ?? '') }}"
+                                    <input type="text" name="stat_4_label" value="{{ old('stat_4_label', $glance->stat_4_label ?? '') }}" readonly
+
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>

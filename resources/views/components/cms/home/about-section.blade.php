@@ -33,6 +33,7 @@
                         id="about_label"
                         type="text"
                         name="about_label"
+                        readonly
                         value="{{ old('about_label',$about->about_label ?? '') }}"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -41,23 +42,24 @@
                     <label for="about_title" class="mb-2 block text-sm font-medium text-gray-700">Title</label>
                     <input
                         id="about_title"
-                       value="{{ old('about_title',$about->about_title ?? '') }}"
+                        value="{{ old('about_title',$about->about_title ?? '') }}"
                         type="text"
                         name="about_title"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="about_description" class="mb-2 block text-sm font-medium text-gray-700">Description</label>
+                    <label for="about_description" class="mb-2 block text-sm font-medium text-gray-700">Description <span class="font-normal text-xs text-red-400">(Max 40 Words or 300 character Allowed *)</span></label>
                     <textarea
                         id="about_description"
                         rows="5"
                         name="about_description"
+                        maxlength="300"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm leading-6 text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">{{ old('about_description',$about->about_description ?? '') }}</textarea>
                 </div>
 
                 <div class="md:col-span-2 rounded-2xl border border-primary-800/10 bg-gray-50 p-5">
-                    <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Bullet Points</h3>
+                    <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-500">Bullet Points <span class="font-normal text-xs text-red-400"> (Max 15 Words or 150 character Allowed *)</span></h3>
                     <div class="mt-4 grid grid-cols-1 gap-4">
                         <div>
                             <label for="about_bullet_1" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 1</label>
@@ -66,6 +68,7 @@
                                 value="{{ old('about_bullate_1',$about->about_bullet_1 ?? '') }}"
                                 type="text"
                                 name="about_bullet_1"
+                                maxlength="120"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
 
@@ -73,9 +76,10 @@
                             <label for="about_bullet_2" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 2</label>
                             <input
                                 id="about_bullet_2"
-                                 value="{{ old('about_bullate_2',$about->about_bullet_2 ?? '') }}"
+                                value="{{ old('about_bullate_2',$about->about_bullet_2 ?? '') }}"
                                 type="text"
                                 name="about_bullet_2"
+                                 maxlength="120"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
 
@@ -83,9 +87,10 @@
                             <label for="about_bullet_3" class="mb-2 block text-sm font-medium text-gray-700">Bullet Point 3</label>
                             <input
                                 id="about_bullet_3"
-                               value="{{ old('about_bullate_3',$about->about_bullet_3 ?? '') }}"
+                                value="{{ old('about_bullate_3',$about->about_bullet_3 ?? '') }}"
                                 type="text"
                                 name="about_bullet_3"
+                                 maxlength="120"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
                     </div>
@@ -118,7 +123,7 @@
                             <label for="pass_percentage" class="mb-2 block text-sm font-medium text-gray-700">Pass Percentage</label>
                             <input
                                 id="pass_percentage"
-                                 value="{{ old('pass_percentage',$about->pass_percentage ?? '') }}"
+                                value="{{ old('pass_percentage',$about->pass_percentage ?? '') }}"
                                 type="text"
                                 name="pass_percentage"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
@@ -210,7 +215,7 @@
                 </div>
                 <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-primary-800/10">
                     <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Pass %</p>
-                    <p class="mt-2 text-2xl font-semibold text-gray-800" >{{ $about->pass_percentage ?? '' }}</p>
+                    <p class="mt-2 text-2xl font-semibold text-gray-800">{{ $about->pass_percentage ?? '' }}</p>
                 </div>
             </div>
 

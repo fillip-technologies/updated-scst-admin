@@ -21,7 +21,7 @@
                 <div>
                     <label for="quiz_section_title" class="mb-2 block text-sm font-medium text-gray-700">Section
                         Title</label>
-                    <input id="quiz_section_title" type="text" value="School Quiz" readonly
+                    <input id="quiz_section_title" type="text" value="School Quiz"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
 
@@ -88,16 +88,16 @@
                                             <i class="fa-solid fa-pen text-[10px]"></i> Edit
                                         </button>
                                         <form method="POST" action="{{ route('quize.delete') }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
-                                                <input type="hidden" name="index" :value="index">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                            <input type="hidden" name="index" :value="index">
 
-                                                <button type="submit"
-                                                    class="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs text-red-500">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            <button type="submit"
+                                                class="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs text-red-500">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
