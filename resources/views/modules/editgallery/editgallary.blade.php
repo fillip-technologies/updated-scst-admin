@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" @click="saveCard()"
+                                <button type="submit"
                                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-primary-800 hover:shadow-md">
                                     <i class="fa-solid fa-floppy-disk text-xs"></i>
                                     Update
@@ -74,8 +74,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </form>

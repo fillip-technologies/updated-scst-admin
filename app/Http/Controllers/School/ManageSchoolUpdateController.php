@@ -491,6 +491,101 @@ class ManageSchoolUpdateController extends Controller
         $editdata = json_decode($getdata->gallery);
         $data = $editdata[$index];
 
-        return view('modules.editgallery.editgallary',compact('data','index'));
+        return view('modules.editgallery.editgallary', compact('data', 'index'));
+    }
+
+    public function galleryUpdate(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required',
+        ]);
+
+        $index = trim($request->index);
+        $schoolID = trim($request->school_id);
+
+        $homedata = Home::where('school_id', $schoolID)->first();
+
+        if (! $homedata) {
+            return back()->with('error', 'Data not found');
+        }
+
+        $editdata = json_decode($homedata->gallery, true);
+
+        if (! isset($editdata[$index])) {
+            return back()->with('error', 'Invalid index');
+        }
+
+        // Old Image
+        $oldImage = $editdata[$index]['gallery_card_image'];
+
+        // Image Upload
+        if ($request->hasFile('gallery_card_image')) {
+
+            // Delete old image
+            if ($oldImage && file_exists(public_path($oldImage))) {
+                unlink(public_path($oldImage));
+            }
+
+            $file = $request->file('gallery_card_image');
+            $filename = time().'.'.$file->getClientOriginalExtension();
+            $imagePath = public_path('GalleryImage');
+
+            $file->move($imagePath, $filename);
+
+            $editdata[$index]['gallery_card_image'] = 'GalleryImage/'.$filename;
+        }
+
+        // Optional: agar aur fields update karna ho
+        if ($request->has('gallery_card_title')) {
+            $editdata[$index]['gallery_card_title'] = $request->gallery_card_title;
+        }
+
+        if ($request->has('gallery_card_subtitle')) {
+            $editdata[$index]['gallery_card_subtitle'] = $request->gallery_card_subtitle;
+        }
+
+        // Save back to DB
+        $homedata->gallery = json_encode($editdata);
+        $homedata->save();
+
+        return redirect()->route('school.website-cms.home')->with('success', 'Gallery updated successfully');
+    }
+
+    public function galleryDelete(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required',
+        ]);
+
+        $index = trim($request->index);
+        $schoolID = trim($request->school_id);
+
+        $homedata = Home::where('school_id', $schoolID)->first();
+
+        if (! $homedata) {
+            return back()->with('error', 'Data not found');
+        }
+
+        $galleryData = json_decode($homedata->gallery, true);
+
+        if (! isset($galleryData[$index])) {
+            return back()->with('error', 'Invalid index');
+        }
+
+        // Delete Image from folder
+        $oldImage = $galleryData[$index]['gallery_card_image'];
+
+        if ($oldImage && file_exists(public_path($oldImage))) {
+            unlink(public_path($oldImage));
+        }
+
+        unset($galleryData[$index]);
+        $galleryData = array_values($galleryData);
+        $homedata->gallery = json_encode($galleryData);
+        $homedata->save();
+
+        return redirect()->route('school.website-cms.home')->with('success', 'Gallery deleted successfully');
     }
 }
