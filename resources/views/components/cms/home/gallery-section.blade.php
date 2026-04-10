@@ -250,7 +250,7 @@
                     }
 
                     // 🔥 Fix: mapping correct keys
-                    this.cards = parsed.map(item => ({
+                    this.cards = parsed.slice(0, 4).map(item => ({
                         image: item.gallery_card_image ?
                             '/' + item.gallery_card_image : 'https://via.placeholder.com/400x300',
                         title: item.gallery_card_title || 'No Title',

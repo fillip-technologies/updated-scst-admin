@@ -1,9 +1,7 @@
-
-
-   @if ($errors->any())
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                let errorMessages = `
+@if ($errors->any())
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let errorMessages = `
                     <ul style="text-align:left;">
                         @foreach ($errors->all() as $error)
                             <li class="text-red-500">• {{ $error }}</li>
@@ -11,15 +9,15 @@
                     </ul>
                 `;
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    html: errorMessages,
-                    confirmButtonColor: '#d33'
-                });
-            });
-        </script>
-    @endif
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: errorMessages,
+            confirmButtonColor: '#d33'
+        });
+    });
+</script>
+@endif
 
 <div class="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_420px]">
     <div class="rounded-3xl border border-primary-800/10 bg-white shadow-sm">
@@ -94,7 +92,7 @@
                         id="school_title"
                         type="text"
                         name="school_title"
-                                value="{{ old('school_title',$home->school_title ?? "") }}"
+                        value="{{ old('school_title',$home->school_title ?? "") }}"
                         placeholder="Dr. B.R. Ambedkar Residential School"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -105,7 +103,7 @@
                         id="location_text"
                         type="text"
                         name="location_text"
-                          value="{{ old('location_text',$home->location_text ?? "") }}"
+                        value="{{ old('location_text',$home->location_text ?? "") }}"
                         placeholder="Patna, Bihar"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -116,7 +114,7 @@
                         id="students_count"
                         type="text"
                         name="students_count"
-                          value="{{ old('students_count',$home->students_count ?? "") }}"
+                        value="{{ old('students_count',$home->students_count ?? "") }}"
                         placeholder="650 Students"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -127,7 +125,7 @@
                         id="class_range"
                         type="text"
                         name="class_range"
-                         value="{{ old('class_range',$home->class_range ?? "") }}"
+                        value="{{ old('class_range',$home->class_range ?? "") }}"
                         placeholder="Class 6 - 12"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -190,7 +188,7 @@
                     </div>
 
                     <h3 class="mt-6 text-3xl font-semibold leading-tight">
-                       {{$home->school_title ?? ""}}
+                        {{$home->school_title ?? ""}}
                     </h3>
 
                     <div class="mt-5 space-y-3 text-sm text-gray-100">
