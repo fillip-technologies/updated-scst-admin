@@ -40,7 +40,7 @@ class ResultManageController extends Controller
 
     public function Resultstore(Request $request)
     {
-
+       
         $request->validate([
             'results.*.*.marks' => 'nullable|numeric|min:0|max:100',
             'results.*.*.file' => 'nullable|file',
@@ -99,7 +99,6 @@ class ResultManageController extends Controller
             ->orderBy('student_id')
             ->get()
             ->groupBy('student_id');
-
 
         return view('modules.manage-result.index', compact('results'));
     }

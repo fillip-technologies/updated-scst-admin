@@ -10,49 +10,58 @@ class ManageSchoolUpdateController extends Controller
 {
     public function UpdateHeroSection(Request $request)
     {
+
+
         try {
             $request->validate([
-                'bgimage' => 'nullable|file|mimes:jpg,jpeg,png,webp,avif',
-                'badge_text' => 'required|string',
+                'bgimage' => 'nullable|image|mimes:jpg,jpeg,png,webp,avif|max:2048',
+                'badge_text' => 'required|string|max:255',
                 'rating_value' => 'required',
-                'school_title' => 'required|string',
-                'location_text' => 'required|string',
+                'school_title' => 'required|string|max:255',
+                'location_text' => 'required|string|max:255',
                 'students_count' => 'required',
-                'class_range' => 'required',
-                'back_button_text' => 'required|string',
+                'class_range' => 'required|string|max:100',
+                'back_button_text' => 'required|string|max:100',
                 'school_id' => 'required',
             ]);
 
             $existing = Home::where('school_id', $request->school_id)->first();
 
             if (! $existing) {
-                return back()->with('error', 'Data not found for update');
+                return back()->with('error', 'Data not found');
             }
 
-            $hero = [];
+            // Decode old data
+            $hero = $existing->hero ? json_decode($existing->hero, true) : [];
 
-            if ($existing->hero) {
-                $hero = json_decode($existing->hero, true);
-            }
-
+            // Image Upload
             if ($request->hasFile('bgimage')) {
 
-                if (! empty($hero['bgimage']) && file_exists(public_path($hero['bgimage']))) {
-                    unlink(public_path($hero['bgimage']));
+                // Delete old image safely
+                if (! empty($hero['bgimage'])) {
+                    $oldPath = public_path($hero['bgimage']);
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
+                    }
                 }
 
                 $file = $request->file('bgimage');
-                $filename = time().'_'.rand(111, 999).'.'.$file->getClientOriginalExtension();
+                $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
 
-                $path = public_path('schoolBgImage');
-                if (! file_exists($path)) {
-                    mkdir($path, 0777, true);
+                $folderPath = public_path('schoolBgImage');
+
+                // Create folder if not exists
+                if (! file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
                 }
 
-                $file->move($path, $filename);
+                // Move file
+                $file->move($folderPath, $filename);
+
                 $hero['bgimage'] = 'schoolBgImage/'.$filename;
             }
 
+            // Update data
             $hero['badge_text'] = $request->badge_text;
             $hero['rating_value'] = $request->rating_value;
             $hero['school_title'] = $request->school_title;
@@ -61,11 +70,12 @@ class ManageSchoolUpdateController extends Controller
             $hero['class_range'] = $request->class_range;
             $hero['back_button_text'] = $request->back_button_text;
 
+            // Save
             $existing->update([
                 'hero' => json_encode($hero),
             ]);
 
-            return back()->with('success', 'Hero section updated successfully');
+            return back()->with('success', 'Hero updated successfully');
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
