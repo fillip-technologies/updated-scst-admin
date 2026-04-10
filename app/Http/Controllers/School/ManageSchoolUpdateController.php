@@ -411,79 +411,181 @@ class ManageSchoolUpdateController extends Controller
         return back()->with('success', 'Faq deleted successfully');
     }
 
-   public function QuizeUpdate(Request $request)
-{
-    $request->validate([
-        'quiz_status' => 'required|string',
-        'quiz_title' => 'required|string|max:255',
-        'quiz_description' => 'required|string',
-        'quiz_button_text' => 'required|string|max:50',
-        'school_id' => 'required|integer',
-        'quiz_index' => 'required|integer',
-        'quiz_image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
-    ]);
+    public function QuizeUpdate(Request $request)
+    {
+        $request->validate([
+            'quiz_status' => 'required|string',
+            'quiz_title' => 'required|string|max:255',
+            'quiz_description' => 'required|string',
+            'quiz_button_text' => 'required|string|max:50',
+            'school_id' => 'required|integer',
+            'quiz_index' => 'required|integer',
+            'quiz_image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+        ]);
 
-    $index = $request->quiz_index;
+        $index = $request->quiz_index;
 
-    $school = Home::where('school_id', $request->school_id)->firstOrFail();
-    $quizzes = json_decode($school->quiz, true);
+        $school = Home::where('school_id', $request->school_id)->firstOrFail();
+        $quizzes = json_decode($school->quiz, true);
 
-    if (!isset($quizzes[$index])) {
-        return redirect()->back()->with('error', 'Quiz not found at this index!');
+        if (! isset($quizzes[$index])) {
+            return redirect()->back()->with('error', 'Quiz not found at this index!');
+        }
+
+        if ($request->hasFile('quiz_image')) {
+            $file = $request->file('quiz_image');
+            $filename = time().'_'.$file->getClientOriginalName(); // unique name
+            $destination = public_path('quizImage'); // folder: public/quizImage
+            $file->move($destination, $filename);
+
+            $quizzes[$index]['quiz_image'] = 'quizImage/'.$filename;
+        }
+
+        // Update other quiz fields
+        $quizzes[$index]['quiz_status'] = $request->quiz_status;
+        $quizzes[$index]['quiz_title'] = $request->quiz_title;
+        $quizzes[$index]['quiz_description'] = $request->quiz_description;
+        $quizzes[$index]['quiz_button_text'] = $request->quiz_button_text;
+
+        $school->quiz = json_encode($quizzes);
+        $school->save();
+
+        return redirect()->back()->with('success', 'Quiz updated successfully!');
     }
 
-    if ($request->hasFile('quiz_image')) {
-        $file = $request->file('quiz_image');
-        $filename = time() . '_' . $file->getClientOriginalName(); // unique name
-        $destination = public_path('quizImage'); // folder: public/quizImage
-        $file->move($destination, $filename);
+    public function QuizeDelete(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required|integer',
+            'quiz_index' => 'required|integer',
+        ]);
 
+        $school = Home::where('school_id', $request->school_id)->firstOrFail();
+        $quizzes = json_decode($school->quiz, true);
 
-        $quizzes[$index]['quiz_image'] = 'quizImage/' . $filename;
+        $index = $request->quiz_index;
+
+        if (! isset($quizzes[$index])) {
+            return redirect()->back()->with('error', 'Quiz not found at this index!');
+        }
+
+        if (! empty($quizzes[$index]['quiz_image']) && file_exists(public_path($quizzes[$index]['quiz_image']))) {
+            unlink(public_path($quizzes[$index]['quiz_image']));
+        }
+
+        array_splice($quizzes, $index, 1);
+
+        $school->quiz = json_encode($quizzes);
+        $school->save();
+
+        return redirect()->back()->with('success', 'Quiz deleted successfully!');
     }
 
+    public function galleryEdit(Request $request, $index)
+    {
 
-    // Update other quiz fields
-    $quizzes[$index]['quiz_status'] = $request->quiz_status;
-    $quizzes[$index]['quiz_title'] = $request->quiz_title;
-    $quizzes[$index]['quiz_description'] = $request->quiz_description;
-    $quizzes[$index]['quiz_button_text'] = $request->quiz_button_text;
+        $index = trim($index);
+        $schoolID = SchoolLogin()->id;
 
-    $school->quiz = json_encode($quizzes);
-    $school->save();
+        $getdata = Home::where('school_id', $schoolID)->first();
+        $editdata = json_decode($getdata->gallery);
+        $data = $editdata[$index];
 
-    return redirect()->back()->with('success', 'Quiz updated successfully!');
-}
-
-
-public function QuizeDelete(Request $request)
-{
-    $request->validate([
-        'school_id' => 'required|integer',
-        'quiz_index' => 'required|integer',
-    ]);
-
-
-    $school = Home::where('school_id', $request->school_id)->firstOrFail();
-    $quizzes = json_decode($school->quiz, true); 
-
-    $index = $request->quiz_index;
-
-    if (!isset($quizzes[$index])) {
-        return redirect()->back()->with('error', 'Quiz not found at this index!');
+        return view('modules.editgallery.editgallary', compact('data', 'index'));
     }
 
+    public function galleryUpdate(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required',
+        ]);
 
-    if (!empty($quizzes[$index]['quiz_image']) && file_exists(public_path($quizzes[$index]['quiz_image']))) {
-        unlink(public_path($quizzes[$index]['quiz_image']));
+        $index = trim($request->index);
+        $schoolID = trim($request->school_id);
+
+        $homedata = Home::where('school_id', $schoolID)->first();
+
+        if (! $homedata) {
+            return back()->with('error', 'Data not found');
+        }
+
+        $editdata = json_decode($homedata->gallery, true);
+
+        if (! isset($editdata[$index])) {
+            return back()->with('error', 'Invalid index');
+        }
+
+        // Old Image
+        $oldImage = $editdata[$index]['gallery_card_image'];
+
+        // Image Upload
+        if ($request->hasFile('gallery_card_image')) {
+
+            // Delete old image
+            if ($oldImage && file_exists(public_path($oldImage))) {
+                unlink(public_path($oldImage));
+            }
+
+            $file = $request->file('gallery_card_image');
+            $filename = time().'.'.$file->getClientOriginalExtension();
+            $imagePath = public_path('GalleryImage');
+
+            $file->move($imagePath, $filename);
+
+            $editdata[$index]['gallery_card_image'] = 'GalleryImage/'.$filename;
+        }
+
+        // Optional: agar aur fields update karna ho
+        if ($request->has('gallery_card_title')) {
+            $editdata[$index]['gallery_card_title'] = $request->gallery_card_title;
+        }
+
+        if ($request->has('gallery_card_subtitle')) {
+            $editdata[$index]['gallery_card_subtitle'] = $request->gallery_card_subtitle;
+        }
+
+        // Save back to DB
+        $homedata->gallery = json_encode($editdata);
+        $homedata->save();
+
+        return redirect()->route('school.website-cms.home')->with('success', 'Gallery updated successfully');
     }
 
+    public function galleryDelete(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required',
+            'index' => 'required',
+        ]);
 
-    array_splice($quizzes, $index, 1);
+        $index = trim($request->index);
+        $schoolID = trim($request->school_id);
 
-    $school->quiz = json_encode($quizzes);
-    $school->save();
+        $homedata = Home::where('school_id', $schoolID)->first();
 
-    return redirect()->back()->with('success', 'Quiz deleted successfully!');
-}
+        if (! $homedata) {
+            return back()->with('error', 'Data not found');
+        }
+
+        $galleryData = json_decode($homedata->gallery, true);
+
+        if (! isset($galleryData[$index])) {
+            return back()->with('error', 'Invalid index');
+        }
+
+        // Delete Image from folder
+        $oldImage = $galleryData[$index]['gallery_card_image'];
+
+        if ($oldImage && file_exists(public_path($oldImage))) {
+            unlink(public_path($oldImage));
+        }
+
+        unset($galleryData[$index]);
+        $galleryData = array_values($galleryData);
+        $homedata->gallery = json_encode($galleryData);
+        $homedata->save();
+
+        return redirect()->route('school.website-cms.home')->with('success', 'Gallery deleted successfully');
+    }
 }

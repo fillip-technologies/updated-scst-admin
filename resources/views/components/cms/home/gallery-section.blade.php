@@ -114,7 +114,7 @@
                                     <div class="mt-5 flex items-center gap-3">
 
                                         <!-- ✏️ EDIT BUTTON -->
-                                        <a :href="`{{ url('gallery/edit') }}/${index}`"
+                                        <a :href="`{{ url('school/gallery/edit') }}/${index}`"
                                             class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium border border-primary-800/20 bg-white text-primary-900 hover:border-primary-700 hover:bg-primary-900/5">
 
                                             <i class="fa-solid fa-pen text-[10px]"></i>
@@ -122,13 +122,22 @@
                                         </a>
 
                                         <!-- 🗑 DELETE BUTTON -->
-                                        <a :href="`{{ url('gallery/delete') }}/${index}`"
-                                            onclick="return confirm('Are you sure?')"
-                                            class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 hover:border-red-400">
+                                        <form action="{{ route('gallery.delete') }}" method="POST"
+                                            onsubmit="return confirm('Are you sure?')">
+                                            @csrf
+                                            @method('DELETE')
 
-                                            <i class="fa-solid fa-trash text-[10px]"></i>
-                                            Delete
-                                        </a>
+                                            <!-- IMPORTANT -->
+                                            <input type="hidden" name="school_id" value="{{ SchoolLogin()->id }}">
+                                            <input type="hidden" name="index" :value="index">
+
+                                            <button type="submit"
+                                                class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 hover:border-red-400">
+
+                                                <i class="fa-solid fa-trash text-[10px]"></i>
+                                                Delete
+                                            </button>
+                                        </form>
 
                                     </div>
                                 </div>

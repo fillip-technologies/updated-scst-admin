@@ -53,7 +53,9 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/create/createInfrastructure', [HomeController::class, 'createInfrastructure'])->name('school.infra.create');
     Route::post('/create/quiz/section', [ManageSchoolController::class, 'SaveQuizSection'])->name('quiz.save');
     Route::get('/reports', [WebsiteCmsController::class, 'reports'])->name('school.reports');
-
+    Route::get('/gallery/edit/{index}',[ManageSchoolUpdateController::class, 'galleryEdit'])->name('edit.gallery');
+      Route::delete('/gallery/delete',[ManageSchoolUpdateController::class, 'galleryDelete'])->name('gallery.delete');
+     Route::post('/update/gallery',[ManageSchoolUpdateController::class, 'galleryUpdate'])->name('gallery.update');
     Route::get('/website-cms', [WebsiteCmsController::class, 'cmsIndex'])->name('school.website-cms');
     Route::get('/website-cms/home', [WebsiteCmsController::class, 'cmsHome'])->name('school.website-cms.home');
     Route::post('/create/gallery/section', [ManageSchoolController::class, 'SaveGallerySection'])->name('gallery.save');
@@ -162,6 +164,3 @@ Route::prefix('school')->middleware('school')->group(function () {
 });
 
 
-Route::prefix('staff')->middleware('staff')->group(function(){
-Route::get('/staf/dashboard',[ManageStaffController::class,'index']);
-});
