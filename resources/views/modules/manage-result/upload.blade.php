@@ -80,21 +80,21 @@
 
                 <!-- RIGHT SIDE (Filter Button) -->
                 <div class="flex gap-3">
-    <button type="submit"
-        class="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition">
-        Filter
-    </button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+                        Filter
+                    </button>
 
-    <a href="{{ TeacherLog() ? route('staff.school.manage-result') : route('school.manage-result') }}"
-        class="bg-orange-500 text-white px-6 py-2 rounded-xl shadow hover:bg-orange-700 transition">
-        Refresh
-    </a>
+                    <a href="{{ TeacherLog() ? route('staff.school.manage-result') : route('school.manage-result') }}"
+                        class="bg-orange-500 text-white px-6 py-2 rounded-xl shadow hover:bg-orange-700 transition">
+                        Refresh
+                    </a>
 
-    <a href="{{ route('staff.result.list') }}"
-        class="bg-green-500 text-white px-6 py-2 rounded-xl shadow hover:bg-green-700 transition">
-        Result List
-    </a>
-</div>
+                    <a href="{{ route('staff.result.list') }}"
+                        class="bg-green-500 text-white px-6 py-2 rounded-xl shadow hover:bg-green-700 transition">
+                        Result List
+                    </a>
+                </div>
 
             </div>
         </form>
@@ -103,6 +103,8 @@
         <!-- STUDENTS -->
         <form id="resultForm" action="{{ route('staff.result.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
+            <input type="hidden" name="term" value="{{ request('term') }}" class="border rounded px-3 py-2">
             <div id="studentSection" class="space-y-6">
 
                 @foreach ($studentdata ?? [] as $student)

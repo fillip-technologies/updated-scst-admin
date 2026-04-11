@@ -11,7 +11,8 @@ class Result extends Model
         'subject_id',
         'marks',
         'is_absent',
-        'file'
+        'file',
+        'term',
     ];
 
     // Relationship

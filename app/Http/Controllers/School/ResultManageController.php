@@ -40,10 +40,12 @@ class ResultManageController extends Controller
 
     public function Resultstore(Request $request)
     {
+       
 
         $request->validate([
             'results.*.*.marks' => 'nullable|numeric|min:0|max:100',
             'results.*.*.file' => 'nullable|file',
+            'term'=>'required',
         ]);
 
         DB::beginTransaction();
@@ -73,6 +75,7 @@ class ResultManageController extends Controller
                         ],
                         [
                             'marks' => $data['marks'] ?? null,
+                            'term'=> $request->term ?? null,
                             'is_absent' => isset($data['absent']) ? 1 : 0,
                             'file' => $fileName,
                             'school_id' => TeacherLog()->school_id ?? SchoolLogin()->id,

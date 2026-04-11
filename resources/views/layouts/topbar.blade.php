@@ -51,7 +51,7 @@
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-800">
-                    {{ Auth::user()->role === 'school_admin' ? Auth::user()->school->principle_name : TeacherLog()->name }}
+                    {{ Auth::user()->role === 'school_admin' ? Auth::user()->school->principle_name : Auth::user()->name }}
                 </p>
                 <p class="text-xs text-gray-500">
                     SC & ST Dept
