@@ -1,6 +1,6 @@
-@php
+{{-- @php
     $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sort()->values();
-@endphp
+@endphp --}}
 
 <div class="grid gap-3 md:grid-cols-4 xl:grid-cols-5">
     <select name="district" class="rounded-md border border-gray-300 px-3 py-2 text-sm" data-filter-district>

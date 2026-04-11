@@ -79,15 +79,22 @@
                 </div>
 
                 <!-- RIGHT SIDE (Filter Button) -->
-                <div>
-                    <button type="submit"
-                        class="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition">
-                        Filter
-                    </button>
-                    <a href="{{ TeacherLog() ? route('staff.school.manage-result') : route('school.manage-result') }}"
-                        class="bg-orange-500 text-white px-6 py-2 rounded-xl shadow hover:bg-orange-700 transition">Refresh
-                    </a>
-                </div>
+                <div class="flex gap-3">
+    <button type="submit"
+        class="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+        Filter
+    </button>
+
+    <a href="{{ TeacherLog() ? route('staff.school.manage-result') : route('school.manage-result') }}"
+        class="bg-orange-500 text-white px-6 py-2 rounded-xl shadow hover:bg-orange-700 transition">
+        Refresh
+    </a>
+
+    <a href="{{ route('staff.result.list') }}"
+        class="bg-green-500 text-white px-6 py-2 rounded-xl shadow hover:bg-green-700 transition">
+        Result List
+    </a>
+</div>
 
             </div>
         </form>
@@ -139,7 +146,8 @@
 
                                     <!-- MARKS -->
                                     <input type="number" name="results[{{ $student->id }}][{{ $subject->id }}][marks]"
-                                        placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3">
+                                        placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3"
+                                        min="0" max="100">
 
                                     <!-- FILE -->
                                     <label

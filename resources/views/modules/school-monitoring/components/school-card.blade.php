@@ -1,7 +1,7 @@
 <article
     class="bg-white border border-gray-200 rounded-lg p-4 space-y-4"
     data-school-card
-    data-school='@json($school)'>
+    {{-- data-school='@json($school)'> --}}
     <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
             <div class="flex items-center gap-2">
@@ -22,8 +22,8 @@
         <div><span class="text-gray-500">Teachers:</span> {{ $school['teachers_count'] }}</div>
         <div><span class="text-gray-500">Dropout:</span> {{ $school['dropout_count'] }}</div>
         <div><span class="text-gray-500">Pass %:</span> {{ $school['pass_percentage'] }}%</div>
-        <div><span class="text-gray-500">Reporting time:</span> {{ $school['last_report_time'] }}</div>
-        <div><span class="text-gray-500">Issues:</span> {{ $school['issues_count'] }}</div>
+        {{-- <div><span class="text-gray-500">Reporting time:</span> {{ $school['last_report_time'] }}</div>
+        <div><span class="text-gray-500">Issues:</span> {{ $school['issues_count'] }}</div> --}}
     </div>
 
     <div class="flex items-center gap-2">

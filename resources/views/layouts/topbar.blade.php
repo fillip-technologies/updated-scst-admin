@@ -8,11 +8,15 @@
         <h1 class="text-xl font-semibold text-gray-800">
             {{ Auth::user()->school->school_name }}
         </h1>
+    @else
+        <h1 class="text-xl font-semibold text-gray-800">
+            {{ Auth::user()->name }}
+        </h1>
     @endif
 
     <div class="flex items-center gap-8">
 
-        <div class="relative">
+        {{-- <div class="relative">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
@@ -22,22 +26,32 @@
             <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                 1
             </span>
-        </div>
+        </div> --}}
 
         <div class="flex items-center gap-3">
+            @php
+                $user = Auth::user();
+
+                if ($user->role === 'school_admin' && $user->school) {
+                    $name = $user->school->principle_name;
+                } elseif ($user->role === 'staff') {
+                    $name = $user->name; // ya staff_name field agar alag hai
+                } elseif ($user->role === 'admin') {
+                    $name = $user->name;
+                } else {
+                    $name = 'NA';
+                }
+
+                $initials = strtoupper(substr($name, 0, 2));
+            @endphp
+
             <div
                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm font-semibold text-gray-700">
-
-                {{ Auth::user()->role === 'school_admin'
-                    ? strtoupper(substr(Auth::user()->school->principle_name, 0, 2))
-                    : 'PR' }}
-
+                {{ $initials }}
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-800">
-                   {{ Auth::user()->role === 'school_admin'
-                    ? Auth::user()->school->principle_name
-                    : 'Priyanka Rani (IAS)' }}
+                    {{ Auth::user()->role === 'school_admin' ? Auth::user()->school->principle_name : TeacherLog()->name }}
                 </p>
                 <p class="text-xs text-gray-500">
                     SC & ST Dept

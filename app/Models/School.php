@@ -48,7 +48,7 @@ class School extends Authenticatable
 
     public function report()
     {
-        $this->hasMany(Report::class);
+        return $this->hasMany(Report::class);
     }
 
     public function mealreport()
@@ -77,6 +77,10 @@ class School extends Authenticatable
 
     public function subject(){
         return $this->hasMany(SubjectAdd::class);
+    }
+
+    public function attendance(){
+        return $this->hasMany(Attendance::class,'recorded_by');
     }
 
 
