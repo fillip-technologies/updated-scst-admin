@@ -11,14 +11,11 @@ use App\Models\Report;
 use App\Models\School;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
-use App\Models\User;
-use Carbon\Carbon;
-use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+
+use function Symfony\Component\Clock\now;
 
 class HomeController extends Controller
 {
@@ -36,52 +33,36 @@ class HomeController extends Controller
 
     public function monitoring(Request $request)
     {
-        $schools = School::query()->get()->map(function (School $school) {
-            $studentsCount = (int) ($school->total_students_enrolled ?? 0);
-            $teachersCount = (int) ($school->total_teachers_sanctioned ?? 0);
-            $dropoutCount = (int) ($school->dropout_count ?? 0);
-            $passPercentage = (float) ($school->pass_percentage ?? 0);
-            $attendancePercentage = (float) ($school->attendance_percentage ?? 0);
-            $reportingStatus = $school->reporting_status ?? $this->deriveReportingStatus($school);
-            $lastReportTime = $school->last_report_time ?? Carbon::now()
-                ->subMinutes(($school->id ?? 1) * 7)
-                ->format('Y-m-d H:i:s');
-            $issuesCount = (int) ($school->issues_count ?? ($dropoutCount > 0 ? 1 : 0));
-            $stockInfo = $this->extractStockInfo($school);
-            $issues = $this->buildIssues($school, $dropoutCount, $passPercentage, $attendancePercentage, $reportingStatus);
+        $schools = School::with(['teacher', 'student', 'report', 'attendance'])
+            ->get()
+            ->map(function ($school) {
 
-            return [
-                'id' => $school->id,
-                'name' => $school->school_name,
-                'district' => $school->district,
-                'students_count' => $studentsCount,
-                'teachers_count' => $teachersCount,
-                'dropout_count' => $dropoutCount,
-                'pass_percentage' => $passPercentage,
-                'attendance_percentage' => $attendancePercentage,
-                'reporting_status' => $reportingStatus,
-                'issues_count' => $issuesCount ?: count($issues),
-                'last_report_time' => $lastReportTime,
-                'issues' => $issues,
-                'stock_info' => $stockInfo,
-                'report_url' => route('show.school', encrypt($school->id)),
-            ];
-        });
+                // Counts
+                $students = $school->student->count();
+                $teachers = $school->teacher->count();
 
-        $schools = $this->applyMonitoringFilters($schools, $request);
+                $school->student_count = $students;
+                $school->teacher_count = $teachers;
+                $dropoutStudents = $school->student->filter(function ($student) {
+                    $absentDays = $student->attendance
+                        ->where('status', 'absent')
+                        ->count();
+                    return $absentDays >= 30;
+                })->count();
+                $school->dropout_count = $dropoutStudents;
+                $school->dropout_rate = $students > 0
+                    ? round(($dropoutStudents / $students) * 100, 2)
+                    : 0;
+                $totalAttendance = $school->attendance->count();
+                $present = $school->attendance->where('status', 'present')->count();
+                $school->attendance_rate = $totalAttendance > 0
+                    ? round(($present / $totalAttendance) * 100, 2)
+                    : 0;
+                return $school;
+            });
 
-        $stats = [
-            'schools' => $schools->count(),
-            'reporting' => $schools->where('reporting_status', 'on_time')->count(),
-            'dropout' => $schools->sum('dropout_count'),
-            'pass_percentage' => round((float) $schools->avg('pass_percentage'), 1),
-            'delayed' => $schools->where('reporting_status', 'delayed')->count(),
-            'not_reported' => $schools->where('reporting_status', 'not_reported')->count(),
-        ];
+        return view('modules.school-monitoring.index', compact('schools'));
 
-        $alerts = $this->buildAlerts($schools);
-
-        return view('modules.school-monitoring.index', compact('schools', 'stats', 'alerts'));
     }
 
     public function sendNotice(Request $request)
@@ -180,7 +161,7 @@ class HomeController extends Controller
         $performance = $request->filled('performance_filter') ? (float) $request->input('performance_filter') : null;
 
         return $schools->filter(function (array $school) use ($search, $district, $status, $dropout, $performance) {
-            if ($search !== '' && ! str_contains(strtolower($school['name'] . ' ' . $school['district']), $search)) {
+            if ($search !== '' && ! str_contains(strtolower($school['name'].' '.$school['district']), $search)) {
                 return false;
             }
 
@@ -354,9 +335,10 @@ class HomeController extends Controller
 
     public function manageResult()
     {
-       $studentdata = null;
-       $subjectdata = null;
-        return view('modules.manage-result.upload',compact('studentdata','subjectdata'));
+        $studentdata = null;
+        $subjectdata = null;
+
+        return view('modules.manage-result.upload', compact('studentdata', 'subjectdata'));
     }
 
     // Upload Page
@@ -366,25 +348,21 @@ class HomeController extends Controller
         return view('modules.school.manage-result.upload');
     }
 
-
     public function storeResult()
     {
 
         return redirect()->back();
     }
 
-
     public function editResult($id)
     {
         return view('modules.school.manage-result.upload');
     }
 
-
     public function updateResult($id)
     {
         return redirect()->back();
     }
-
 
     public function deleteResult($id)
     {
@@ -400,7 +378,8 @@ class HomeController extends Controller
     // Subjects
     public function subjects()
     {
-        $subject = SubjectAdd::where('teacher_id',TeacherLog()->staff_id)->where('school_id',TeacherLog()->school_id)->where('class_id',getClassID())->get();
-        return view('modules.subjects.index',compact('subject'));
+        $subject = SubjectAdd::where('teacher_id', TeacherLog()->staff_id)->where('school_id', TeacherLog()->school_id)->where('class_id', getClassID())->get();
+
+        return view('modules.subjects.index', compact('subject'));
     }
 }

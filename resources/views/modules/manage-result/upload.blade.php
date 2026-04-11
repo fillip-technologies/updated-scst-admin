@@ -139,7 +139,8 @@
 
                                     <!-- MARKS -->
                                     <input type="number" name="results[{{ $student->id }}][{{ $subject->id }}][marks]"
-                                        placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3">
+                                        placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3"
+                                        min="0" max="100">
 
                                     <!-- FILE -->
                                     <label

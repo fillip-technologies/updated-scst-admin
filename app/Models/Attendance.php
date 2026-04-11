@@ -27,4 +27,8 @@ class Attendance extends Model
     {
         return $this->belongsTo(AddClasses::class);
     }
+
+    public function school(){
+        return $this->belongsTo(School::class,'recorded_by');
+    }
 }
