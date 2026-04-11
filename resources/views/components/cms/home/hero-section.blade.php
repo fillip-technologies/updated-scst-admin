@@ -172,7 +172,7 @@
         <div class="mt-6 overflow-hidden rounded-3xl bg-primary-900 shadow-sm">
             <div class="relative min-h-[520px]">
                 <img
-                    src="{{ asset($home->bgimage ?? "" ) }}"
+                    src="{{ asset($home->bgimage ?? "" ) }}
                     alt="Homepage hero preview"
                     class="absolute inset-0 h-full w-full object-cover opacity-35">
                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 via-primary-900/85 to-primary-800/40"></div>

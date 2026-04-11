@@ -33,7 +33,7 @@
                         id="about_label"
                         type="text"
                         name="about_label"
-                        readonly
+
                         value="{{ old('about_label',$about->about_label ?? '') }}"
                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                 </div>
@@ -79,7 +79,7 @@
                                 value="{{ old('about_bullate_2',$about->about_bullet_2 ?? '') }}"
                                 type="text"
                                 name="about_bullet_2"
-                                 maxlength="120"
+                                maxlength="120"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
 
@@ -90,7 +90,7 @@
                                 value="{{ old('about_bullate_3',$about->about_bullet_3 ?? '') }}"
                                 type="text"
                                 name="about_bullet_3"
-                                 maxlength="120"
+                                maxlength="120"
                                 class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition placeholder:text-gray-400 focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                         </div>
                     </div>

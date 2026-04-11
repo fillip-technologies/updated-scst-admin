@@ -239,17 +239,17 @@
                 console.log("RAW DATA:", raw);
 
                 try {
-                    // 🔥 Fix: agar string hai to parse karo
+                    // 
                     let parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
                     console.log("PARSED:", parsed);
 
-                    // 🔥 Fix: agar object hai to array banao
+                    // 
                     if (!Array.isArray(parsed)) {
                         parsed = [parsed];
                     }
 
-                    // 🔥 Fix: mapping correct keys
+                    // 
                     this.cards = parsed.slice(0, 4).map(item => ({
                         image: item.gallery_card_image ?
                             '/' + item.gallery_card_image : 'https://via.placeholder.com/400x300',
