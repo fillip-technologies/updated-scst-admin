@@ -6,17 +6,46 @@
 
     @foreach ($results as $studentId => $studentResults)
 
+        @php
+            $data = $studentResults['data'];
+            $student = $data->first();
+
+            $totalMarks = $studentResults['total_marks'];
+            $totalSubjects = $studentResults['total_subjects'];
+
+            $percentage = $totalSubjects > 0
+                ? ($totalMarks / ($totalSubjects * 100)) * 100
+                : 0;
+
+            $status = $percentage >= 33 ? 'Pass' : 'Fail';
+        @endphp
+
         <div class="bg-white shadow rounded-2xl p-6 mb-6">
 
             <!-- STUDENT HEADER -->
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-800">
-                    👨‍🎓 {{ $studentResults->first()->student->name }}
+                    👨‍🎓 {{ $student->student->name ?? '' }}
                 </h2>
 
                 <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                    Roll: {{ $studentResults->first()->student->id }}
+                    Roll: {{ $student->student->id ?? '' }}
                 </span>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="flex justify-between items-center mb-4">
+                <p class="text-green-600 font-semibold">
+                    Total Marks: {{ $totalMarks }}
+                </p>
+
+                <p class="text-purple-600 font-semibold">
+                    Percentage: {{ number_format($percentage, 2) }}%
+                </p>
+
+                <p class="{{ $status == 'Pass' ? 'text-green-600' : 'text-red-500' }} font-semibold">
+                    Result: {{ $status }}
+                </p>
             </div>
 
             <!-- TABLE -->
@@ -33,20 +62,17 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($studentResults as $result)
+                        @foreach ($data as $result)
                             <tr class="border-b">
 
-                                <!-- SUBJECT -->
                                 <td class="py-2">
-                                    {{ $result->subject->subjects }}
+                                    {{ $result->subject->subjects ?? '' }}
                                 </td>
 
-                                <!-- MARKS -->
                                 <td class="py-2">
-                                    {{ $result->marks ?? '-' }}
+                                    {{ $result->is_absent ? '-' : $result->marks }}
                                 </td>
 
-                                <!-- STATUS -->
                                 <td class="py-2">
                                     @if ($result->is_absent)
                                         <span class="text-red-500 text-xs">Absent</span>
@@ -55,7 +81,6 @@
                                     @endif
                                 </td>
 
-                                <!-- FILE -->
                                 <td class="py-2">
                                     @if ($result->file)
                                         <a href="{{ asset('uploads/results/' . $result->file) }}"

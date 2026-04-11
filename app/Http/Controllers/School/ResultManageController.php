@@ -40,7 +40,7 @@ class ResultManageController extends Controller
 
     public function Resultstore(Request $request)
     {
-       
+
         $request->validate([
             'results.*.*.marks' => 'nullable|numeric|min:0|max:100',
             'results.*.*.file' => 'nullable|file',
@@ -98,7 +98,21 @@ class ResultManageController extends Controller
         $results = Result::with(['student', 'subject'])
             ->orderBy('student_id')
             ->get()
-            ->groupBy('student_id');
+            ->groupBy('student_id')
+            ->map(function ($studentResults) {
+
+                // Total marks per student
+                $totalMarks = $studentResults->sum('marks');
+
+                // Optional: total subjects
+                $totalSubjects = $studentResults->count();
+
+                return [
+                    'data' => $studentResults,
+                    'total_marks' => $totalMarks,
+                    'total_subjects' => $totalSubjects,
+                ];
+            });
 
         return view('modules.manage-result.index', compact('results'));
     }
