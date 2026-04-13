@@ -83,5 +83,9 @@ class School extends Authenticatable
         return $this->hasMany(Attendance::class,'recorded_by');
     }
 
+    public function result(){
+        return $this->hasMany(Result::class);
+    }
+
 
 }

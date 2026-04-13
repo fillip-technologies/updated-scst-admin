@@ -29,7 +29,17 @@ class Result extends Model
         return $this->belongsTo(SubjectAdd::class);
     }
 
-    public function teacher(){
+    public function teacher()
+    {
         return $this->belongsTo(Teacher::class);
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function addclass(){
+        return $this->belongsTo(AddClasses::class);
     }
 }
