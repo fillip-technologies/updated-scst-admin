@@ -9,6 +9,9 @@ class Result extends Model
     protected $fillable = [
         'student_id',
         'subject_id',
+        'school_id',
+        'teacher_id',
+        'class_id',
         'marks',
         'is_absent',
         'file',
@@ -24,5 +27,9 @@ class Result extends Model
     public function subject()
     {
         return $this->belongsTo(SubjectAdd::class);
+    }
+
+    public function teacher(){
+        return $this->belongsTo(Teacher::class);
     }
 }

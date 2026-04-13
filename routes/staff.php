@@ -65,6 +65,7 @@ Route::prefix('staff')->middleware('staff')->group(function () {
     Route::get('/result/show/data',[ResultManageController::class ,'getdata'])->name('staff.get.result');
     Route::post('/result/add',[ResultManageController::class, 'Resultstore'])->name('staff.result.store');
     Route::get('/list/reselt',[ResultManageController::class, 'ListResult'])->name('staff.result.list');
+    Route::get('/get/filter/result',[ResultManageController::class, 'filterResult'])->name('filter.result');
 
 
 });
