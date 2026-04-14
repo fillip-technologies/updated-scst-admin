@@ -34,6 +34,9 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('update/teache/section/staff', [StaffController::class, 'UpdateTeacher'])->name('staff.update.teacher');
     Route::delete('delete/teache/section/staff', [StaffController::class, 'DeleteTeacher'])->name('staff.delete.teacher');
     Route::post('create/notice/section/staff', [NoticeController::class, 'SaveNotice'])->name('notice.save');
+    Route::get('edit/notice/{index}/{sid}',[NoticeController::class , 'editNotice'])->name('notice.edit');
+    Route::delete('delete/notice',[NoticeController::class , 'deleteNotice'])->name('notice.delete');
+    Route::post('update/notice',[NoticeController::class , 'updateNotice'])->name('notice.update');
     Route::post('update/campus/section/infrastructure', [InfrastructureController::class, 'UpdateCampus'])->name('inf.update.campus');
     Route::get('/homepagedata', [ManageSchoolController::class, 'getHomepagedata']);
     Route::get('/dashboard', [WebsiteCmsController::class, 'schoolDashboard'])->name('school.dashboard');

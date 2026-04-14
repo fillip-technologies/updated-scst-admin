@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainNoticeController;
+use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\SchoolManageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\ReportManageController;
@@ -83,8 +84,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/admin/stock/edit', [HomeController::class, 'editStock'])
         ->name('admin.stock.edit');
 
+    Route::get('/filterMonotering', [MonitoringController::class, 'filterMonotering'])->name('filterMonotering');
+
     Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
         ->name('admin.stock.update');
-      Route::get('/search/data',[SearchManageController::class, 'schoolSearch'])->name('search.school');
+    Route::get('/search/data', [SearchManageController::class, 'schoolSearch'])->name('search.school');
+    Route::get('/details/montering/school/{id}',[MonitoringController::class, 'detailsMonitering'])->name('details.schools');
 
 });

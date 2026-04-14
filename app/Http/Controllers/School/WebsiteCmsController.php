@@ -122,9 +122,9 @@ class WebsiteCmsController extends Controller
 
     public function cmsnoticeindex()
     {
-      $notice = Notices::where('school_id', SchoolLogin()->id)->get();
-
-        return view('modules.school.notices.index', compact('notice'));
+      $notice = Notices::where('school_id', SchoolLogin()->id)->first();
+      $notices = json_decode($notice->notice_manage);
+     return view('modules.school.notices.index', compact('notices'));
     }
 
     public function attandence()

@@ -1,40 +1,58 @@
-{{-- @php
-    $districtOptions = collect($schools)->pluck('district')->filter()->unique()->sort()->values();
-@endphp --}}
+<div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 items-end">
 
-<div class="grid gap-3 md:grid-cols-4 xl:grid-cols-5">
-    <select name="district" class="rounded-md border border-gray-300 px-3 py-2 text-sm" data-filter-district>
-        <option value="">Select district</option>
-        @foreach (getDisc() as $dis)
-            <option value="{{ $dis->district }}" @selected(request('district') === $dis->district)>{{ $dis->district }}</option>
-        @endforeach
-    </select>
+    <!-- District -->
+    <div class="flex flex-col">
+        <label class="text-xs text-gray-500 mb-1">District</label>
+        <select name="district" class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full">
+            <option value="">Select district</option>
+            @foreach (getDisc() as $dis)
+                <option value="{{ $dis->district }}" @selected(request('district') === $dis->district)>
+                    {{ $dis->district }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-    <input
-        type="number"
-        name="dropout_filter"
-        value="{{ request('dropout_filter') }}"
-        placeholder="Dropout greater than"
-        class="rounded-md border border-gray-300 px-3 py-2 text-sm"
-        data-filter-dropout>
+    <!-- Dropout -->
+    <div class="flex flex-col">
+        <label class="text-xs text-gray-500 mb-1">Dropout % ≥</label>
+        <input
+            type="number"
+            name="dropout_filter"
+            value="{{ request('dropout_filter') }}"
+            placeholder="e.g. 10"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full"
+        >
+    </div>
 
-    <input
-        type="number"
-        step="0.1"
-        name="performance_filter"
-        value="{{ request('performance_filter') }}"
-        placeholder="Performance below %"
-        class="rounded-md border border-gray-300 px-3 py-2 text-sm"
-        data-filter-performance>
+    <!-- Pass Percentage -->
+    <div class="flex flex-col">
+        <label class="text-xs text-gray-500 mb-1">Pass % ≥</label>
+        <input
+            type="number"
+            step="0.1"
+            name="pass_percentage"
+            value="{{ request('pass_percentage') }}"
+            placeholder="e.g. 75"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full"
+        >
+    </div>
 
-    <select name="status_filter" class="rounded-md border border-gray-300 px-3 py-2 text-sm" data-filter-status>
-        <option value="">Select reporting status</option>
-        <option value="on_time" @selected(request('status_filter') === 'on_time')>On Time</option>
-        <option value="delayed" @selected(request('status_filter') === 'delayed')>Delayed</option>
-        <option value="not_reported" @selected(request('status_filter') === 'not_reported')>Not Reported</option>
-    </select>
+    <!-- Buttons -->
+    <div class="flex gap-2">
+        <!-- Submit -->
+        <button
+            type="submit"
+            class="w-full rounded-md bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 transition"
+        >
+            Apply
+        </button>
 
-    <button type="submit" class="rounded-md border border-gray-300 px-4 py-2 text-sm">
-        Submit
-    </button>
+
+        <a href="{{ url('admin/school-monitoring') }}"
+           class="w-full text-center rounded-md bg-gray-500 text-white px-4 py-2 text-sm font-medium hover:bg-gray-600 transition">
+            Reset
+        </a>
+    </div>
+
 </div>

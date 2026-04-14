@@ -2,7 +2,7 @@
     print_r($notice);
 @endphp --}}
 
-<div x-data="noticeManager()"  class="relative">
+<div x-data="noticeManager()" class="relative">
     <div class="rounded-3xl border border-primary-800/10 bg-white shadow-sm">
         <div
             class="flex flex-col gap-4 border-b border-primary-800/10 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
@@ -31,8 +31,9 @@
             </div>
 
             <div class="space-y-4">
-                <template x-for="(notice, index) in notices" :key="`${notice.title}-${index}`">
-                    <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4">
+                @foreach ($notice ?? [] as $key => $items)
+                    <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4"
+                        {{ $key }}>
 
                         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 
@@ -41,19 +42,24 @@
 
                                 <!-- TITLE + CATEGORY + BADGE -->
                                 <div class="flex flex-wrap items-center gap-3">
-                                    <h3 class="text-base font-semibold text-gray-800" x-text="notice.title"></h3>
+                                    <h3 class="text-base font-semibold text-gray-800">{{ $items->notice_title ?? '' }}
+                                    </h3>
 
                                     <span class="rounded-full px-3 py-1 text-xs font-semibold"
-                                        :class="categoryClass(notice.category)" x-text="notice.category"></span>
+                                        :class="categoryClass(notice.category)">{{ $items->notice_category ?? '' }}</span>
 
-                                    <template x-if="notice.badge === 'New'">
-                                        <span class="rounded-full px-3 py-1 text-xs font-semibold"
-                                            :class="badgeClass(notice.badge)" x-text="notice.badge"></span>
-                                    </template>
+                                    @if ($items->notice_badge == 'new')
+                                        <span
+                                            class=" bg-red-700 text-white rounded-full px-3 py-1 text-xs font-semibold">{{ $items->notice_badge }}</span>
+                                    @else
+                                        <span
+                                            class=" bg-pink-700 text-white rounded-full px-3 py-1 text-xs font-semibold">{{ $items->notice_badge }}</span>
+                                    @endif
+
                                 </div>
 
                                 <!-- DESCRIPTION -->
-                                <p class="mt-3 text-sm text-gray-600 line-clamp-2" x-text="notice.description"></p>
+                                <p class="mt-3 text-sm text-gray-600 line-clamp-2">{{ $items->notice_description }}</p>
 
                                 <!-- META -->
                                 <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
@@ -61,17 +67,17 @@
                                     <!-- DATE -->
                                     <span class="inline-flex items-center gap-2">
                                         <i class="fa-regular fa-calendar"></i>
-                                        <span x-text="new Date(notice.publishDate).toLocaleDateString()"></span>
+                                        <span>{{ $items->notice_publish_date }}</span>
                                     </span>
 
                                     <!-- ATTACHMENT -->
-                                    <template x-if="notice.attachmentName">
-                                        <a :href="`/storage/${notice.attachmentFile}`" target="_blank"
-                                            class="inline-flex items-center gap-2 text-primary-700 hover:underline">
-                                            <i class="fa-regular fa-file-lines"></i>
-                                            <span x-text="notice.attachmentName"></span>
-                                        </a>
-                                    </template>
+
+                                    <a href="{{ asset($items->notice_attachment) }}" target="_blank"
+                                        class="inline-flex items-center gap-2 text-primary-700 hover:underline">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                        <span>View Notice</span>
+                                    </a>
+
 
                                 </div>
                             </div>
@@ -79,21 +85,29 @@
                             <!-- RIGHT ACTIONS -->
                             <div class="flex flex-wrap items-center gap-3">
 
-                                <button @click="openEdit(index)"
-                                    class="px-3 py-2 text-xs border rounded-lg text-primary-900">
+                                <!-- EDIT -->
+                                <a href="{{ route('notice.edit',['index'=> $key , 'sid'=> SchoolLogin()->id ?? ""]) }}" class="px-3 py-2 text-xs border rounded-lg text-primary-900">
                                     Edit
-                                </button>
+                                </a>
 
-                                <button @click="deleteNotice(index)"
-                                    class="px-3 py-2 text-xs border rounded-lg text-red-500">
-                                    Delete
-                                </button>
+                                <!-- DELETE -->
+                                <form action="{{ route('notice.delete') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="index" value="{{ $key }}">
+                                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? '' }}">
+                                    <button type="submit" onclick="return confirm('Are you sure delete this data')" class="px-3 py-2 text-xs border rounded-lg text-red-500">
+                                        Delete
+                                    </button>
+                                </form>
 
                             </div>
 
                         </div>
                     </div>
-                </template>
+                @endforeach
+
+
             </div>
         </div>
     </div>
@@ -202,46 +216,23 @@
     </div>
 </div>
 <script>
-function noticeManager() {
-    return {
-        // 
-        notices: (@json($notice ?? [])).map(item => ({
-            title: item.notice_title,
-            description: item.notice_description,
-            category: item.notice_category,
-            publishDate: item.notice_publish_date,
-            badge: item.notice_badge === 'Nnew' ? 'New' : item.notice_badge,
-            attachmentName: item.notice_attachment ? item.notice_attachment.split('/').pop() : '',
-            attachmentFile: item.notice_attachment
-        })),
+    function noticeManager() {
+        return {
+            //
+            notices: (@json($notice ?? [])).map(item => ({
+                title: item.notice_title,
+                description: item.notice_description,
+                category: item.notice_category,
+                publishDate: item.notice_publish_date,
+                badge: item.notice_badge === 'Nnew' ? 'New' : item.notice_badge,
+                attachmentName: item.notice_attachment ? item.notice_attachment.split('/').pop() : '',
+                attachmentFile: item.notice_attachment
+            })),
 
-        editorOpen: false,
-        editingIndex: null,
+            editorOpen: false,
+            editingIndex: null,
 
-        form: {
-            title: '',
-            description: '',
-            category: 'General',
-            publishDate: '',
-            badge: 'None',
-            attachmentName: '',
-            attachmentFile: ''
-        },
-
-        openCreate() {
-            this.editingIndex = null;
-            this.resetForm();
-            this.editorOpen = true;
-        },
-
-        openEdit(index) {
-            this.editingIndex = index;
-            this.form = { ...this.notices[index] };
-            this.editorOpen = true;
-        },
-
-        resetForm() {
-            this.form = {
+            form: {
                 title: '',
                 description: '',
                 category: 'General',
@@ -249,52 +240,79 @@ function noticeManager() {
                 badge: 'None',
                 attachmentName: '',
                 attachmentFile: ''
-            };
-        },
+            },
 
-        handleAttachmentChange(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            openCreate() {
+                this.editingIndex = null;
+                this.resetForm();
+                this.editorOpen = true;
+            },
 
-            this.form.attachmentName = file.name;
-            this.form.attachmentFile = file; // ✅ correct
-        },
+            openEdit(index) {
+                this.editingIndex = index;
+                this.form = {
+                    ...this.notices[index]
+                };
+                this.editorOpen = true;
+            },
 
-        saveNotice() {
-            const payload = { ...this.form };
+            resetForm() {
+                this.form = {
+                    title: '',
+                    description: '',
+                    category: 'General',
+                    publishDate: '',
+                    badge: 'None',
+                    attachmentName: '',
+                    attachmentFile: ''
+                };
+            },
 
-            if (this.editingIndex === null) {
-                this.notices.unshift(payload);
-            } else {
-                this.notices[this.editingIndex] = payload;
-            }
+            handleAttachmentChange(event) {
+                const file = event.target.files[0];
+                if (!file) return;
 
-            this.editorOpen = false;
-        },
+                this.form.attachmentName = file.name;
+                this.form.attachmentFile = file; // ✅ correct
+            },
 
-        deleteNotice(index) {
-            this.notices.splice(index, 1);
+            saveNotice() {
+                const payload = {
+                    ...this.form
+                };
 
-            if (this.editingIndex === index) {
+                if (this.editingIndex === null) {
+                    this.notices.unshift(payload);
+                } else {
+                    this.notices[this.editingIndex] = payload;
+                }
+
                 this.editorOpen = false;
+            },
+
+            deleteNotice(index) {
+                this.notices.splice(index, 1);
+
+                if (this.editingIndex === index) {
+                    this.editorOpen = false;
+                }
+            },
+
+            badgeClass(value) {
+                return value === 'New' ?
+                    'bg-accent-500 text-black' :
+                    'bg-primary-900/10 text-primary-900';
+            },
+
+            categoryClass(value) {
+                const map = {
+                    Admission: 'bg-primary-900 text-white',
+                    Events: 'bg-accent-500 text-black',
+                    Academic: 'bg-primary-700 text-white',
+                    General: 'bg-primary-900/10 text-primary-900'
+                };
+                return map[value] || map.General;
             }
-        },
-
-        badgeClass(value) {
-            return value === 'New'
-                ? 'bg-accent-500 text-black'
-                : 'bg-primary-900/10 text-primary-900';
-        },
-
-        categoryClass(value) {
-            const map = {
-                Admission: 'bg-primary-900 text-white',
-                Events: 'bg-accent-500 text-black',
-                Academic: 'bg-primary-700 text-white',
-                General: 'bg-primary-900/10 text-primary-900'
-            };
-            return map[value] || map.General;
         }
     }
-}
 </script>

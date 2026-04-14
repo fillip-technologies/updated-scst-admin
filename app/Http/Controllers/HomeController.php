@@ -92,6 +92,7 @@ class HomeController extends Controller
 
                 return $school;
             });
+           
 
         return view('modules.school-monitoring.index', compact('schools'));
 

@@ -67,6 +67,14 @@ class NoticeController extends Controller
         return redirect()->back()->with('success', 'Notice saved successfully');
     }
 
+    public function editNotice($index,$sid){
+        $section = Notices::where('school_id', $sid)->first();
+        $getdata = json_decode($section->notice_manage);
+
+        $editdata = $getdata[$index];
+        return view('modules.school.notices.edit_notice',compact('editdata','index'));
+    }
+
     public function UpdateNotice(Request $request)
     {
         $request->validate([
@@ -92,7 +100,7 @@ class NoticeController extends Controller
             return back()->with('error', 'Invalid index');
         }
 
-      
+
         if ($request->hasFile('notice_attachment')) {
             $file = $request->file('notice_attachment');
             $filename = time().'.'.$file->getClientOriginalExtension();
@@ -119,7 +127,7 @@ class NoticeController extends Controller
             'notice_manage' => json_encode($data),
         ]);
 
-        return back()->with('success', 'Notice updated successfully');
+        return redirect()->route('school.website-cms.notices')->with('success', 'Notice updated successfully');
     }
 
     public function DeleteNotice(Request $request)
