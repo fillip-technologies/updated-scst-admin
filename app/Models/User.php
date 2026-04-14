@@ -27,6 +27,7 @@ class User extends Authenticatable
         'schoolCode',
         'school_id',
         'phone',
+        'staff_id',
 
     ];
 
