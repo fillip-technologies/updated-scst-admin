@@ -8,12 +8,14 @@ use App\Models\Student;
 use App\Models\SubjectAdd;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class ResultManageController extends Controller
 {
     public function getdata(Request $request)
     {
+
         $schoolID = $request->school_id;
         $classID = $request->class_id;
         $teacherID = $request->teacher_id;
@@ -40,12 +42,11 @@ class ResultManageController extends Controller
 
     public function Resultstore(Request $request)
     {
-       
 
         $request->validate([
             'results.*.*.marks' => 'nullable|numeric|min:0|max:100',
             'results.*.*.file' => 'nullable|file',
-            'term'=>'required',
+            'term' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -75,10 +76,12 @@ class ResultManageController extends Controller
                         ],
                         [
                             'marks' => $data['marks'] ?? null,
-                            'term'=> $request->term ?? null,
+                            'term' => $request->term ?? null,
                             'is_absent' => isset($data['absent']) ? 1 : 0,
                             'file' => $fileName,
-                            'school_id' => TeacherLog()->school_id ?? SchoolLogin()->id,
+                            'school_id' => $request->school_id,
+                            'class_id' => $request->class_id,
+                            'teacher_id' => $request->teacher_id,
                         ]
                     );
                 }
@@ -98,16 +101,13 @@ class ResultManageController extends Controller
 
     public function ListResult()
     {
-        $results = Result::with(['student', 'subject'])
+        $allResults = Result::with(['student', 'subject'])
             ->orderBy('student_id')
             ->get()
             ->groupBy('student_id')
             ->map(function ($studentResults) {
 
-                // Total marks per student
                 $totalMarks = $studentResults->sum('marks');
-
-                // Optional: total subjects
                 $totalSubjects = $studentResults->count();
 
                 return [
@@ -116,6 +116,63 @@ class ResultManageController extends Controller
                     'total_subjects' => $totalSubjects,
                 ];
             });
+
+        // Manual Pagination
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 5;
+
+        $currentItems = $allResults->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $results = new LengthAwarePaginator(
+            $currentItems,
+            $allResults->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url()]
+        );
+
+        return view('modules.manage-result.index', compact('results'));
+    }
+
+    public function filterResult(Request $request)
+    {
+        $schoolID = $request->school_id;
+        $teacherID = $request->teacher_id;
+        $classID = $request->class_id;
+        $term = $request->term;
+
+        $allResults = Result::with(['student', 'subject'])
+            ->when($schoolID, fn ($q) => $q->where('school_id', $schoolID))
+            ->when($classID, fn ($q) => $q->where('class_id', $classID))
+            ->when($teacherID, fn ($q) => $q->where('teacher_id', $teacherID))
+            ->when($term, fn ($q) => $q->where('term', $term))
+            ->orderBy('student_id')
+            ->get()
+            ->groupBy('student_id')
+            ->map(function ($studentResults) {
+                return [
+                    'data' => $studentResults,
+                    'total_marks' => $studentResults->sum('marks'),
+                    'total_subjects' => $studentResults->count(),
+                ];
+            });
+
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 5;
+
+        $currentItems = $allResults->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $results = new LengthAwarePaginator(
+            $currentItems,
+            $allResults->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(), 
+            ]
+        );
 
         return view('modules.manage-result.index', compact('results'));
     }

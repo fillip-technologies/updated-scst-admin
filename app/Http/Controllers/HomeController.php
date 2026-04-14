@@ -33,7 +33,8 @@ class HomeController extends Controller
 
     public function monitoring(Request $request)
     {
-        $schools = School::with(['teacher', 'student', 'report', 'attendance'])
+
+        $schools = School::with(['teacher', 'student', 'attendance', 'result'])
             ->get()
             ->map(function ($school) {
 
@@ -43,21 +44,52 @@ class HomeController extends Controller
 
                 $school->student_count = $students;
                 $school->teacher_count = $teachers;
+
+                // Dropout
                 $dropoutStudents = $school->student->filter(function ($student) {
                     $absentDays = $student->attendance
                         ->where('status', 'absent')
                         ->count();
+
                     return $absentDays >= 30;
                 })->count();
+
                 $school->dropout_count = $dropoutStudents;
+
                 $school->dropout_rate = $students > 0
                     ? round(($dropoutStudents / $students) * 100, 2)
                     : 0;
+
+                // Attendance %
                 $totalAttendance = $school->attendance->count();
                 $present = $school->attendance->where('status', 'present')->count();
+
                 $school->attendance_rate = $totalAttendance > 0
                     ? round(($present / $totalAttendance) * 100, 2)
                     : 0;
+
+                // ✅ PASS STUDENTS LOGIC
+                $passStudents = $school->student->filter(function ($student) use ($school) {
+
+                    // is student ke saare results
+                    $results = $school->result->where('student_id', $student->id);
+
+                    if ($results->isEmpty()) {
+                        return false;
+                    }
+
+                    // check sab subjects pass hai ya nahi
+                    return $results->every(function ($res) {
+                        return $res->marks >= 33;
+                    });
+
+                })->count();
+
+                // ✅ PASS %
+                $school->pass_percentage = $students > 0
+                    ? round(($passStudents / $students) * 100, 2)
+                    : 0;
+
                 return $school;
             });
 

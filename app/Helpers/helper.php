@@ -2,7 +2,6 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
-use App\Models\Teacher;
 
 if (! function_exists('districts')) {
 
@@ -163,4 +162,17 @@ if (! function_exists('dateRange')) {
 
         ];
     }
+}
+
+if (! function_exists('ExamType')) {
+
+    function ExamType()
+    {
+        return [
+            'half' => 'Half Yearly',
+            'third' => 'Third Terminal',
+            'final' =>'Final'
+        ];
+    }
+
 }

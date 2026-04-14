@@ -51,11 +51,12 @@
                     <!-- Term Select -->
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Select Term</p>
-                        <select name="term" class="border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 w-70">
+                        <select name="term" class="border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 w-70"
+                            required>
                             <option value="">Choose Term</option>
-                            <option value="half">Half Yearly</option>
-                            <option value="third">Third Terminal</option>
-                            <option value="final">Final</option>
+                            @foreach (ExamType() as $key => $exam)
+                                <option value="{{ $key }}">{{ $exam }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -63,17 +64,15 @@
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Select Class</p>
 
-                        <select name="class_id" class="border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 w-70">
-
-                            <option value="">Choose Class</option>
-
+                        <select class="border rounded px-4 py-2 w-70" disabled>
                             @foreach (getClass() as $class)
                                 <option value="{{ $class->id }}" @selected(getClassID() == $class->id)>
                                     {{ $class->name }}
                                 </option>
                             @endforeach
-
                         </select>
+
+                        <input type="hidden" name="class_id" value="{{ getClassID() }}">
                     </div>
 
                 </div>
@@ -103,8 +102,10 @@
         <!-- STUDENTS -->
         <form id="resultForm" action="{{ route('staff.result.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            <input type="hidden" name="school_id" value="{{ TeacherLog()->school_id ?? SchoolLogin()->id }}">
+            <input type="hidden" name="teacher_id" value="{{ TeacherLog()->staff_id ?? SchoolLogin()->id }}">
             <input type="hidden" name="term" value="{{ request('term') }}" class="border rounded px-3 py-2">
+             <input type="hidden" name="class_id" value="{{ request('class_id') }}" class="border rounded px-3 py-2">
             <div id="studentSection" class="space-y-6">
 
                 @foreach ($studentdata ?? [] as $student)
@@ -149,7 +150,8 @@
                                     <!-- MARKS -->
                                     <input type="number" name="results[{{ $student->id }}][{{ $subject->id }}][marks]"
                                         placeholder="Enter Marks" class="w-full border rounded-lg px-3 py-2 mb-3"
-                                        min="0" max="100">
+                                        min="0" max="100"
+                                        value="{{ old('results.' . $student->id . '.' . $subject->id . '.marks') }}">
 
                                     <!-- FILE -->
                                     <label
