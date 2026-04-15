@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     @if (session('success'))
         <script>
             Swal.fire({
@@ -25,13 +24,15 @@
             <div class="col-span-12 lg:col-span-3 bg-white rounded-xl shadow-sm p-4">
                 <h2 class="text-sm font-semibold text-gray-600 mb-4">Select Class</h2>
 
-                <form id="classForm" action="{{ SchoolLogin() ?  route('student.class.filter') : route('staff.student.class.filter')   }}" method="GET">
+                <form id="classForm"
+                    action="{{ SchoolLogin() ? route('student.class.filter') : route('staff.student.class.filter') }}"
+                    method="GET">
 
                     <input type="hidden" name="class" id="selectedClass">
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
 
                     @php
-                        $activeClass = session('selected_class') ?? $classes->first()->id;
+                        $activeClass = session('selected_class') ?? ($classes->first()->id ?? null);
                     @endphp
 
                     <div class="space-y-2">
@@ -58,17 +59,17 @@
                         <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search student..."
                             class="border rounded-lg px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-200">
 
-                        <a href="{{ SchoolLogin() ?  route('school.stud.create') : route('staff.school.stud.create') }}"
+                        <a href="{{ SchoolLogin() ? route('school.stud.create') : route('staff.school.stud.create') }}"
                             class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition">
                             Add Student
                         </a>
 
-                        <a href="{{ SchoolLogin() ? route('student.bulkupload') : route('staff.student.bulkupload')  }}"
+                        <a href="{{ SchoolLogin() ? route('student.bulkupload') : route('staff.student.bulkupload') }}"
                             class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-primary-900 text-primary-900 text-sm font-medium hover:bg-primary-50 transition">
                             Bulk Upload
                         </a>
 
-                        <a href="{{ SchoolLogin() ?  route('student.export') : route('staff.student.export')  }}"
+                        <a href="{{ SchoolLogin() ? route('student.export') : route('staff.student.export') }}"
                             class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-primary-900 text-primary-900 text-sm font-medium hover:bg-primary-50 transition">
                             Export
                         </a>
@@ -102,11 +103,13 @@
                                         <td class="py-3 px-6">{{ $stud->parent_phone }}</td>
                                         <td class="py-3 px-6">
                                             <div class="flex items-center gap-2">
-                                                <a href="{{SchoolLogin() ?  route('school.stud.edit', $stud->id) :  route('staff.school.stud.edit', $stud->id) }}"
+                                                <a href="{{ SchoolLogin() ? route('school.stud.edit', $stud->id) : route('staff.school.stud.edit', $stud->id) }}"
                                                     class="inline-flex items-center px-3 py-1 rounded-md bg-green-50 text-green-700 border border-green-200 text-xs font-medium hover:bg-green-100 transition">
                                                     Edit
                                                 </a>
-                                                <form action="{{SchoolLogin() ?  route('student.delete', $stud->id) : route('staff.student.delete', $stud->id)  }}" method="POST">
+                                                <form
+                                                    action="{{ SchoolLogin() ? route('student.delete', $stud->id) : route('staff.student.delete', $stud->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
 

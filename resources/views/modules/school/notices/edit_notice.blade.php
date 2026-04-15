@@ -47,7 +47,7 @@
                                     Status</label>
                                 <select id="notice_badge" name="notice_badge"
                                     class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
-                                    <option selected>Badge Status Select</option>
+                                    <option >Badge Status Select</option>
                                     <option value="Nnew" @selected($editdata->notice_badge === 'New')>New</option>
                                     <option value="None" @selected($editdata->notice_badge === 'None')>None</option>
                                 </select>

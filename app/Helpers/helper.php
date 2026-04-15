@@ -146,7 +146,9 @@ if (! function_exists('leaveType')) {
 if (! function_exists('getDisc')) {
     function getDisc()
     {
-        $disdata = School::select('id', 'district')->get();
+        $disdata = School::select('district')
+            ->groupBy('district')
+            ->get();
 
         return $disdata;
     }

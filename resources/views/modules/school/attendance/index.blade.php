@@ -53,20 +53,21 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-sm font-semibold text-gray-600">Select Class</h2>
 
-                    <a href="{{ SchoolLogin() ?  route('school.classes.create') : route('staff.classes.create') }}"
+                    <a href="{{ SchoolLogin() ? route('school.classes.create') : route('staff.classes.create') }}"
                         class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs">
                         + Add
                     </a>
                 </div>
 
-                <form id="classForm" action="{{ SchoolLogin() ? route('class.filter')  : route('staff.class.filter')}}" method="GET">
+                <form id="classForm" action="{{ SchoolLogin() ? route('class.filter') : route('staff.class.filter') }}"
+                    method="GET">
 
                     <input type="hidden" name="class" id="selectedClass">
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
 
 
                     @php
-                        $activeClass = session('selected_class') ?? $classes->first()->id;
+                        $activeClass = session('selected_class') ?? ($classes->first()->id ?? null);
                     @endphp
 
                     <div class="space-y-2">
@@ -85,7 +86,11 @@
             <!-- RIGHT SIDE -->
             <div class="col-span-9 space-y-6">
                 @php
-                    $activeClass = session('selected_class') ?? (request('class') ?? $classes->first()->id);
+                    if (session('selected_class')) {
+                        $activeClass = session('selected_class');
+                    } else {
+                        $activeClass = $classes->first()->id ?? null;
+                    }
                 @endphp
                 <!-- Top Summary -->
                 @php
@@ -119,10 +124,10 @@
                     </div>
                     <div class="flex items-center gap-3">
 
-                        <form action="{{ SchoolLogin() ?  route('search.attendance') : route('staff.search.attendance')  }}" method="GET" class="flex items-center gap-3">
+                        <form action="{{ SchoolLogin() ? route('search.attendance') : route('staff.search.attendance') }}"
+                            method="GET" class="flex items-center gap-3">
 
-                            <input type="date" name="date"
-                                onchange="this.form.submit()"
+                            <input type="date" name="date" onchange="this.form.submit()"
                                 class=" w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none">
 
                         </form>
@@ -153,10 +158,13 @@
                             <h2 class="text-lg font-semibold mb-4">Upload Report</h2>
 
                             <!-- Form -->
-                            <form action="{{ SchoolLogin() ?  route('report.save') :  route('staff.report.save')  }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ SchoolLogin() ? route('report.save') : route('staff.report.save') }}"
+                                method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
-                                <input type="hidden" name="district" value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">
+                                <input type="hidden" name="school_id"
+                                    value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+                                <input type="hidden" name="district"
+                                    value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">Report Type</label>
                                     <select name="report_type" id="report_type"
@@ -247,7 +255,8 @@
 
                                                 <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                 <input type="hidden" name="class_id" value="{{ $student->class_id }}">
-                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+                                                <input type="hidden" name="school_id"
+                                                    value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
                                                 <input type="hidden" name="date" value="{{ date('Y-m-d') }}">
 
                                                 <select name="status" onchange="this.form.submit()"
