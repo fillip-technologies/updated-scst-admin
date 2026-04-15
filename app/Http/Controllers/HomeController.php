@@ -22,7 +22,7 @@ class HomeController extends Controller
     // Home page
     public function homePage()
     {
-
+        // dd(Hash::make('123456'));
         return view('auth.login');
     }
 
@@ -82,7 +82,6 @@ class HomeController extends Controller
                     return $results->every(function ($res) {
                         return $res->marks >= 33;
                     });
-
                 })->count();
 
                 // ✅ PASS %
@@ -92,10 +91,9 @@ class HomeController extends Controller
 
                 return $school;
             });
-           
+
 
         return view('modules.school-monitoring.index', compact('schools'));
-
     }
 
     public function sendNotice(Request $request)
@@ -194,7 +192,7 @@ class HomeController extends Controller
         $performance = $request->filled('performance_filter') ? (float) $request->input('performance_filter') : null;
 
         return $schools->filter(function (array $school) use ($search, $district, $status, $dropout, $performance) {
-            if ($search !== '' && ! str_contains(strtolower($school['name'].' '.$school['district']), $search)) {
+            if ($search !== '' && ! str_contains(strtolower($school['name'] . ' ' . $school['district']), $search)) {
                 return false;
             }
 
