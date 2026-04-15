@@ -178,3 +178,14 @@ if (! function_exists('ExamType')) {
     }
 
 }
+
+if(!function_exists('RecipientGroup')){
+    function RecipientGroup(){
+        return [
+            'All Schools',
+            'Principals Only',
+            'District Coordinators',
+            'Specific District'
+        ];
+    }
+}

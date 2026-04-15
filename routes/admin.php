@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\MainNoticeController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\SchoolManageController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Mails\ManageMailController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::prefix('admin')->middleware('admin')->group(function () {
@@ -65,6 +67,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('school.monitoring.send-notice');
 
     //
+
+    Route::post('/send/notification/mail',[ManageMailController::class, 'sentNotification'])->name('send.email');
 
     Route::get('/notices', [HomeController::class, 'notices'])
         ->name('admin.notices.index');
