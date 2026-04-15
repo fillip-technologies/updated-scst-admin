@@ -17,7 +17,7 @@
         <div class="grid grid-cols-3 gap-6">
 
             <!-- LEFT PANEL -->
-            <form action="{{ route('send.email') }}" action="" method="POST">
+            <form action="{{ route('notification.send') }}" method="POST">
                 @csrf
                 <div class="col-span-1 bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
 
@@ -37,15 +37,19 @@
                         <label class="text-sm font-medium text-gray-600">
                             Recipient Group
                         </label>
-                        <select name="reciver"
+                        <select  id="reciver"
                             class="w-full mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <option>Select Recipient</option>
                             @forelse (RecipientGroup() as $rec)
                                 <option value="{{ $rec }}">{{ $rec }}</option>
                             @empty
-                            <p class="text-center">No Recipient Group</p>
+                                <p class="text-center">No Recipient Group</p>
                             @endforelse
                         </select>
+                    </div>
+
+                    <div class="mb-4" id="hiddenfield">
+
                     </div>
 
                     <!-- Subject -->
@@ -230,4 +234,50 @@
         </div>
 
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#reciver").on('change', function() {
+                var opvalue = $(this).val();
+                if (opvalue === "Principals Only") {
+                    $('#hiddenfield').html(`
+                        <label class="text-sm font-medium text-gray-600">
+                           All Principale
+                        </label>
+                        <div class="mt-2 border rounded-lg p-3 max-h-40 overflow-y-auto">
+
+                   @forelse (getPrincipale() as $pri)
+                 <label class="flex items-center gap-2 mb-2">
+                        <input type="checkbox" name="reciver[]" value="{{ $pri->official_email }}">
+                        <span>{{ $pri->principle_name }}</span>
+                    </label>
+                @empty
+                    <p class="text-center text-gray-500">No Recipient Group</p>
+                @endforelse
+
+                </div>
+                `);
+                }
+                else if (opvalue === "Specific District") {
+                    $('#hiddenfield').html(`
+                       <label class="text-sm font-medium text-gray-600">
+                           All District
+                        </label>
+                        <select name="reciver" id="reciver"
+                            class="w-full mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option>Select Recipient</option>
+                            @forelse (SinglegetDisc() as $rec)
+                                <option value="{{ $rec->official_email }}">{{ $rec->district }}</option>
+                            @empty
+                                <p class="text-center">No Recipient Group</p>
+                            @endforelse
+                        </select>
+                `);
+                } else {
+                    $('#hiddenfield').html("");
+                }
+
+            });
+        });
+    </script>
 @endsection

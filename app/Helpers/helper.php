@@ -173,19 +173,56 @@ if (! function_exists('ExamType')) {
         return [
             'half' => 'Half Yearly',
             'third' => 'Third Terminal',
-            'final' =>'Final'
+            'final' => 'Final',
         ];
     }
 
 }
 
-if(!function_exists('RecipientGroup')){
-    function RecipientGroup(){
+if (! function_exists('RecipientGroup')) {
+    function RecipientGroup()
+    {
         return [
             'All Schools',
             'Principals Only',
             'District Coordinators',
-            'Specific District'
+            'Specific District',
         ];
+    }
+}
+
+if (! function_exists('getPrincipale')) {
+    function getPrincipale()
+    {
+        $principale = School::select('id', 'principle_name', 'official_email')->get();
+        if (! empty($principale)) {
+            return $principale;
+        } else {
+            echo 'No data found';
+        }
+    }
+}
+
+
+if (! function_exists('getPrincipale')) {
+    function getPrincipale()
+    {
+        $principale = School::select('id', 'principle_name', 'official_email')->get();
+        if (! empty($principale)) {
+            return $principale;
+        } else {
+            echo 'No data found';
+        }
+    }
+}
+
+if (! function_exists('SinglegetDisc')) {
+    function SinglegetDisc()
+    {
+        return School::select('id','district','official_email')
+            ->orderBy('district')
+            ->get()
+            ->unique('district')
+            ->values();
     }
 }

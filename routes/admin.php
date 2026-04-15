@@ -52,8 +52,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('approvals');
 
     // Notifications
-    Route::view('/notifications', 'modules.notifications.index')
-        ->name('notifications');
+    Route::get('/notifications',[HomeController::class ,'notifications'])->name('notifications');
 
     Route::view('/audit-logs', 'modules.audit-logs.index')
         ->name('audit.logs');
@@ -69,6 +68,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     //
 
     Route::post('/send/notification/mail',[ManageMailController::class, 'sentNotification'])->name('send.email');
+    Route::post('/notificationsend',[ManageMailController::class, 'notificationsend'])->name('notification.send');
 
     Route::get('/notices', [HomeController::class, 'notices'])
         ->name('admin.notices.index');

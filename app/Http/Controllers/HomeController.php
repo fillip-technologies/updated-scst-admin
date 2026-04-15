@@ -413,4 +413,8 @@ class HomeController extends Controller
 
         return view('modules.subjects.index', compact('subject'));
     }
+
+    public function notifications(){
+        return view('modules.notifications.index');
+    }
 }

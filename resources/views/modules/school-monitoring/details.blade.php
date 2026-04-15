@@ -13,6 +13,18 @@
             })
         </script>
     @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                showConfirmButton: true,
+                timer: 3000
+            })
+        </script>
+    @endif
     <div class="max-w-6xl mx-auto space-y-6">
 
         <!-- Top Header Card -->
@@ -237,8 +249,8 @@
 
                     <form class="space-y-3" action="{{ route('send.email') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="school" value="{{ $school->school_name ?? "" }}">
-                        <input type="hidden" name="principale" value="{{ $school->principle_name ?? "" }}">
+                        <input type="hidden" name="school" value="{{ $school->school_name ?? '' }}">
+                        <input type="hidden" name="principale" value="{{ $school->principle_name ?? '' }}">
                         <textarea name="message"
                             class="w-full border rounded-lg px-3 py-2 text-sm
                         @error('message')
@@ -249,7 +261,7 @@
 
                         <button type="submit"
                             class="w-full bg-blue-800 text-white rounded-lg px-4 py-2 text-sm hover:bg-primary-600">
-                            Send Notice
+                            Send Flat Notice
                         </button>
                     </form>
                 </div>
