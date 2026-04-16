@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Exports\Report\ExamRepoExport;
 use App\Exports\Report\MealsRepoExport;
 use App\Exports\Report\StdentRepoExport;
 use App\Exports\Report\TeacherRepoExport;
@@ -13,7 +14,6 @@ class ExcelReportController extends Controller
 {
     public function RepotDownload(Request $request)
     {
-
 
         $category = $request->category ?? null;
         $range = $request->date_range ?? null;
@@ -83,6 +83,30 @@ class ExcelReportController extends Controller
             return Excel::download(
                 new MealsRepoExport($date_range),
                 'MealReport.xlsx'
+            );
+        } elseif ($category === 'exam') {
+            $startDate = now();
+            $endDate = now();
+
+            if ($range == '1') { // last 7 days
+                $startDate = now()->subDays(6);
+            } elseif ($range == '2') { // last 30 days
+                $startDate = now()->subDays(29);
+            } elseif ($range == '3') { // this month
+                $startDate = now()->startOfMonth();
+            }
+            $classID = $request->class;
+            $examtype = $request->type;
+            $date_range = [
+                $startDate->format('Y-m-d'),
+                $endDate->format('Y-m-d'),
+                $classID,
+                $examtype,
+            ];
+
+            return Excel::download(
+                new ExamRepoExport($date_range),
+                'Result.xlsx'
             );
         } else {
             return back()->with('error', 'Invalid request');

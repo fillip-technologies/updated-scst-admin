@@ -132,9 +132,15 @@
 
                         if (category === 'exam') {
                             html = `
-                <label class="text-sm text-gray-600">Exam Type</label>
-                <input type="text" name="exam_type" placeholder="Enter exam"
+
+               <label class="text-sm text-gray-600">Select Exam</label>
+                <select name="type"
                     class="mt-2 w-full border rounded-lg px-4 py-2 text-sm">
+                    <option>Select Exam Type</option>
+                    @foreach (ExamType() as $key => $type)
+                     <option value="{{ $key }}">{{ $type }}</option>
+                    @endforeach
+                </select>
 
                      <label class="text-sm text-gray-600">Select Class</label>
                 <select name="class"
