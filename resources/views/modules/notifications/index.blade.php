@@ -1,6 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(session('success'))
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('success') }}",
+        confirmButtonColor: '#3085d6'
+    });
+});
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let errorMessages = `
+        <ul style="text-align:center;">
+            @foreach ($errors->all() as $error)
+                <li> {{ $error }}</li>
+            @endforeach
+        </ul>
+    `;
+
+    Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        html: errorMessages,
+        confirmButtonColor: '#d33'
+    });
+});
+</script>
+@endif
     <div class="p-6">
 
         <!-- Page Header -->
@@ -37,9 +71,9 @@
                         <label class="text-sm font-medium text-gray-600">
                             Recipient Group
                         </label>
-                        <select  id="reciver"
+                        <select name="reciver"  id="reciver"
                             class="w-full mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                            <option>Select Recipient</option>
+                            <option value="">Select Recipient</option>
                             @forelse (RecipientGroup() as $rec)
                                 <option value="{{ $rec }}">{{ $rec }}</option>
                             @empty

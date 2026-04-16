@@ -108,12 +108,11 @@
 
                         // 2. Remove active class from all buttons
                         document.querySelectorAll('.report-btn').forEach(btn => {
-                            btn.classList.remove('border-primary-900', 'bg-primary-50');
+                            btn.classList.remove('border-blue-900', 'bg-primary-50', 'border-2');
                         });
 
                         // 3. Add active class to selected
-                        button.classList.add('border-primary-900', 'bg-primary-50');
-
+                        button.classList.add('border-2', 'border-blue-900', 'bg-primary-50');
                         // 4. Dynamic Section Content
                         let html = '';
 

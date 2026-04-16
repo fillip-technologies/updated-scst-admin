@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mails;
 use App\Http\Controllers\Controller;
 use App\Mail\NotificationMail;
 use App\Mail\SendMail;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,23 +31,42 @@ class ManageMailController extends Controller
 
     }
 
-   public function notificationsend(Request $request)
-{
-    $request->validate([
-        'subject' => 'required|string',
-        'message' => 'required|string',
-        'reciver' => 'required',
-    ]);
+    public function notificationsend(Request $request)
+    {
+        $request->validate([
+            'subject' => 'required|string',
+            'message' => 'required|string',
+            'reciver' => 'required',
+        ]);
 
 
-    $recivers = is_array($request->reciver)
-        ? $request->reciver
-        : [$request->reciver];
+        if ($request->reciver === 'All Schools' || $request->reciver === "District Coordinators") {
 
-    if (is_array($recivers)) {
+            $schooldata = School::pluck('official_email')->filter();
+
+            foreach ($schooldata as $data) {
+
+                $notidata = [
+                    'message' => $request->message,
+                    'subject' => $request->subject,
+                    'reciver' => $data,
+                ];
+
+                Mail::to($data)->queue(new NotificationMail($notidata));
+            }
+
+            return back()->with('success', 'Mail sent to all schools ✅');
+        }
+
+        $recivers = is_array($request->reciver)
+            ? $request->reciver
+            : [$request->reciver];
+
         foreach ($recivers as $data) {
 
-
+            if (! filter_var($data, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
 
             $notidata = [
                 'message' => $request->message,
@@ -54,22 +74,9 @@ class ManageMailController extends Controller
                 'reciver' => $data,
             ];
 
-            Mail::to($data)->send(new NotificationMail($notidata));
+            Mail::to($data)->queue(new NotificationMail($notidata));
         }
 
         return back()->with('success', 'Mail sent successfully ✅');
-    } else {
-
-
-        $notidata = [
-            'message' => $request->message,
-            'subject' => $request->subject,
-            'reciver' => $request->reciver,
-        ];
-
-        Mail::to($request->reciver)->send(new NotificationMail($notidata));
-
-        return back()->with('success', 'Mail sent successfully ✅');
     }
-}
 }
