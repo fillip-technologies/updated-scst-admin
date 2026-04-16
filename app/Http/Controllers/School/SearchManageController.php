@@ -30,9 +30,23 @@ class SearchManageController extends Controller
         $search = request('search');
         $schools = School::where('school_name', 'LIKE', "%{$search}%")
             ->orWhere('district', 'LIKE', "%{$search}%")
-            ->orWhere('school_code', 'LIKE', "%{$search}%")->orWhere('principle_name','LIKE',"{% $search %}")
+            ->orWhere('school_code', 'LIKE', "%{$search}%")->orWhere('principle_name', 'LIKE', "{% $search %}")
             ->get();
 
         return view('modules.school-management.index', compact('schools'));
+    }
+
+    public function studentSearch(Request $request)
+    {
+        $data = $request->query('search');
+        $schoolID = $request->school_id;
+
+        $classes = AddClasses::where('school_id', SchoolLogin()->id ?? TeacherLog()->school_id)->get();
+
+        $studentdata = Student::where('school_id', $schoolID)
+            ->where('name', 'LIKE', "%{$data}%")
+            ->paginate(10);
+
+        return view('modules.school.school-management.index', compact('studentdata', 'classes'));
     }
 }

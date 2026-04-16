@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <p class="text-center">No Recipient Group</p>
                             @endforelse
                         </select>
+
                     </div>
 
                     <div class="mb-4" id="hiddenfield">
@@ -174,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
 
 
-                    <!-- Notification Item 2 -->
+                    
                     <div class="p-6 flex justify-between items-start">
 
                         <div class="flex gap-4">

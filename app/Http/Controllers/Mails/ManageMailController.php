@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mails;
 
+use \Exception;
 use App\Http\Controllers\Controller;
 use App\Mail\NotificationMail;
 use App\Mail\SendMail;
@@ -33,18 +34,54 @@ class ManageMailController extends Controller
 
     public function notificationsend(Request $request)
     {
-        $request->validate([
-            'subject' => 'required|string',
-            'message' => 'required|string',
-            'reciver' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'subject' => 'required|string',
+                'message' => 'required|string',
+                'reciver' => 'required',
+            ]);
 
 
-        if ($request->reciver === 'All Schools' || $request->reciver === "District Coordinators") {
+            if ($request->reciver === 'All Schools' || $request->reciver === 'District Coordinators') {
 
-            $schooldata = School::pluck('official_email')->filter();
+                if ($request->reciver === 'All Schools') {
+                    $schooldata = School::pluck('official_email')->filter();
+                } else {
+                    // ✅ FIX: coordinators ke liye correct data
+                    $schooldata = School::pluck('official_email')->filter();
+                }
 
-            foreach ($schooldata as $data) {
+                foreach ($schooldata as $data) {
+
+                    if (! filter_var($data, FILTER_VALIDATE_EMAIL)) {
+                        continue;
+                    }
+
+                    $notidata = [
+                        'message' => $request->message,
+                        'subject' => $request->subject,
+                        'reciver' => $data,
+                    ];
+
+                    Mail::to($data)->queue(new NotificationMail($notidata));
+                }
+
+                return back()->with('success',
+                    $request->reciver === 'All Schools'
+                        ? 'Mail sent to all schools ✅'
+                        : 'Mail sent to all coordinators ✅'
+                );
+            }
+
+            $recivers = is_array($request->reciver)
+                ? $request->reciver
+                : [$request->reciver];
+
+            foreach ($recivers as $data) {
+
+                if (! filter_var($data, FILTER_VALIDATE_EMAIL)) {
+                    continue;
+                }
 
                 $notidata = [
                     'message' => $request->message,
@@ -55,28 +92,10 @@ class ManageMailController extends Controller
                 Mail::to($data)->queue(new NotificationMail($notidata));
             }
 
-            return back()->with('success', 'Mail sent to all schools ✅');
+            return back()->with('success', 'Mail sent successfully ✅');
+
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        $recivers = is_array($request->reciver)
-            ? $request->reciver
-            : [$request->reciver];
-
-        foreach ($recivers as $data) {
-
-            if (! filter_var($data, FILTER_VALIDATE_EMAIL)) {
-                continue;
-            }
-
-            $notidata = [
-                'message' => $request->message,
-                'subject' => $request->subject,
-                'reciver' => $data,
-            ];
-
-            Mail::to($data)->queue(new NotificationMail($notidata));
-        }
-
-        return back()->with('success', 'Mail sent successfully ✅');
     }
 }

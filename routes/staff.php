@@ -23,7 +23,7 @@ Route::prefix('staff')->middleware('staff')->group(function () {
     Route::get('/student/schoolmanagement', [StudentManageController::class, 'getallStudent'])->name('staff.school.student');
     Route::get('/manage-result', [HomeController::class, 'manageResult'])
         ->name('staff.school.manage-result');
-
+Route::get('/search/student',[SearchManageController::class,'studentSearch'])->name('staff.student.search');
     Route::post('/add/class', [ClassController::class, 'addClass'])->name('staff.add.class');
     Route::get('/edit/class/{id}', [ClassController::class, 'editclass'])->name('staff.edit.class');
     Route::post('/update/class/{id}', [ClassController::class, 'updateclass'])->name('staff.update.class');

@@ -56,8 +56,15 @@
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search student..."
-                            class="border rounded-lg px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        <form action="{{ SchoolLogin() ? route('student.search') : route('staff.student.search') }}" method="GET">
+                            <input type="hidden" name="school_id"
+                                value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+
+                            <input type="text" id="searchInput" name="search" placeholder="Search student..."
+                                value="{{ request('search') }}" onkeyup="this.form.submit()"
+                                class="border rounded-lg px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        </form>
+
 
                         <a href="{{ SchoolLogin() ? route('school.stud.create') : route('staff.school.stud.create') }}"
                             class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition">

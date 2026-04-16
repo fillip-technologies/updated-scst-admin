@@ -111,7 +111,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::get('/student/export', [StudentManageController::class, 'exportStudent'])->name('student.export');
     Route::post('/student/import', [StudentManageController::class, 'importStudent'])->name('student.import');
     Route::post('/create/school/teacher', [TeacherManageController::class, 'SaveTeacher'])->name('school.teacher');
-
+Route::get('/search/student',[SearchManageController::class,'studentSearch'])->name('student.search');
     Route::post('/update/school/{id}/teacher/{schoolId}', [TeacherManageController::class, 'UpdateTeacher'])->name('teacher.update');
     Route::delete('/delete/school/teacher/{id}/{schoolId}', [TeacherManageController::class, 'DeleteTeacher'])->name('delete.teacher');
     Route::get('/export/school/teacher', [TeacherManageController::class, 'TeacheeExport'])->name('export.teacher');
