@@ -96,3 +96,24 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/details/montering/school/{id}',[MonitoringController::class, 'detailsMonitering'])->name('details.schools');
 
 });
+
+Route::get('/admin/department/website-cms/home/leader', [HomeController::class, 'leader'])
+    ->name('admin.department.cms.leader');
+
+Route::get('/admin/department/website-cms/home/leader/edit', [HomeController::class, 'editLeader'])
+    ->name('admin.department.cms.leader.edit');
+
+Route::get('/admin/department/website-cms/home/stats', [HomeController::class, 'stats'])
+    ->name('admin.department.cms.stats');
+
+Route::get('/admin/department/website-cms/home/stats/edit', [HomeController::class, 'editStats'])
+    ->name('admin.department.cms.stats.edit');
+
+Route::get('/admin/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
+    ->name('admin.department.cms.schemes');
+
+Route::get('/admin/department/website-cms/home/schemes/create', [HomeController::class, 'createScheme'])
+    ->name('admin.department.cms.schemes.create');
+
+Route::get('/admin/department/website-cms/home/schemes/edit', [HomeController::class, 'editSchemes'])
+    ->name('admin.department.cms.schemes.edit');

@@ -417,4 +417,43 @@ class HomeController extends Controller
     public function notifications(){
         return view('modules.notifications.index');
     }
+
+    public function leader(Request $request)
+    {
+        $type = $request->get('type', 'minister');
+
+        return view('modules.department.website-cms.home.leader', compact('type'));
+    }
+
+    public function editLeader(Request $request)
+    {
+        $type = $request->get('type', 'minister');
+
+        return view('modules.department.website-cms.home.edit-leader', compact('type'));
+    }
+
+    public function stats()
+    {
+        return view('modules.department.website-cms.home.stats');
+    }
+
+    public function editStats()
+    {
+        return view('modules.department.website-cms.home.edit-stats');
+    }
+
+    public function schemes()
+    {
+        return view('modules.department.website-cms.home.schemes');
+    }
+
+    public function createScheme()
+    {
+        return view('modules.department.website-cms.home.create-scheme');
+    }
+
+    public function editSchemes()
+    {
+        return view('modules.department.website-cms.home.edit-schemes');
+    }
 }
