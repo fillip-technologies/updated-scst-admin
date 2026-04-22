@@ -10,19 +10,26 @@ class DepartmentCmsController extends Controller
 {
     public function minister_add(Request $request)
     {
-
         $request->validate([
             'name' => 'required',
             'designation' => 'required',
         ]);
 
-        $storeFile = null;
+        $leader = LeaderMessage::find($request->id);
+
+        $oldData = [];
+        if ($leader && $leader->minister) {
+            $oldData = json_decode($leader->minister, true);
+        }
+
+        $storeFile = $oldData['profile'] ?? null;
 
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');
             $filename = time().'_'.$file->getClientOriginalName();
             $upload = public_path('leaders');
             $file->move($upload, $filename);
+
             $storeFile = 'leaders/'.$filename;
         }
 
@@ -45,19 +52,31 @@ class DepartmentCmsController extends Controller
 
     public function secretary_add(Request $request)
     {
-
         $request->validate([
             'name' => 'required',
             'designation' => 'required',
         ]);
 
-        $storeFile = null;
+        $leader = LeaderMessage::find($request->id);
+
+        $oldData = [];
+        if ($leader && $leader->secretary) {
+            $oldData = json_decode($leader->secretary, true);
+        }
+
+        $storeFile = $oldData['profile'] ?? null;
 
         if ($request->hasFile('profile')) {
+
+            if (! empty($oldData['profile']) && file_exists(public_path($oldData['profile']))) {
+                unlink(public_path($oldData['profile']));
+            }
+
             $file = $request->file('profile');
             $filename = time().'_'.$file->getClientOriginalName();
-            $upload = public_path('secretarys');
+            $upload = public_path('leaders');
             $file->move($upload, $filename);
+
             $storeFile = 'leaders/'.$filename;
         }
 
@@ -76,7 +95,6 @@ class DepartmentCmsController extends Controller
         );
 
         return back()->with('success', 'Add/Update Secretary Data');
-
     }
 
     public function ias_officer_add(Request $request)
@@ -86,13 +104,26 @@ class DepartmentCmsController extends Controller
             'designation' => 'required',
         ]);
 
-        $storeFile = null;
+        $leader = LeaderMessage::find($request->id);
+
+        $oldData = [];
+        if ($leader && $leader->ias_officer) {
+            $oldData = json_decode($leader->ias_officer, true);
+        }
+
+        $storeFile = $oldData['profile'] ?? null;
 
         if ($request->hasFile('profile')) {
+
+            if (! empty($oldData['profile']) && file_exists(public_path($oldData['profile']))) {
+                unlink(public_path($oldData['profile']));
+            }
+
             $file = $request->file('profile');
             $filename = time().'_'.$file->getClientOriginalName();
             $upload = public_path('leaders');
             $file->move($upload, $filename);
+
             $storeFile = 'leaders/'.$filename;
         }
 
