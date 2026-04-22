@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\cms;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeaderMessage;
+use App\Models\StateSection;
 use Illuminate\Http\Request;
 
 class DepartmentCmsController extends Controller
@@ -144,5 +145,37 @@ class DepartmentCmsController extends Controller
         return back()->with('success', 'Add/Update IAS Officer Data');
     }
 
-    public function schema_initiactives() {}
+    public function add_states(Request $request) {
+
+        $request->validate([
+            'schools_count'=>'required',
+            'schools_label' =>'required',
+            'students_count'=>'required',
+            'students_label'=>'required',
+            'teachers_count'=>'required',
+            'teachers_label'=>'required'
+        ]);
+
+        $data = [
+            'schools_count'=>$request->schools_count,
+            'schools_label' =>$request->schools_label,
+            'students_count'=>$request->students_count,
+            'students_label'=>$request->students_label,
+            'teachers_count'=>$request->teachers_count,
+            'teachers_label'=>$request->teachers_label,
+        ];
+
+        StateSection::updateOrCreate(
+            ['id'=>$request->id],
+
+            [
+                'state_section'=> json_encode($data),
+            ]
+
+        );
+
+        return back()->with('success', 'Add/Update State Data');
+    }
+
+    public function add_schema() {}
 }

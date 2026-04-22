@@ -12,6 +12,8 @@ use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware('admin')->group(function () {
+    Route::post('/store/state/section',[DepartmentCmsController::class, 'add_states'])->name('add.states');
+    Route::post('/store/schema',[DepartmentCmsController::class, 'add_schema'])->name('add.schemas');
     Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
     Route::get('/logout', [LoginController::class, 'AdminLogout'])->name('admin.logout');
     Route::get('/school-management', [HomeController::class, 'schoolManagement'])->name('admin.school.management');
@@ -103,6 +105,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/department/website-cms/home/stats', [HomeController::class, 'stats'])
         ->name('admin.department.cms.stats');
 
+
     Route::get('/department/website-cms/home/stats/edit', [HomeController::class, 'editStats'])
         ->name('admin.department.cms.stats.edit');
 
@@ -119,5 +122,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/minister/data/store', [DepartmentCmsController::class, 'minister_add'])->name('minister.data.store');
     Route::post('/secretary/data/store', [DepartmentCmsController::class, 'secretary_add'])->name('secretary.data.store');
     Route::post('/iasofficer/data/store', [DepartmentCmsController::class, 'ias_officer_add'])->name('ias.data.store');
+
 
 });

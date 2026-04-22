@@ -10,6 +10,7 @@ use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\School;
+use App\Models\StateSection;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -436,7 +437,8 @@ class HomeController extends Controller
 
     public function stats()
     {
-        return view('modules.department.website-cms.home.stats');
+        $states = StateSection::orderBy('id','desc')->first();
+        return view('modules.department.website-cms.home.stats',compact('states'));
     }
 
     public function editStats()
