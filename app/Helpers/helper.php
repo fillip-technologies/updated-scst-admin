@@ -2,6 +2,9 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 if (! function_exists('districts')) {
 
@@ -203,7 +206,6 @@ if (! function_exists('getPrincipale')) {
     }
 }
 
-
 if (! function_exists('getPrincipale')) {
     function getPrincipale()
     {
@@ -219,10 +221,48 @@ if (! function_exists('getPrincipale')) {
 if (! function_exists('SinglegetDisc')) {
     function SinglegetDisc()
     {
-        return School::select('id','district','official_email')
+        return School::select('id', 'district', 'official_email')
             ->orderBy('district')
             ->get()
             ->unique('district')
             ->values();
+    }
+}
+
+if (! function_exists('getSchools')) {
+    function getSchools($district = null)
+    {
+        $query = School::select('id', 'school_name', 'district');
+
+        if ($district) {
+            $query->where('district', $district);
+        }
+
+        return $query->get();
+    }
+}
+
+
+if (!function_exists('checkLoginAttempt')) {
+
+    function checkLoginAttempt(User $user, $credentials, $redirectRoute)
+    {
+
+        if ($user->lock_until && Carbon::now()->lessThan($user->lock_until)) {
+            return back()->with('error', 'Account locked for 24 hours');
+        }
+        if (Auth::attempt($credentials)) {
+            $user->login_attempts = 0;
+            $user->lock_until = null;
+            $user->save();
+            return redirect()->route($redirectRoute);
+        }
+        $user->login_attempts += 1;
+        if ($user->login_attempts >= 5) {
+            $user->lock_until = Carbon::now()->addHours(24);
+        }
+        $user->save();
+        $remaining = 5 - $user->login_attempts;
+        return back()->with('error', "Invalid Credentials. $remaining attempts left");
     }
 }

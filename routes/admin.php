@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\cms\DepartmentCmsController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainNoticeController;
 use App\Http\Controllers\Admin\MonitoringController;
@@ -9,8 +10,6 @@ use App\Http\Controllers\Mails\ManageMailController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
-
-
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
@@ -52,7 +51,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('approvals');
 
     // Notifications
-    Route::get('/notifications',[HomeController::class ,'notifications'])->name('notifications');
+    Route::get('/notifications', [HomeController::class, 'notifications'])->name('notifications');
 
     Route::view('/audit-logs', 'modules.audit-logs.index')
         ->name('audit.logs');
@@ -67,8 +66,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     //
 
-    Route::post('/send/notification/mail',[ManageMailController::class, 'sentNotification'])->name('send.email');
-    Route::post('/notificationsend',[ManageMailController::class, 'notificationsend'])->name('notification.send');
+    Route::post('/send/notification/mail', [ManageMailController::class, 'sentNotification'])->name('send.email');
+    Route::post('/notificationsend', [ManageMailController::class, 'notificationsend'])->name('notification.send');
 
     Route::get('/notices', [HomeController::class, 'notices'])
         ->name('admin.notices.index');
@@ -93,27 +92,32 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
         ->name('admin.stock.update');
     Route::get('/search/data', [SearchManageController::class, 'schoolSearch'])->name('search.school');
-    Route::get('/details/montering/school/{id}',[MonitoringController::class, 'detailsMonitering'])->name('details.schools');
+    Route::get('/details/montering/school/{id}', [MonitoringController::class, 'detailsMonitering'])->name('details.schools');
+
+    Route::get('department/website-cms/home/leader', [HomeController::class, 'leader'])
+        ->name('admin.department.cms.leader');
+
+    Route::get('epartment/website-cms/home/leader/edit', [HomeController::class, 'editLeader'])
+        ->name('admin.department.cms.leader.edit');
+
+    Route::get('/department/website-cms/home/stats', [HomeController::class, 'stats'])
+        ->name('admin.department.cms.stats');
+
+    Route::get('/department/website-cms/home/stats/edit', [HomeController::class, 'editStats'])
+        ->name('admin.department.cms.stats.edit');
+
+    Route::get('/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
+        ->name('admin.department.cms.schemes');
+
+    Route::get('/department/website-cms/home/schemes/create', [HomeController::class, 'createScheme'])
+        ->name('admin.department.cms.schemes.create');
+
+    Route::get('/department/website-cms/home/schemes/edit', [HomeController::class, 'editSchemes'])
+        ->name('admin.department.cms.schemes.edit');
+
+    Route::get('/get/school/{value}', [SchoolManageController::class, 'getschools'])->name('get.schools');
+    Route::post('/minister/data/store', [DepartmentCmsController::class, 'minister_add'])->name('minister.data.store');
+    Route::post('/secretary/data/store', [DepartmentCmsController::class, 'secretary_add'])->name('secretary.data.store');
+    Route::post('/iasofficer/data/store', [DepartmentCmsController::class, 'ias_officer_add'])->name('ias.data.store');
 
 });
-
-Route::get('/admin/department/website-cms/home/leader', [HomeController::class, 'leader'])
-    ->name('admin.department.cms.leader');
-
-Route::get('/admin/department/website-cms/home/leader/edit', [HomeController::class, 'editLeader'])
-    ->name('admin.department.cms.leader.edit');
-
-Route::get('/admin/department/website-cms/home/stats', [HomeController::class, 'stats'])
-    ->name('admin.department.cms.stats');
-
-Route::get('/admin/department/website-cms/home/stats/edit', [HomeController::class, 'editStats'])
-    ->name('admin.department.cms.stats.edit');
-
-Route::get('/admin/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
-    ->name('admin.department.cms.schemes');
-
-Route::get('/admin/department/website-cms/home/schemes/create', [HomeController::class, 'createScheme'])
-    ->name('admin.department.cms.schemes.create');
-
-Route::get('/admin/department/website-cms/home/schemes/edit', [HomeController::class, 'editSchemes'])
-    ->name('admin.department.cms.schemes.edit');

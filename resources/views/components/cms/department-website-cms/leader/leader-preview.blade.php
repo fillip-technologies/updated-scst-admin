@@ -1,3 +1,21 @@
+@php
+    $type = request('type');
+    $leaderget = [];
+
+    if ($type === 'minister') {
+        $data = $leaderdata->minister ?? [];
+        $leaderget = is_string($data) ? json_decode($data, true) : $data;
+    } elseif ($type === 'secretary') {
+        $data = $leaderdata->secretary ?? [];
+
+        $leaderget = is_string($data) ? json_decode($data, true) : $data;
+    } else {
+        $data = $leaderdata->ias_officer ?? [];
+        $leaderget = is_string($data) ? json_decode($data, true) : $data;
+    }
+
+
+@endphp
 <div class="rounded-2xl border border-primary-800/10 bg-white p-6 shadow-sm">
     <div class="flex items-center justify-between">
         <div>
@@ -7,15 +25,16 @@
         <span class="rounded-full bg-primary-900 px-3 py-1 text-xs font-medium text-white">Live UI</span>
     </div>
 
-    <div class="mt-6 rounded-2xl bg-gradient-to-br from-primary-900 via-primary-800 to-slate-800 p-6 text-white shadow-sm">
+    <div
+        class="mt-6 rounded-2xl bg-gradient-to-br from-primary-900 via-primary-800 to-slate-800 p-6 text-white shadow-sm">
         <div class="flex flex-col items-center text-center">
-            <img src="{{ $leader['image'] }}"
-                alt="Leader profile preview" class="h-24 w-24 rounded-full border-4 border-white/20 object-cover shadow-sm">
+            <img src="{{ asset($leaderget['profile'] ?? "") }}" alt="Leader profile preview"
+                class="h-24 w-24 rounded-full border-4 border-white/20 object-cover shadow-sm">
 
-            <h3 class="mt-5 text-2xl font-semibold">{{ $leader['name'] }}</h3>
-            <p class="mt-2 text-sm font-medium text-primary-100">{{ $leader['designation'] }}</p>
+            <h3 class="mt-5 text-2xl font-semibold">{{ $leaderget['name'] ?? "N/A" }}</h3>
+            <p class="mt-2 text-sm font-medium text-primary-100">{{ $leaderget['designation'] ?? "N/A"}}</p>
 
-            <p class="mt-5 max-w-md text-sm leading-7 text-primary-50/90">{{ $leader['message'] }}</p>
+            <p class="mt-5 max-w-md text-sm leading-7 text-primary-50/90">{{ $leaderget['message'] ?? "N/A" }}</p>
 
             <button type="button"
                 class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-medium text-primary-900 transition hover:bg-primary-50">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ManageCrud;
 use App\Models\AddClasses;
 use App\Models\InfraReport;
+use App\Models\LeaderMessage;
 use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
@@ -421,8 +422,9 @@ class HomeController extends Controller
     public function leader(Request $request)
     {
         $type = $request->get('type', 'minister');
+        $allleaders = LeaderMessage::first();
 
-        return view('modules.department.website-cms.home.leader', compact('type'));
+        return view('modules.department.website-cms.home.leader', compact('type','allleaders'));
     }
 
     public function editLeader(Request $request)

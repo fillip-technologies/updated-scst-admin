@@ -49,21 +49,14 @@
             <select id="district" name="district" x-model="filters.district"
                 class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Select District</option>
-                @foreach (districts() as $district)
-                    <option value="{{ $district }}">{{ $district }}</option>
+                @foreach (getDisc() as $dist)
+                    <option value="{{ $dist->district }}">{{ $dist->district }}</option>
                 @endforeach
             </select>
         </div>
 
-        <div>
-            <label for="school_id" class="mb-1 block text-sm text-gray-500">Select School</label>
-            <select id="school_id" name="school_id" x-model="filters.school_id"
-                class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <option value="">Select School</option>
-                @foreach ($schools as $school)
-                    <option value="{{ $school->id }}">{{ $school->school_name }}</option>
-                @endforeach
-            </select>
+         <div id="allschool">
+
         </div>
 
         <div>
@@ -118,4 +111,41 @@
 
         }
     }
+
+    $(document).ready(function() {
+        var allschool = $("#allschool").hide();
+
+        $("#district").on('change', function() {
+            var value = $(this).val();
+
+            $.ajax({
+                url: "/get/school/" + value,
+                type: "GET",
+                success: function(res) {
+
+                    var datas = res.data;
+                    var options = `<option value="">Select School</option>`;
+
+                    // loop through data
+                    $.each(datas, function(key, school) {
+                        options +=
+                            `<option value="${school.id}">${school.school_name}</option>`;
+                    });
+
+                    var html = `
+                <label class="mb-1 block text-sm text-gray-500">Select School</label>
+                <select id="school_id" name="school_id"
+                    class="h-11 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                    ${options}
+                </select>
+                `;
+
+                    $("#allschool").html(html).show();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
 </script>

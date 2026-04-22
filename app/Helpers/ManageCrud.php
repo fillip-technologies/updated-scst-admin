@@ -11,7 +11,7 @@ class ManageCrud
 
     public static function getAll($model)
     {
-        return $model::orderBy('updated_at','desc')->get();
+        return $model::orderBy('updated_at','desc')->paginate(10);
     }
 
     public static function singledata($model, $id)

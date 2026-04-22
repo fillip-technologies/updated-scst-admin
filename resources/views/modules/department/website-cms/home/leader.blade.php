@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
     <div class="min-h-screen bg-gray-100 p-8">
         <div class="mx-auto max-w-6xl">
             <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -25,7 +36,7 @@
                 </a>
             </div>
 
-            <x-cms.department-website-cms.leader.leader-section :type="$type" />
+            <x-cms.department-website-cms.leader.leader-section :type="$type" :allleaders="$allleaders" />
         </div>
     </div>
 @endsection

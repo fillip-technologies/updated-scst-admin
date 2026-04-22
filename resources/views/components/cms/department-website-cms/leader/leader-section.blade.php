@@ -32,7 +32,7 @@
     <x-cms.department-website-cms.leader.leader-tabs :type="$resolvedType" :route-name="$routeName ?? 'admin.department.cms.leader'" />
 
     <div class="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_420px]">
-        <x-cms.department-website-cms.leader.leader-form :leader="$leader" :button-text="$buttonText ?? 'Save'" />
-        <x-cms.department-website-cms.leader.leader-preview :leader="$leader" />
+        <x-cms.department-website-cms.leader.leader-form :leaderdata="$allleaders" :button-text="$buttonText ?? 'Save'" />
+        <x-cms.department-website-cms.leader.leader-preview :leader="$leader" :leaderdata="$allleaders" />
     </div>
 </section>

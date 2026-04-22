@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\SchoolExport;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\School;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,16 +52,15 @@ class SchoolManageController extends Controller
             $validatedata['password'] = Hash::make($validatedata['password']);
         }
 
-
         $data = ManageCrud::createdatas(School::class, $validatedata);
 
         User::create([
-            'name'=>$data->school_name,
-            'username'=>$data->school_admin_username,
-            'schoolCode'=>$data->school_code,
-            'password'=>$data->password,
-            'role'=>'school_admin',
-            'school_id'=>$data->id
+            'name' => $data->school_name,
+            'username' => $data->school_admin_username,
+            'schoolCode' => $data->school_code,
+            'password' => $data->password,
+            'role' => 'school_admin',
+            'school_id' => $data->id,
         ]);
         if ($data) {
             return redirect()->route('admin.school.management')
@@ -155,6 +154,7 @@ class SchoolManageController extends Controller
         $school->update([
             'account_status' => $status,
         ]);
+
         return redirect()->route('admin.school.management')
             ->with('success', 'Account Status Updated Successfully');
     }
@@ -162,5 +162,15 @@ class SchoolManageController extends Controller
     public function SchoolExport()
     {
         return Excel::download(new SchoolExport, 'schools.xlsx');
+    }
+
+    public function getschools($value)
+    {
+         $value = trim($value);
+         $data = School::select('id', 'school_name', 'district')->where('district','LIKE',"%{$value}%")->get();
+         return response()->json([
+         'message'=>"All Schools Here",
+         'data'=>$data,
+        ]);
     }
 }
