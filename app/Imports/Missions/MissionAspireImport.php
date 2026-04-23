@@ -5,21 +5,27 @@ namespace App\Imports\Missions;
 use App\Models\MissionAspire;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class MissionAspireImport implements ToModel
+class MissionAspireImport implements ToModel, WithHeadingRow
 {
     /**
      * @return Model|null
      */
     public function model(array $row)
     {
+
         return new MissionAspire([
-            'district' => $row['district'] ?? null,
-            'school_name' => $row['school_name'] ?? null,
 
-            'total__enrolled_student' => $row['total_students_enrolled_at_start_of_year'] ?? null,
+            'district' => trim($row['district']) ?? null,
 
-            'dropouts_student' => $row['number_of_students_left_school_during_the_year_dropouts'] ?? null,
+            'school_name' => trim($row['school_name']) ?? null,
+
+            'school_code' => $row['school_code'] ?? null,
+
+            'total__enrolled_students' => $row['total_students_enrolled_at_start_of_year'] ?? null,
+
+            'dropouts_students' => $row['number_of_students_left_school_during_the_year_dropouts'] ?? null,
 
             'current_students_enrolled' => $row['current_students_enrolled_4_5'] ?? null,
 

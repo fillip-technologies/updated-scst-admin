@@ -22,6 +22,7 @@ class MissionAspireController extends Controller
 
     public function uploadMissionAspire(Request $request)
     {
+   
         $request->validate([
             'mission_section' => 'required',
             'upload_file' => 'required|file|mimes:xlsx,xls,csv',
@@ -29,17 +30,17 @@ class MissionAspireController extends Controller
 
         try {
 
-            if ($request->mission_section == '1') {
+            if ($request->mission_section === '1') {
                 Excel::import(new MissionAspireImport, $request->file('upload_file'));
-            } elseif ($request->mission_section == '2') {
+            } elseif ($request->mission_section === '2') {
                 Excel::import(new SchoolHelthReportImport, $request->file('upload_file'));
-            } elseif ($request->mission_section == '3') {
+            } elseif ($request->mission_section === '3') {
                 Excel::import(new TeacherStaffReportImport, $request->file('upload_file'));
-            } elseif ($request->mission_section == '4') {
+            } elseif ($request->mission_section === '4') {
                 Excel::import(new SchoolInfrastructureReportImport, $request->file('upload_file'));
-            } elseif ($request->mission_section == '5') {
+            } elseif ($request->mission_section === '5') {
                 Excel::import(new StudentActivityReportImport, $request->file('upload_file'));
-            } elseif ($request->mission_section == '6') {
+            } elseif ($request->mission_section === '6') {
                 Excel::import(new ParentEngagementReportImport, $request->file('upload_file'));
             } else {
                 Excel::import(new DistrictFinanceReportImport, $request->file('upload_file'));

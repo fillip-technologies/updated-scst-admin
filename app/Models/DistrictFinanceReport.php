@@ -9,6 +9,7 @@ class DistrictFinanceReport extends Model
    protected $table = 'district_finance_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'budget_allocated',
         'budget_utilised',

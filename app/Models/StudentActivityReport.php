@@ -10,6 +10,7 @@ class StudentActivityReport extends Model
     protected $table = 'student_activity_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'school_name',
         'total_students',

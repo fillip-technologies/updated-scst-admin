@@ -9,6 +9,7 @@ class TeacherStaffReport extends Model
     protected $table = 'teacher_staff_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'school_name',
         'sanctioned_teacher_posts',

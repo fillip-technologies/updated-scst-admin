@@ -13,6 +13,17 @@
         </script>
     @endif
 
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                showConfirmButton: true
+            });
+        </script>
+    @endif
+
     <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="w-full max-w-3xl">
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -45,7 +56,7 @@
                         @enderror
                     </div>
 
-                    
+
 
                     <div class="flex items-center gap-3 pt-2">
                         <button type="submit"

@@ -9,6 +9,7 @@ class SchoolInfrastructureReport extends Model
     protected $table = 'school_infrastructure_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'school_name',
         'adequate_classrooms',

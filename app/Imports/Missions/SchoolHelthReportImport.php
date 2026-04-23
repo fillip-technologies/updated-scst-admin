@@ -14,9 +14,11 @@ class SchoolHelthReportImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        // dd($row);
+
         return new SchoolHelthReport([
             'district' => $row['district'] ?? null,
-
+            'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,
 
             'students_tested_anaemia' => $row['total_students_tested_for_anaemia'] ?? null,
@@ -37,7 +39,7 @@ class SchoolHelthReportImport implements ToModel, WithHeadingRow
 
             'safe_drinking_water' => $row['safe_drinking_water_available_yes_no'] ?? null,
 
-            'kitchen_hygiene_score' => $row['kitchen_hygiene_score_0_100_based_on_cleanliness'] ?? null,
+            'kitchen_hygiene_score' => $row['kitchen_hygiene_score_00100_0_based_on_cleanliness'] ?? null,
 
             'mental_health_sessions' => $row['mental_health_counselling_sessions_conducted'] ?? null,
         ]);

@@ -9,6 +9,7 @@ class SchoolHelthReport extends Model
     protected $table = 'school_health_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'school_name',
         'students_tested_anaemia',

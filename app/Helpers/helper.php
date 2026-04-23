@@ -274,7 +274,7 @@ if (! function_exists('mission_aspire')) {
         return [
             '1' => 'Academic Excellence & Zero Dropout',
             '2' => 'Poshan & Student Health',
-            '3' => ' Teacher Welfare & Capacity Building',
+            '3' => 'Teacher Welfare & Capacity Building',
             '4' => 'Assured Minimum Infrastructure',
             '5' => 'Excellence & Personality Development',
             '6' => 'Parent & Community Engagements',

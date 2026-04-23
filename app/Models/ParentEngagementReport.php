@@ -10,6 +10,7 @@ class ParentEngagementReport extends Model
     protected $table = 'parent_engagement_reports';
 
     protected $fillable = [
+        'school_code',
         'district',
         'school_name',
         'ptm_conducted_count',
