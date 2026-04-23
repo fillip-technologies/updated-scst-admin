@@ -5,7 +5,7 @@ namespace App\Imports\Missions;
 use App\Models\TeacherStaffReport;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class TeacherStaffReport implements ToModel
+class TeacherStaffReportImport implements ToModel
 {
     /**
     * @param array $row
