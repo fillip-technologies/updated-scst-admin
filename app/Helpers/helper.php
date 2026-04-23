@@ -2,9 +2,9 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 if (! function_exists('districts')) {
 
@@ -242,8 +242,7 @@ if (! function_exists('getSchools')) {
     }
 }
 
-
-if (!function_exists('checkLoginAttempt')) {
+if (! function_exists('checkLoginAttempt')) {
 
     function checkLoginAttempt(User $user, $credentials, $redirectRoute)
     {
@@ -255,6 +254,7 @@ if (!function_exists('checkLoginAttempt')) {
             $user->login_attempts = 0;
             $user->lock_until = null;
             $user->save();
+
             return redirect()->route($redirectRoute);
         }
         $user->login_attempts += 1;
@@ -263,6 +263,22 @@ if (!function_exists('checkLoginAttempt')) {
         }
         $user->save();
         $remaining = 5 - $user->login_attempts;
+
         return back()->with('error', "Invalid Credentials. $remaining attempts left");
+    }
+}
+
+if (! function_exists('mission_aspire')) {
+    function mission_aspire()
+    {
+        return [
+            '1' => 'Academic Excellence & Zero Dropout',
+            '2' => 'Poshan & Student Health',
+            '3' => ' Teacher Welfare & Capacity Building',
+            '4' => 'Assured Minimum Infrastructure',
+            '5' => 'Excellence & Personality Development',
+            '6' => 'Parent & Community Engagements',
+            '7' => 'Governance, Digital Monitoring & Finance',
+        ];
     }
 }
