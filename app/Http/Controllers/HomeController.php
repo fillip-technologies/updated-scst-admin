@@ -9,6 +9,7 @@ use App\Models\LeaderMessage;
 use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
+use App\Models\SchemaInitiactive;
 use App\Models\School;
 use App\Models\StateSection;
 use App\Models\SubjectAdd;
@@ -448,7 +449,9 @@ class HomeController extends Controller
 
     public function schemes()
     {
-        return view('modules.department.website-cms.home.schemes');
+        $schemas = SchemaInitiactive::orderBy('id','desc')->paginate(2);
+        $editdata = null;
+        return view('modules.department.website-cms.home.schemes',compact('schemas','editdata'));
     }
 
     public function createScheme()

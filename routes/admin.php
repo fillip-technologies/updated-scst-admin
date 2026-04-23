@@ -111,6 +111,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::get('/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
         ->name('admin.department.cms.schemes');
+        Route::get('/schema/edit/{id}',[DepartmentCmsController::class, 'editschema'])->name('edit.schema');
+        Route::post('/update/schema/{id}',[DepartmentCmsController::class, 'updateschema'])->name('update.schema');
 
     Route::get('/department/website-cms/home/schemes/create', [HomeController::class, 'createScheme'])
         ->name('admin.department.cms.schemes.create');

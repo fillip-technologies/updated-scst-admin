@@ -13,14 +13,14 @@
                 </div>
             </div>
 
-            <div class="mb-6 flex justify-end">
+            {{-- <div class="mb-6 flex justify-end">
                 <a href="{{ route('admin.department.cms.schemes.edit') }}"
                     class="inline-flex items-center justify-center rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-yellow-400">
                     Edit
                 </a>
-            </div>
+            </div> --}}
 
-            <x-cms.department-website-cms.schemes.schemes-section />
+            <x-cms.department-website-cms.schemes.schemes-section :datas="$schemas" :editdata="$editdata"/>
         </div>
     </div>
 @endsection
