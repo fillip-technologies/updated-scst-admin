@@ -21,6 +21,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/school-management/create', function () {
         return view('modules.school-management.create');
     });
+Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->name('reset.admin.password');
+    Route::get('/profile',[HomeController::class, 'admin_profile'])->name('admin.profile');
     Route::post('/school/create', [SchoolManageController::class, 'AddSchool'])->name('save.school');
     Route::get('/edit/school/{id}', [SchoolManageController::class, 'EditSchool'])->name('edit.school');
     Route::get('/view/school/{id}', [SchoolManageController::class, 'ViewSchool'])->name('show.school');
@@ -36,6 +38,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/notice/delete/{id}', [MainNoticeController::class, 'NoticeDelete'])->name('admin.notice.delete');
     Route::get('/notice/export', [MainNoticeController::class, 'NoticeExport'])->name('admin.notice.export');
     Route::post('/notice/import', [MainNoticeController::class, 'NoticeImport'])->name('admin.notice.import');
+
 
     Route::view('/performance-analytics', 'modules.performance-management.index')
         ->name('performance.analytics');

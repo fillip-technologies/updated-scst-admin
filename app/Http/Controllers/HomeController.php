@@ -463,4 +463,12 @@ class HomeController extends Controller
     {
         return view('modules.department.website-cms.home.edit-schemes');
     }
+
+    public function admin_profile(){
+        return view('modules.dashboard.profile');
+    }
+
+    public function school_profile(){
+        return view('modules.school.dashboard.school_profile');
+    }
 }

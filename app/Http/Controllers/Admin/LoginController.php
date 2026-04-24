@@ -160,7 +160,7 @@ class LoginController extends Controller
 
     public function SystemLogin(Request $request)
     {
-      
+
         if ($request->login_type === 'school') {
 
             $request->validate([
@@ -238,4 +238,34 @@ class LoginController extends Controller
 
         return redirect()->route('teacher.singup');
     }
+
+    public function adminforgetpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'id' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        if ($request->password === $request->password_confirmation) {
+            $getdata = User::findOrFail($request->id);
+            if ($getdata->username === $request->email) {
+                
+                $data = [
+                    'password' => Hash::make($request->password),
+                ];
+
+                $getdata->update($data);
+
+                return back()->with('success', 'Password Reset SuccessFul');
+            } else {
+                return back()->with('error', 'Data not found');
+            }
+        } else {
+            return back()->with('error', 'Something went wrong');
+        }
+
+    }
+
+    public function schoolforgetpassword(Request $request) {}
 }
