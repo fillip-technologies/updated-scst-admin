@@ -46,8 +46,6 @@ class DepartmentCmsApiController extends Controller
     {
         try {
             $data = SchemaInitiactive::orderBy('id', 'desc')->first();
-
-            $data->minister = json_decode($data->state_section) ?? null;
             if (! empty($data)) {
                 return SuccessResponse(200, 'Schema Listing Here', $data);
             }
