@@ -14,9 +14,10 @@ class TeacherStaffReportImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+    
         return new TeacherStaffReport([
             'district' => $row['district'] ?? null,
-
+            'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,
 
             'sanctioned_teacher_posts' => $row['total_sanctioned_teacher_posts'] ?? null,
@@ -33,9 +34,9 @@ class TeacherStaffReportImport implements ToModel, WithHeadingRow
 
             'teacher_satisfaction_score' => $row['teacher_satisfaction_based_on_internal_survey_of_housing_salary_etc_0_100'] ?? null,
 
-            'teacher_training_conducted' => $row['teachers_development_training_conducted_yes_no'] ?? null,
+            'teacher_training_conducted' => $row['teachers_development_training_conducted_yesno'] ?? null,
 
-            'teacher_accommodation_available' => $row['teachers_accomodation_available_yes_no'] ?? null,
+            'teacher_accommodation_available' => $row['teachers_accomodation_available_yesno'] ?? null,
 
             'best_teacher_award_given' => $row['best_teacher_award_given_yes_no'] ?? null,
 
@@ -49,3 +50,5 @@ class TeacherStaffReportImport implements ToModel, WithHeadingRow
         ]);
     }
 }
+
+

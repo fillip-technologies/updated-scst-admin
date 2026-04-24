@@ -10,14 +10,14 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class DistrictFinanceReportImport implements ToModel, WithHeadingRow
 {
     /**
-     * @param array $row
      * @return Model|null
      */
     public function model(array $row)
     {
+
         return new DistrictFinanceReport([
             'district' => $row['district'] ?? null,
-
+            'school_code' => $row['school_code'] ?? null,
             'budget_allocated' => $row['total_budget_allocated_rs'] ?? null,
 
             'budget_utilised' => $row['total_budget_utilised_rs'] ?? null,
@@ -34,4 +34,3 @@ class DistrictFinanceReportImport implements ToModel, WithHeadingRow
         ]);
     }
 }
-

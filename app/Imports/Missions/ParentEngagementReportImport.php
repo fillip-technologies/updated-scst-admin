@@ -10,9 +10,10 @@ class ParentEngagementReportImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+     
         return new ParentEngagementReport([
             'district' => $row['district'] ?? null,
-
+            'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,
 
             'ptm_conducted_count' => $row['ptms_conducted_last_academic_year_count'] ?? null,
@@ -23,7 +24,7 @@ class ParentEngagementReportImport implements ToModel, WithHeadingRow
 
             'progress_reports_shared' => $row['total_number_of_progress_reports_per_students_shared_with_parents_during_last_academic_year'] ?? null,
 
-            'grievances_received' => $row['total_grievances_complaints_received_from_parents'] ?? null,
+            'grievances_received' => $row['total_grievancescomplaints_received_from_parents'] ?? null,
 
             'grievances_resolved' => $row['number_of_grievances_resolved'] ?? null,
 
@@ -31,3 +32,6 @@ class ParentEngagementReportImport implements ToModel, WithHeadingRow
         ]);
     }
 }
+
+
+

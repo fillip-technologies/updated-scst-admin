@@ -10,9 +10,10 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+
         return new StudentActivityReport([
             'district' => $row['district'] ?? null,
-
+            'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,
 
             'total_students' => $row['total_no_of_students'] ?? null,
@@ -21,7 +22,7 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
 
             'students_sports' => $row['students_participating_in_sports'] ?? null,
 
-            'students_district_state_sports' => $row['number_of_students_representing_school_in_district_state_sports'] ?? null,
+            'students_district_state_sports' => $row['number_of_students_representing_school_in_districtstate_sports'] ?? null,
 
             'career_guidance_sessions' => $row['career_guidance_sessions_conducted_this_year_number'] ?? null,
 
@@ -33,7 +34,7 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
 
             'enrolled_competitive_students' => $row['students_enrolled_in_competitive_exam_coaching'] ?? null,
 
-            'students_appearing_competitive' => $row['number_of_students_appearing_in_competitive_exams_jee_neet_ssc_etc'] ?? null,
+            'students_appearing_competitive' => $row['number_of_students_appearing_in_competitive_exams_jeeneetssc_etc'] ?? null,
 
             'annual_talent_festival' => $row['annual_talent_festival_conducted_yes_no'] ?? null,
 
@@ -41,3 +42,15 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
         ]);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
