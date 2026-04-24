@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -250,7 +251,7 @@ class LoginController extends Controller
         if ($request->password === $request->password_confirmation) {
             $getdata = User::findOrFail($request->id);
             if ($getdata->username === $request->email) {
-                
+
                 $data = [
                     'password' => Hash::make($request->password),
                 ];
@@ -267,5 +268,24 @@ class LoginController extends Controller
 
     }
 
-    public function schoolforgetpassword(Request $request) {}
+    public function schoolforgetpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'id' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+        if ($request->password === $request->password_confirmation) {
+            $getdata = User::where('school_id', $request->id);
+            $schooldata = School::findOrFail($request->id);
+                $data = [
+                    'password' => Hash::make($request->password),
+                ];
+                $getdata->update($data);
+                $schooldata->update($data);
+                return back()->with('success', 'Password Reset SuccessFul');
+        } else {
+            return back()->with('error', 'Something went wrong');
+        }
+    }
 }

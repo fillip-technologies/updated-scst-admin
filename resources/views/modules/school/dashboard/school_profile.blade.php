@@ -23,6 +23,15 @@
             });
         </script>
     @endif
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+            });
+        </script>
+    @endif
     <div class="min-h-screen bg-gray-100 flex  justify-center px-4">
         <div class="w-full max-w-md">
 
@@ -102,31 +111,43 @@
 
             <!-- Content -->
             <h2 class="text-xl font-semibold mb-3">Reset Password</h2>
-            <form id="resetForm" class="space-y-4">
-                <input type="hidden" value="{{ Auth::user()->role === 'school_admin' ? Auth::user()->school->id : '' }}">
+            <form id="resetForm" class="space-y-4" action="{{ route('reset.school.password') }}" method="POST">
+                @csrf
+                <input type="hidden" value="{{ Auth::user()->role === 'school_admin' ? Auth::user()->school->id : '' }}"
+                    name="id">
                 <!-- Email -->
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Email</label>
-                    <input type="email" id="email" readonly
-                        value="{{ Auth::user()->role === 'school_admin' ? Auth::user()->school->official_email : Auth::user()->username }}"
+                    <input type="email" id="email" readonly name="email"
+                        value="{{ old('email', Auth::user()->role === 'school_admin' ? Auth::user()->school->official_email : Auth::user()->username) }}"
                         class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                        placeholder="Enter your email" required>
+                        placeholder="Enter your email">
+                    @error('email')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- New Password -->
                 <div>
                     <label class="block text-sm font-medium text-gray-600">New Password</label>
-                    <input type="password" id="password"
+                    <input type="password" id="password" name="password" value="{{ old('password') }}"
                         class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                        placeholder="Enter new password" required>
+                        placeholder="Enter new password">
+                    @error('password')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Confirm Password -->
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Confirm Password</label>
-                    <input type="password" id="confirmPassword"
+                    <input type="password" id="confirmPassword" name="password_confirmation"
+                        value="{{ old('password_confirmation') }}"
                         class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                        placeholder="Confirm password" required>
+                        placeholder="Confirm password">
+                    @error('password_confirmation')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Error -->

@@ -49,7 +49,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/infra-info/store', [ReportManageController::class, 'infrReportSave'])->name('infra.store');
     Route::get('/infra/edit/{id}', [HomeController::class, 'editInfraInfo'])
         ->name('school.infra.edit');
-        
+        Route::post('/reset/password',[LoginController::class, 'schoolforgetpassword'])->name('reset.school.password');
     Route::post('/infra-info/update/{id}', [ReportManageController::class, 'infrReportUpdate'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
     Route::get('/create/createInfrastructure', [HomeController::class, 'createInfrastructure'])->name('school.infra.create');
