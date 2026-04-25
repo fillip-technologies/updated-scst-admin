@@ -14,18 +14,19 @@ use App\Models\School;
 use App\Models\StateSection;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
+use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Schema;
 
-use function Symfony\Component\Clock\now;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
     // Home page
     public function homePage()
     {
-        // dd(Hash::make('123456'));
+        //  dd(Hash::make('admin@123'));
         return view('auth.login');
     }
 

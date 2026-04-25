@@ -130,6 +130,6 @@ Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->
 
     // Imported Routes
 
-    Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire');
+    Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire'); //show mission
     Route::post('/upload/mission/aspire',[MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
 });

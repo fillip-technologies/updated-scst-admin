@@ -34,7 +34,8 @@
                 <form class="p-6 space-y-6" action="{{ route('upload.mission.aspire') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
-                    <div> <label for="class" class="block text-sm font-medium text-gray-700 mb-2">Select Missio Aspire</label>
+                    <div> <label for="class" class="block text-sm font-medium text-gray-700 mb-2">Select Missio
+                            Aspire</label>
                         <select id="class" name="mission_section"
                             class="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                             <option value="">Select Mission Field</option>
@@ -55,7 +56,11 @@
                             <span class="text-sm text-red-600">{{ $message }}</span>
                         @enderror
                     </div>
-
+                    <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                        <a href="{{ asset('missionASPIRE.zip') }}" class="text-blue-600 underline font-medium">
+                            Download Mission Aspire Excel
+                        </a>
+                    </div>
 
 
                     <div class="flex items-center gap-3 pt-2">
@@ -64,10 +69,7 @@
                             Upload
                         </button>
 
-                        <a href="#"
-                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition">
-                            Cancel
-                        </a>
+                       
                     </div>
                 </form>
             </div>
