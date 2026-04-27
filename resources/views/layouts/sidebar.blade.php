@@ -64,7 +64,7 @@
                     </svg>
                     Manage School
                 </a>
-                <a href="{{ route('mission.aspire') }}"
+                <a href="{{ route('mission.list') }}"
                     class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->is('mission/aspire') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 

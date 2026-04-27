@@ -7,17 +7,24 @@
     <title>SC/ST Admin Panel</title>
 
     <!-- Tailwind CDN -->
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
-<script src="{{ asset('sweetalert/sweetalert.js') }}"></script>
-<script src="{{ asset('staticfils/jquery.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('sweetalert/sweetalert.css') }}">
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script src="{{ asset('sweetalert/sweetalert.js') }}"></script>
+    <script src="{{ asset('staticfils/jquery.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('sweetalert/sweetalert.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 
+    <!-- jQuery (required) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body class="bg-gray-100 text-gray-800 antialiased">

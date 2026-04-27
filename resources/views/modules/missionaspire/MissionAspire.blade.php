@@ -64,12 +64,18 @@
 
 
                     <div class="flex items-center gap-3 pt-2">
+                         <button type="button" onclick="window.history.back()"
+                            class="inline-flex items-center justify-center px-5 py-2.5 border rounded-lg text-sm font-medium transition-colors duration-300 ease-in-out">
+                            Back
+                        </button>
                         <button type="submit"
                             class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition">
                             Upload
                         </button>
 
-                       
+
+
+
                     </div>
                 </form>
             </div>

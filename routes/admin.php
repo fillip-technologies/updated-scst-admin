@@ -130,6 +130,11 @@ Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->
 
     // Imported Routes
 
-    Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire'); //show mission
+    Route::get('listing/mission/aspire',[MissionAspireController::class,'list_mission'])->name('mission.list'); //show mission
+    Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire');
     Route::post('/upload/mission/aspire',[MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
+
+    //Missin Filtering
+
+    Route::get('/mission/type',[MissionAspireController::class, 'listofmission'])->name('list.search.mission');
 });

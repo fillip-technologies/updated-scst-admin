@@ -23,10 +23,8 @@ use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
-    // Home page
     public function homePage()
     {
-        //  dd(Hash::make('admin@123'));
         return view('auth.login');
     }
 
@@ -42,14 +40,12 @@ class HomeController extends Controller
             ->get()
             ->map(function ($school) {
 
-                // Counts
                 $students = $school->student->count();
                 $teachers = $school->teacher->count();
 
                 $school->student_count = $students;
                 $school->teacher_count = $teachers;
 
-                // Dropout
                 $dropoutStudents = $school->student->filter(function ($student) {
                     $absentDays = $student->attendance
                         ->where('status', 'absent')
@@ -64,7 +60,6 @@ class HomeController extends Controller
                     ? round(($dropoutStudents / $students) * 100, 2)
                     : 0;
 
-                // Attendance %
                 $totalAttendance = $school->attendance->count();
                 $present = $school->attendance->where('status', 'present')->count();
 
@@ -72,7 +67,6 @@ class HomeController extends Controller
                     ? round(($present / $totalAttendance) * 100, 2)
                     : 0;
 
-                // ✅ PASS STUDENTS LOGIC
                 $passStudents = $school->student->filter(function ($student) use ($school) {
 
                     // is student ke saare results
@@ -82,13 +76,11 @@ class HomeController extends Controller
                         return false;
                     }
 
-                    // check sab subjects pass hai ya nahi
                     return $results->every(function ($res) {
                         return $res->marks >= 33;
                     });
                 })->count();
 
-                // ✅ PASS %
                 $school->pass_percentage = $students > 0
                     ? round(($passStudents / $students) * 100, 2)
                     : 0;
@@ -347,7 +339,6 @@ class HomeController extends Controller
         return view('modules.school.teacher-attendance.create-teacher');
     }
 
-    // Admin
     public function notices()
     {
         $notices = MainNotice::all();
@@ -366,7 +357,7 @@ class HomeController extends Controller
         return redirect()->route('admin.notices.index');
     }
 
-    // ================= RESULT MODULE =================
+
 
     public function manageResult()
     {
