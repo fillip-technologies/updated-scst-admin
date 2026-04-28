@@ -66,7 +66,7 @@
                         class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                         📤 Upload Report
                     </button>
-                    
+
                     <button onclick="history.back()"
                         class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
                         ← Back
@@ -195,7 +195,7 @@
 
                                             <select name="leave_type"
                                                 class="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-gray-50">
-                                                <option value="">Select</option>
+                                                <option value="">Select Leave Type</option>
 
                                                 @foreach (leaveType() as $leave)
                                                     <option value="{{ $leave }}"
@@ -212,8 +212,7 @@
                                         <select name="status" onchange="this.form.submit()"
                                             class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white w-full">
 
-                                            <option value="">Update</option>
-
+                                            <option value="">Select Status</option>
                                             <option value="present" {{ $status == 'present' ? 'selected' : '' }}>✅ Present
                                             </option>
                                             <option value="absent" {{ $status == 'absent' ? 'selected' : '' }}>❌ Absent

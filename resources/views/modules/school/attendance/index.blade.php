@@ -261,7 +261,7 @@
 
                                                 <select name="status" onchange="this.form.submit()"
                                                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-
+                                                    <option >Select Marks</option>
                                                     <option value="present" {{ $status == 'present' ? 'selected' : '' }}>✅
                                                         Present</option>
                                                     <option value="absent" {{ $status == 'absent' ? 'selected' : '' }}>❌
