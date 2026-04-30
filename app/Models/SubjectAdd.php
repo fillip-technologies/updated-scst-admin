@@ -10,7 +10,7 @@ class SubjectAdd extends Model
 
     protected $table = 'subject_adds';
 
-    protected $fillable = ['sunject_name'];
+    protected $fillable = ['sunject_name','school_id'];
 
     public function topic()
     {
@@ -20,5 +20,9 @@ class SubjectAdd extends Model
     public function assingsubject()
     {
         return $this->hasMany(AssingSubject::class);
+    }
+
+    public function school(){
+        return $this->belongsTo(School::class);
     }
 }

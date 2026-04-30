@@ -71,25 +71,38 @@ class School extends Authenticatable
         return $this->hasMany(Teacher::class);
     }
 
-    public function teacherattend(){
+    public function teacherattend()
+    {
         return $this->hasMany(TeacherAttend::class);
     }
 
-    public function subject(){
+    public function subject()
+    {
         return $this->hasMany(SubjectAdd::class);
     }
 
-    public function attendance(){
-        return $this->hasMany(Attendance::class,'recorded_by');
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'recorded_by');
     }
 
-    public function result(){
+    public function result()
+    {
         return $this->hasMany(Result::class);
     }
 
-    public function assingsubject(){
+    public function assingsubject()
+    {
         return $this->hasMany(AssingSubject::class);
     }
 
+    public function addsubject()
+    {
+        return $this->hasMany(SubjectAdd::class);
+    }
 
+    public function topics()
+    {
+        return $this->hasMany(SubTopics::class);
+    }
 }
