@@ -40,7 +40,7 @@
                         @enderror
                     </div>
 
-                    <!-- Gender -->
+                
                     <div>
                         <label class="text-sm">Gender</label>
                         <select name="gender"

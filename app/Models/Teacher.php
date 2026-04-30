@@ -28,10 +28,6 @@ class Teacher extends Model
         return $this->hasMany(TeacherAttend::class);
     }
 
-    public function subject(){
-        return $this->hasMany(SubjectAdd::class);
-    }
-
     public function result(){
         return $this->hasMany(Result::class);
     }

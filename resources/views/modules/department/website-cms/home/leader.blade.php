@@ -22,20 +22,7 @@
                         Manage leader profile details and homepage message content for Minister, Secretary, and IAS Officer sections.
                     </p>
                 </div>
-
-                <!-- <div class="rounded-2xl border border-primary-800/10 bg-white px-5 py-4 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Route</p>
-                    <p class="mt-2 text-sm font-medium text-primary-900">/admin/department/website-cms/home/leader</p>
-                </div> -->
             </div>
-
-            <div class="mb-6 flex justify-end">
-                <a href="{{ route('admin.department.cms.leader.edit', ['type' => $type ?? 'minister']) }}"
-                    class="inline-flex items-center justify-center rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-yellow-400">
-                    Edit
-                </a>
-            </div>
-
             <x-cms.department-website-cms.leader.leader-section :type="$type" :allleaders="$allleaders" />
         </div>
     </div>

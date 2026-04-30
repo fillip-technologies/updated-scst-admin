@@ -32,10 +32,7 @@ class AddClasses extends Model
         return $this->hasMany(Teacher::class);
     }
 
-    public function subject()
-    {
-        return $this->hasMany(SubjectAdd::class);
-    }
+   
 
     public function result()
     {
