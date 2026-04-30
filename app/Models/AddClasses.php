@@ -32,10 +32,13 @@ class AddClasses extends Model
         return $this->hasMany(Teacher::class);
     }
 
-   
+
 
     public function result()
     {
         return $this->hasMany(Result::class);
+    }
+     public function assingsubject(){
+        return $this->hasMany(AssingSubject::class);
     }
 }

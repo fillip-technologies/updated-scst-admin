@@ -87,5 +87,9 @@ class School extends Authenticatable
         return $this->hasMany(Result::class);
     }
 
+    public function assingsubject(){
+        return $this->hasMany(AssingSubject::class);
+    }
+
 
 }

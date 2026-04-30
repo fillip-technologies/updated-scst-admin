@@ -31,4 +31,7 @@ class Teacher extends Model
     public function result(){
         return $this->hasMany(Result::class);
     }
+     public function assingsubject(){
+        return $this->hasMany(AssingSubject::class);
+    }
 }
