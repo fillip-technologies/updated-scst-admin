@@ -10,7 +10,7 @@ class AssingSubject extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['school_id', 'teacher_id', 'topics_id', 'class_id', 'subject_id'];
+    protected $fillable = ['school_id', 'teacher_id', 'topics_id', 'class_id', 'sublist_id'];
 
     public function school()
     {
@@ -34,6 +34,6 @@ class AssingSubject extends Model
 
     public function subject()
     {
-        return $this->belongsTo(SubjectAdd::class);
+        return $this->belongsTo(SubjectList::class);
     }
 }

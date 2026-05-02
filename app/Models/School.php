@@ -101,6 +101,10 @@ class School extends Authenticatable
         return $this->hasMany(SubjectAdd::class);
     }
 
+     public function subjectlist(){
+        return $this->hasMany(SubjectList::class);
+     }
+
     public function topics()
     {
         return $this->hasMany(SubTopics::class);

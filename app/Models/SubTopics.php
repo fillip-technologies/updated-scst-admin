@@ -8,10 +8,10 @@ class SubTopics extends Model
 {
     protected $table = "sub_topics";
     protected $primaryKey = 'id';
-    protected $fillable = ['subject_id','topics','school_id'];
+    protected $fillable = ['sublist_id','topics','school_id'];
 
-    public function subject(){
-        return $this->belongsTo(SubjectAdd::class);
+    public function subjectlist(){
+        return $this->belongsTo(SubjectList::class);
     }
      public function assingsubject(){
         return $this->hasMany(AssingSubject::class);
@@ -20,4 +20,6 @@ class SubTopics extends Model
      public function school(){
         return $this->belongsTo(School::class);
     }
+
+    protected $casts = ['topics'=>'array'];
 }

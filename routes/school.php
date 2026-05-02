@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
 use App\Http\Controllers\School\ExcelReportController;
 use App\Http\Controllers\School\InfrastructureController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\NoticeController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use App\Http\Controllers\SubjectManageController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('school')->middleware('school')->group(function () {
     Route::post('teacher/update/attendance', [TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
@@ -93,6 +95,12 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
     Route::post('/report/send', [ReportManageController::class, 'ReportUpload'])->name('report.save');
     Route::post('/meals/report', [ReportManageController::class, 'mealReport'])->name('meal.report');
+  //Syllabus
+
+    Route::get('/index/syllabus',[ManagementSyllabusController::class, 'indexsyllabus'])->name('syllabus.index');
+    Route::get('/create/syllabus',[ManagementSyllabusController::class,'createSyllabus'])->name('create.syllabus');
+    Route::post('/store/syllabus/topic',[ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
+    Route::post('/assing/subject',[ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
 
     // RouteCms-Wedsite
     Route::post('/update/school/faq', [ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
@@ -163,4 +171,6 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
     Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
+
+
 });

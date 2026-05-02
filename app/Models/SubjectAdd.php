@@ -10,19 +10,25 @@ class SubjectAdd extends Model
 
     protected $table = 'subject_adds';
 
-    protected $fillable = ['sunject_name','school_id'];
+    protected $fillable = ['school_id', 'teacher_id', 'class_id', 'subjects'];
 
-    public function topic()
+    public function allclass()
     {
-        return $this->hasMany(SubTopics::class);
+        return $this->belongsTo(AddClasses::class);
     }
 
-    public function assingsubject()
+    public function school()
     {
-        return $this->hasMany(AssingSubject::class);
-    }
-
-    public function school(){
         return $this->belongsTo(School::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function result()
+    {
+        return $this->hasMany(Result::class);
     }
 }

@@ -31,7 +31,7 @@
         <div class="flex items-center gap-3">
             @php
                 $user = Auth::user();
-
+$profile_route =null;
                 if ($user->role === 'school_admin' && $user->school) {
                     $name = $user->school->principle_name;
                     $profile_route = route('school.profile');
