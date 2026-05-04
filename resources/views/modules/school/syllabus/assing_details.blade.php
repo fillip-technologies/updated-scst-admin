@@ -26,7 +26,7 @@
 
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 class="text-xl font-semibold text-gray-800">Syllabus Managements</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Assing Subjects</h1>
                     <p class="text-sm text-gray-500">Mark and manage daily syllabus records.</p>
                 </div>
                 <a href="{{ route('create.syllabus') }}"
@@ -37,14 +37,16 @@
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
                 <div class="bg-white rounded-2xl shadow-sm border p-5">
-                    <h2 class="text-lg font-semibold text-gray-700 mb-3">School Details</h2>
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">School & Teacher Details</h2>
                     <div class="space-y-2 text-sm text-gray-600">
-                        <div><span class="font-semibold text-gray-800">Name:</span> {{ $school->school_name ?? '-' }}</div>
-                        <div><span class="font-semibold text-gray-800">Code:</span> {{ $school->school_code ?? '-' }}</div>
-                        <div><span class="font-semibold text-gray-800">District:</span> {{ $school->district ?? '-' }}</div>
-                        <div><span class="font-semibold text-gray-800">Address:</span> {{ $school->full_address ?? '-' }}</div>
-                        <div><span class="font-semibold text-gray-800">Email:</span> {{ $school->official_email ?? '-' }}</div>
-                        <div><span class="font-semibold text-gray-800">Phone:</span> {{ $school->school_phone ?? '-' }}</div>
+                        <div><span class="font-semibold text-gray-800">Name:</span> {{ $teacher->name ?? '-' }}</div>
+                        <div><span class="font-semibold text-gray-800">School Name:</span>
+                            {{ $teacher->school->school_name ?? '-' }}</div>
+                        <div><span class="font-semibold text-gray-800">Phone Number:</span>
+                            {{ $teacher->staff->phone ?? '-' }}</div>
+                        <div><span class="font-semibold text-gray-800">Email:</span> {{ $teacher->staff->email ?? '-' }}
+                        </div>
+                        {{-- <div><span class="font-semibold text-gray-800">Phone:</span> {{ $school->school_phone ?? '-' }}</div>  --}}
                     </div>
                 </div>
                 {{-- <div class="bg-white rounded-2xl shadow-sm border p-5">
@@ -89,7 +91,7 @@
 
             <div class="bg-white rounded-2xl shadow-md border border-gray-100">
                 <div class="flex justify-between items-center px-6 py-4 border-b">
-                    <h2 class="font-semibold text-lg text-gray-700">👩‍🏫 Syllabus  List</h2>
+                    <h2 class="font-semibold text-lg text-gray-700">👩‍🏫 Syllabus List</h2>
                 </div>
 
                 <div class="overflow-x-auto bg-white rounded-xl shadow">
@@ -103,7 +105,7 @@
                                 <th class="py-3 px-6 text-left">Subjects</th>
                                 <th class="py-3 px-6 text-left">Topics</th>
                                 <th class="py-3 px-6 text-left">Class</th>
-                                 <th class="py-3 px-6 text-left">Status</th>
+                                <th class="py-3 px-6 text-left">Status</th>
                                 <th class="py-3 px-6 text-center">Action</th>
                             </tr>
                         </thead>
@@ -112,7 +114,8 @@
                                 <tr class="bg-white hover:bg-gray-50">
                                     <td class="py-4 px-6 text-left">
                                         {{ $record->teacher->name ?? 'N/A' }}
-                                        <div class="text-xs text-gray-500 mt-1">{{ $record->teacher->designation ?? '' }}</div>
+                                        <div class="text-xs text-gray-500 mt-1">{{ $record->teacher->designation ?? '' }}
+                                        </div>
                                     </td>
                                     <td class="py-4 px-6 text-left">
                                         {{ $record->subject->subject_name ?? 'N/A' }}
@@ -130,11 +133,21 @@
                                     <td class="py-4 px-6 text-left">
                                         <span
                                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $record->status ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
-                                            {{ ucfirst($record->status ?? "" )}}
+                                            {{ ucfirst($record->status ?? '') }}
                                         </span>
                                     </td>
                                     <td class="py-4 px-6 text-center text-sm text-gray-500">
-                                        {{ $record->school->school_name ?? 'N/A' }}
+                                        <form action="{{ route('subject.status') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="sublist_id" value="{{ $record->sublist_id }}">
+                                            <input type="hidden" name="teacher_id" value="{{ TeacherLog()->staff_id ?? "" }}">
+                                            <select name="status" id="" class="w-full border rounded p-2" onchange="submit()">
+                                                <option value="">---Select Status---</option>
+                                                <option value="pending" @selected($record->status === 'pending')>Pending</option>
+                                                <option value="completed" @selected($record->status === 'completed')>Completed</option>
+                                            </select>
+                                        </form>
+
                                     </td>
                                 </tr>
                             @empty
@@ -246,7 +259,8 @@
 
             updateRowUI(row);
         });
-         function openModal() {
+
+        function openModal() {
             document.getElementById('uploadModal').classList.remove('hidden');
             document.getElementById('uploadModal').classList.add('flex');
         }

@@ -384,6 +384,14 @@
             </a>
 
 
+            <a href="{{ route('staff.assing.syllabus') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->routeIs('staff.school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+                <i
+                   class="fa-solid fa-book-open {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                Assing Syllabus
+            </a>
             <a href="{{ route('staff.school.attendance') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('staff.school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">

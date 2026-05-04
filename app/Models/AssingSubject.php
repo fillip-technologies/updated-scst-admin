@@ -24,7 +24,7 @@ class AssingSubject extends Model
 
     public function topic()
     {
-        return $this->belongsTo(SubTopics::class);
+        return $this->belongsTo(SubTopics::class, 'topics_id');
     }
 
     public function class()
@@ -34,6 +34,6 @@ class AssingSubject extends Model
 
     public function subject()
     {
-        return $this->belongsTo(SubjectList::class);
+        return $this->belongsTo(SubjectList::class, 'sublist_id');
     }
 }

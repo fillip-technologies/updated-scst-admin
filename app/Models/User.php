@@ -58,5 +58,9 @@ class User extends Authenticatable
         return $this->belongsTo(School::class);
     }
 
+    public function staff(){
+        return $this->belongsTo(Teacher::class,'staff_id');
+    }
+
 
 }

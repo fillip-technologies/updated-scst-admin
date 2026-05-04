@@ -6,7 +6,6 @@ use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\AddClasses;
 use App\Models\AssingSubject;
-use App\Models\SubjectAdd;
 use App\Models\SubjectList;
 use App\Models\SubTopics;
 use App\Models\Teacher;
@@ -16,8 +15,14 @@ class ManagementSyllabusController extends Controller
 {
     public function indexsyllabus()
     {
+        $school = SchoolLogin();
 
-        return view('modules.school.syllabus.index');
+        $records = AssingSubject::with(['class', 'school', 'teacher', 'subject', 'topic'])
+            ->where('school_id', $school->id)
+            ->get();
+        // dd($records);
+
+        return view('modules.school.syllabus.index', compact('school', 'records'));
     }
 
     public function createSyllabus()
@@ -62,7 +67,6 @@ class ManagementSyllabusController extends Controller
 
     public function assingSubject(Request $request)
     {
-
         $request->validate([
             'school_id' => 'required',
             'teacher_id' => 'required',
@@ -70,18 +74,53 @@ class ManagementSyllabusController extends Controller
             'sublist_id' => 'required',
         ]);
 
+        $topicId = SubTopics::where('sublist_id', $request->sublist_id)->value('id');
+
+        if (! $topicId) {
+            return back()->with('error', 'Topic not found');
+        }
         $data = [
             'school_id' => $request->school_id,
             'teacher_id' => $request->teacher_id,
             'sublist_id' => $request->sublist_id,
             'class_id' => $request->class_id,
+            'topics_id' => $topicId,
         ];
         $data = ManageCrud::createdatas(AssingSubject::class, $data);
         if ($data) {
-            return back()->with('success', 'Assing Subject SuccesFul');
+            return back()->with('success', 'Assign Subject Successful');
         } else {
             return back()->with('error', 'Something went wrong');
+        }
+    }
 
+    public function teachergetSyllabus()
+    {
+        $teacher = TeacherLog();
+
+        $records = AssingSubject::with(['class', 'school', 'teacher', 'topic', 'subject'])->where('teacher_id', TeacherLog()->staff_id ?? 0)->get();
+
+        return view('modules.school.syllabus.assing_details', compact('records', 'teacher'));
+    }
+
+    public function subject_status(Request $request)
+    {
+        $request->validate([
+            'teacher_id' => 'required',
+            'sublist_id' => 'required',
+            'status' => 'required',
+        ]);
+
+        $updated = AssingSubject::where('teacher_id', $request->teacher_id)
+            ->where('sublist_id', $request->sublist_id)
+            ->update([
+                'status' => $request->status,
+            ]);
+
+        if ($updated) {
+            return back()->with('success', 'Status Updated Successfully');
+        } else {
+            return back()->with('error', 'No record found');
         }
 
     }

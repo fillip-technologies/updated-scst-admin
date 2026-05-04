@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\ResultManageController;
 use App\Http\Controllers\School\SearchManageController;
@@ -67,5 +68,7 @@ Route::get('/search/student',[SearchManageController::class,'studentSearch'])->n
     Route::get('/list/reselt',[ResultManageController::class, 'ListResult'])->name('staff.result.list');
     Route::get('/get/filter/result',[ResultManageController::class, 'filterResult'])->name('filter.result');
 
+    Route::get('/teacher/get/syllabus',[ManagementSyllabusController::class, 'teachergetSyllabus'])->name('staff.assing.syllabus');
+    Route::post('/subject_status/',[ManagementSyllabusController::class, 'subject_status'])->name('subject.status');
 
 });
