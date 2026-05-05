@@ -29,10 +29,7 @@
                     <h1 class="text-xl font-semibold text-gray-800">Assing Subjects</h1>
                     <p class="text-sm text-gray-500">Mark and manage daily syllabus records.</p>
                 </div>
-                <a href="{{ route('create.syllabus') }}"
-                    class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm shadow-sm">
-                    <span>+ Add Syllabus</span>
-                </a>
+               
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">

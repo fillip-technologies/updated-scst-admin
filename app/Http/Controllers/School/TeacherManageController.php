@@ -6,11 +6,13 @@ use App\Exports\TeacherExport;
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Imports\TeacherImport;
+use App\Mail\TeacherRegMail;
 use App\Models\Teacher;
 use App\Models\TeacherAttend;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherManageController extends Controller
@@ -67,7 +69,7 @@ class TeacherManageController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'password'=>'required|min:6',
+            'password' => 'required|min:6',
             'designation' => 'required',
             'address' => 'required',
             'photo' => 'required|file|mimes:jpg,jpeg,png,webp',
@@ -103,13 +105,21 @@ class TeacherManageController extends Controller
         $data = ManageCrud::createdatas(Teacher::class, $data);
 
         User::create([
-            'name'=>$data->name,
-            'username'=>$data->email,
-            'password'=> Hash::make($request->password),
-            'school_id'=> SchoolLogin()->id,
-            'role'=>'staff',
-            'staff_id' => $data->id
+            'name' => $data->name,
+            'username' => $data->email,
+            'password' => Hash::make($request->password),
+            'school_id' => SchoolLogin()->id,
+            'role' => 'staff',
+            'staff_id' => $data->id,
         ]);
+
+        $emaildata = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'link' => route('teacher.singup'),
+        ];
+        Mail::to($request->email)->send(new TeacherRegMail($emaildata));
+
         if ($data) {
             return redirect('/school/teacher/list')->with('success', 'Teacher Added SuccessFul');
         } else {
@@ -120,7 +130,6 @@ class TeacherManageController extends Controller
 
     public function UpdateTeacher(Request $request, $id, $schoolId)
     {
-
 
         $teacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
@@ -211,4 +220,6 @@ class TeacherManageController extends Controller
 
         return redirect('/school/teacher/list')->with('success', 'Teacher Importted Successfully');
     }
+
+   
 }
