@@ -12,6 +12,7 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
     {
 
         return new StudentActivityReport([
+            'school_id' => SchoolLogin()->id ?? null,
             'district' => $row['district'] ?? null,
             'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,
@@ -42,15 +43,3 @@ class StudentActivityReportImport implements ToModel, WithHeadingRow
         ]);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

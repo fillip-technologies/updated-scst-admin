@@ -16,10 +16,10 @@ class DistrictFinanceReportImport implements ToModel, WithHeadingRow
     {
 
         return new DistrictFinanceReport([
+            'school_id'=> SchoolLogin()->id,
             'district' => $row['district'] ?? null,
             'school_code' => $row['school_code'] ?? null,
             'budget_allocated' => $row['total_budget_allocated_rs'] ?? null,
-
             'budget_utilised' => $row['total_budget_utilised_rs'] ?? null,
 
             'audit_status' => $row['audit_compliance_status_compliant_pending_non_compliant'] ?? null,

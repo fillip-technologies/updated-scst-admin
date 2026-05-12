@@ -12,6 +12,7 @@ class ParentEngagementReport extends Model
     protected $fillable = [
         'school_code',
         'district',
+        'school_id',
         'school_name',
         'ptm_conducted_count',
         'parents_invited_last_ptm',
@@ -21,4 +22,9 @@ class ParentEngagementReport extends Model
         'grievances_resolved',
         'committee_active',
     ];
+
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

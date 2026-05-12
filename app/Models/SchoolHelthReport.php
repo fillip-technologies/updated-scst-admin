@@ -11,6 +11,7 @@ class SchoolHelthReport extends Model
     protected $fillable = [
         'school_code',
         'district',
+        'school_id',
         'school_name',
         'students_tested_anaemia',
         'anaemic_students_found',
@@ -24,4 +25,8 @@ class SchoolHelthReport extends Model
         'kitchen_hygiene_score',
         'mental_health_sessions',
     ];
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

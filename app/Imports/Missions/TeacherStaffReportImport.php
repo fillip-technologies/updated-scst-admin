@@ -14,8 +14,9 @@ class TeacherStaffReportImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-    
+
         return new TeacherStaffReport([
+            'school_id'=> SchoolLogin()->id ?? null,
             'district' => $row['district'] ?? null,
             'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,

@@ -10,6 +10,7 @@ class SchoolInfrastructureReport extends Model
 
     protected $fillable = [
         'school_code',
+        'school_id',
         'district',
         'school_name',
         'adequate_classrooms',
@@ -28,4 +29,8 @@ class SchoolInfrastructureReport extends Model
         'smart_classroom_operational',
         'infrastructure_audit_completed',
     ];
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

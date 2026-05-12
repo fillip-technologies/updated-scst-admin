@@ -10,8 +10,9 @@ class ParentEngagementReportImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-     
+
         return new ParentEngagementReport([
+            'school_id'=> SchoolLogin()->id ?? null,
             'district' => $row['district'] ?? null,
             'school_code' => $row['school_code'] ?? null,
             'school_name' => $row['school_name'] ?? null,

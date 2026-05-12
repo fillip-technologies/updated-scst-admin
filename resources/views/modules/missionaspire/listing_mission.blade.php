@@ -7,7 +7,8 @@
 
             <div class="flex items-center gap-4 justify-between">
 
-                <form action="{{ route('list.search.mission') }}" method="GET">
+                <form action="{{ route('school.list.search.mission') }}" method="GET">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? "" }}">
                     <select name="mission" id="mission" onchange="submit()"
                         class="px-4 py-2.5 rounded border border-gray-300 bg-gray-50 w-80
                    text-sm text-gray-700
@@ -28,7 +29,7 @@
                     <form action="" method="GET" id="formfield" class="flex gap-3"></form>
                 </div> --}}
 
-                <a href="{{ route('mission.aspire') }}"
+                <a href="{{ route('school.mission.aspire') }}"
                     class="text-sm font-medium text-white transition bg-blue-500 p-3 rounded-xl">
                     + Add Mission Aspire
                 </a>

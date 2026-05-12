@@ -68,31 +68,31 @@ class MissionAspireController extends Controller
     {
         $mission = trim($request->mission);
         if ($mission == 1) {
-            $reports = MissionAspire::orderBy('id', 'desc')->get();
+            $reports = MissionAspire::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.academic_excellenc', compact('reports'));
         } elseif ($mission == 2) {
-            $reports = SchoolHelthReport::orderBy('id', 'desc')->get();
+            $reports = SchoolHelthReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.school_helth', compact('reports'));
         } elseif ($mission == 3) {
-            $reports = TeacherStaffReport::orderBy('id', 'desc')->get();
+            $reports = TeacherStaffReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.teacher_staff', compact('reports'));
         } elseif ($mission == 4) {
-            $reports = SchoolInfrastructureReport::orderBy('id', 'desc')->get();
+            $reports = SchoolInfrastructureReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.school_infra', compact('reports'));
         } elseif ($mission == 5) {
-            $reports = StudentActivityReport::orderBy('id', 'desc')->get();
+            $reports = StudentActivityReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.student_activity', compact('reports'));
         } elseif ($mission == 6) {
-            $reports = ParentEngagementReport::orderBy('id', 'desc')->get();
+            $reports = ParentEngagementReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.parent_engagement', compact('reports'));
         } else {
-            $reports = DistrictFinanceReport::orderBy('id', 'desc')->get();
+            $reports = DistrictFinanceReport::where('school_id', $request->school_id)->orderBy('id', 'desc')->get();
 
             return view('modules.missionaspire.filter-tabs.financial_report', compact('reports'));
         }
