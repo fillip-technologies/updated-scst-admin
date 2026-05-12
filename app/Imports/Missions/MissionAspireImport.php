@@ -14,9 +14,8 @@ class MissionAspireImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-
         return new MissionAspire([
-
+            'school_id'=> SchoolLogin()->id ?? null,
             'district' => trim($row['district']) ?? null,
 
             'school_name' => trim($row['school_name']) ?? null,

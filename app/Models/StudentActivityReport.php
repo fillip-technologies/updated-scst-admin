@@ -11,6 +11,7 @@ class StudentActivityReport extends Model
 
     protected $fillable = [
         'school_code',
+        'school_id',
         'district',
         'school_name',
         'total_students',
@@ -26,4 +27,8 @@ class StudentActivityReport extends Model
         'annual_talent_festival',
         'debate_events_count',
     ];
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

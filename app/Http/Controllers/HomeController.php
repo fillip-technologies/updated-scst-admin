@@ -7,6 +7,7 @@ use App\Models\AddClasses;
 use App\Models\InfraReport;
 use App\Models\LeaderMessage;
 use App\Models\MainNotice;
+use App\Models\MealReport;
 use App\Models\Notices;
 use App\Models\Report;
 use App\Models\SchemaInitiactive;
@@ -135,14 +136,17 @@ class HomeController extends Controller
         return view('modules.performance-management.index');
     }
 
-    public function allreport()
-    {
-        $allSchools = School::select('id', 'school_name')->get();
-        $reports = Report::with('school')->get();
-        $infrReports = InfraReport::with('school')->get();
+   public function allreport()
+{
+    $allSchools = School::select('id', 'school_name')->get();
 
-        return view('modules.reports.index', compact('allSchools', 'reports', 'infrReports'));
-    }
+    $reports = Report::with('school')->get();
+    $infrReports = InfraReport::with('school')->get();
+    $mealReports = MealReport::with('school')->get();
+    $reports = $reports
+        ->merge($mealReports);
+    return view('modules.reports.index', compact('allSchools', 'reports','infrReports'));
+}
 
     public function createInfrastructure()
     {

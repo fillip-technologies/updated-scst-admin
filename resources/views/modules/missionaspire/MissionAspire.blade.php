@@ -31,7 +31,7 @@
                     <h2 class="font-semibold text-gray-700">Upload Excel File</h2>
                 </div>
 
-                <form class="p-6 space-y-6" action="{{ route('upload.mission.aspire') }}" method="POST"
+                <form class="p-6 space-y-6" action="{{ route('school.upload.mission.aspire') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div> <label for="class" class="block text-sm font-medium text-gray-700 mb-2">Select Missio

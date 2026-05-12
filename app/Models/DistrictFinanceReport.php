@@ -10,6 +10,7 @@ class DistrictFinanceReport extends Model
 
     protected $fillable = [
         'school_code',
+        'school_id',
         'district',
         'budget_allocated',
         'budget_utilised',
@@ -19,4 +20,8 @@ class DistrictFinanceReport extends Model
         'last_submission_date',
         'dashboard_updated',
     ];
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

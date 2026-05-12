@@ -251,6 +251,14 @@
                     class="fa-solid fa-user-check {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Student Attendance
             </a>
+            <a href="{{ route('school.mission.list') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->is('mission/aspire') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+                <i
+                    class="fa-solid fa-school {{ request()->is('mission/aspire') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                Mission ASPIRE
+            </a>
 
             <a href="{{ route('syllabus.index') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl transition
@@ -389,7 +397,7 @@
         {{ request()->routeIs('staff.school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
                 <i
-                   class="fa-solid fa-book-open {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                    class="fa-solid fa-book-open {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Assing Syllabus
             </a>
             <a href="{{ route('staff.school.attendance') }}"

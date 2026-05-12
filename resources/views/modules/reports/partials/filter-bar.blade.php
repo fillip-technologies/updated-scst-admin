@@ -119,7 +119,7 @@
             var value = $(this).val();
 
             $.ajax({
-                url: "/get/school/" + value,
+                url: "{{ url('school/get/school/ ')}}" + value,
                 type: "GET",
                 success: function(res) {
 

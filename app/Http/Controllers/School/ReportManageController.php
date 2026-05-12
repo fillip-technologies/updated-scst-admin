@@ -86,7 +86,6 @@ class ReportManageController extends Controller
 
     public function showallReport(Request $request)
     {
-
         $request->validate([
             'district' => 'required',
             'school_id' => 'required',
@@ -98,27 +97,45 @@ class ReportManageController extends Controller
         $school_id = trim($request->school_id);
         $type = trim($request->report_type);
         $district = trim($request->district);
+
         $allSchools = School::select('id', 'school_name')->get();
-        $reportData = Report::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('report_type', $type)
-            ->where('district', $district)
+
+        $reportData = Report::with('school')
+            ->where([
+                'report_category' => $category,
+                'school_id' => $school_id,
+                'report_type' => $type,
+                'district' => $district,
+            ])
             ->get();
 
-        $mealData = MealReport::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('report_type', $type)
-            ->where('district', $district)
+        $mealData = MealReport::with('school')
+            ->where([
+                'report_category' => $category,
+                'school_id' => $school_id,
+                'report_type' => $type,
+                'district' => $district,
+            ])
             ->get();
 
-        $infrReports = InfraReport::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('district', $district)
+        $infrReports = InfraReport::with('school')
+            ->where([
+                'report_category' => $category,
+                'school_id' => $school_id,
+                'district' => $district,
+            ])
             ->get();
-        $reports = $reportData->merge($mealData);
 
-        return view('modules.reports.index', compact('reports', 'allSchools', 'infrReports'));
+      
+        $reports = $reportData
+            ->merge($mealData)
+            ->merge($infrReports);
 
+
+        return view(
+            'modules.reports.index',
+            compact('reports', 'allSchools')
+        );
     }
 
     public function infrReportSave(Request $request)

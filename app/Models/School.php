@@ -101,12 +101,50 @@ class School extends Authenticatable
         return $this->hasMany(SubjectAdd::class);
     }
 
-     public function subjectlist(){
+    public function subjectlist()
+    {
         return $this->hasMany(SubjectList::class);
-     }
+    }
 
     public function topics()
     {
         return $this->hasMany(SubTopics::class);
+    }
+
+
+    
+    public function districFinancialReport()
+    {
+        return $this->hasMany(DistrictFinanceReport::class);
+    }
+
+    public function missioaspire()
+    {
+        return $this->hasMany(MissionAspire::class);
+    }
+
+    public function parentengreport()
+    {
+        return $this->hasMany(ParentEngagementReport::class);
+    }
+
+    public function schoolhelreport()
+    {
+        return $this->hasMany(SchoolHelthReport::class);
+    }
+
+    public function schoolinfrareport()
+    {
+        return $this->hasMany(SchoolInfrastructureReport::class);
+    }
+
+    public function studentactivityreport()
+    {
+        return $this->hasMany(StudentActivityReport::class);
+    }
+
+    public function teacherstaffreport()
+    {
+        return $this->hasMany(TeacherStaffReport::class);
     }
 }

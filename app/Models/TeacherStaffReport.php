@@ -11,6 +11,7 @@ class TeacherStaffReport extends Model
     protected $fillable = [
         'school_code',
         'district',
+        'school_id',
         'school_name',
         'sanctioned_teacher_posts',
         'teachers_posted_departmental',
@@ -27,4 +28,8 @@ class TeacherStaffReport extends Model
         'filled_non_teaching_posts',
         'vacant_non_teaching_posts',
     ];
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
 }

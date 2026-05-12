@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\MissionAspireController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
 use App\Http\Controllers\School\ExcelReportController;
@@ -51,7 +52,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/infra-info/store', [ReportManageController::class, 'infrReportSave'])->name('infra.store');
     Route::get('/infra/edit/{id}', [HomeController::class, 'editInfraInfo'])
         ->name('school.infra.edit');
-        Route::post('/reset/password',[LoginController::class, 'schoolforgetpassword'])->name('reset.school.password');
+    Route::post('/reset/password', [LoginController::class, 'schoolforgetpassword'])->name('reset.school.password');
     Route::post('/infra-info/update/{id}', [ReportManageController::class, 'infrReportUpdate'])->name('school.infra.update');
     Route::post('/create/faq/section', [ManageSchoolController::class, 'SaveFaqSection'])->name('faq.save');
     Route::get('/create/createInfrastructure', [HomeController::class, 'createInfrastructure'])->name('school.infra.create');
@@ -95,12 +96,12 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/student/addmition', [StudentManageController::class, 'createStudent'])->name('addmition.student');
     Route::post('/report/send', [ReportManageController::class, 'ReportUpload'])->name('report.save');
     Route::post('/meals/report', [ReportManageController::class, 'mealReport'])->name('meal.report');
-  //Syllabus
+    // Syllabus
 
-    Route::get('/index/syllabus',[ManagementSyllabusController::class, 'indexsyllabus'])->name('syllabus.index');
-    Route::get('/create/syllabus',[ManagementSyllabusController::class,'createSyllabus'])->name('create.syllabus');
-    Route::post('/store/syllabus/topic',[ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
-    Route::post('/assing/subject',[ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
+    Route::get('/index/syllabus', [ManagementSyllabusController::class, 'indexsyllabus'])->name('syllabus.index');
+    Route::get('/create/syllabus', [ManagementSyllabusController::class, 'createSyllabus'])->name('create.syllabus');
+    Route::post('/store/syllabus/topic', [ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
+    Route::post('/assing/subject', [ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
 
     // RouteCms-Wedsite
     Route::post('/update/school/faq', [ManageSchoolUpdateController::class, 'UpdateFaqSection'])->name('faq.update');
@@ -172,5 +173,10 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
     Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
 
-
+    Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('school.mission.list');
+    Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('school.mission.aspire');
+    Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('school.upload.mission.aspire');
+    // Missin Filtering
+    Route::get('/mission/type', [MissionAspireController::class, 'listofmission'])->name('school.list.search.mission');
 });
+
