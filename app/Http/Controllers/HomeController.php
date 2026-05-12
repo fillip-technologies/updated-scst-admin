@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ManageCrud;
 use App\Models\AddClasses;
+use App\Models\DistrictFinanceReport;
 use App\Models\InfraReport;
 use App\Models\LeaderMessage;
 use App\Models\MainNotice;
 use App\Models\MealReport;
+use App\Models\MissionAspire;
 use App\Models\Notices;
+use App\Models\ParentEngagementReport;
 use App\Models\Report;
 use App\Models\SchemaInitiactive;
 use App\Models\School;
+use App\Models\SchoolHelthReport;
+use App\Models\SchoolInfrastructureReport;
 use App\Models\StateSection;
+use App\Models\StudentActivityReport;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
+use App\Models\TeacherStaffReport;
 use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -134,6 +141,87 @@ class HomeController extends Controller
     public function performance()
     {
         return view('modules.performance-management.index');
+    }
+
+    public function missionAspire(Request $request)
+    {
+        $districts = School::select('district')
+            ->whereNotNull('district')
+            ->groupBy('district')
+            ->orderBy('district')
+            ->pluck('district');
+
+        $schools = School::select('id', 'school_name', 'district')
+            ->orderBy('school_name')
+            ->get();
+
+        $reports = collect();
+        $filters = $request->only(['district', 'school', 'mission_aspire']);
+
+        if ($request->filled('mission_aspire')) {
+            $reports = $this->missionAspireReportQuery($request)->get();
+        }
+
+        return view('modules.missionaspire.index', [
+            'districts' => $districts,
+            'schools' => $schools,
+            'missionOptions' => mission_aspire(),
+            'reports' => $reports,
+            'filters' => $filters,
+        ]);
+    }
+
+    public function missionAspireReport(Request $request)
+    {
+        $reports = $request->filled('mission_aspire')
+            ? $this->missionAspireReportQuery($request)->get()
+            : collect();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('modules.missionaspire.partials.report-table', [
+                    'reports' => $reports,
+                    'selectedMission' => $request->input('mission_aspire'),
+                ])->render(),
+            ]);
+        }
+
+        return $this->missionAspire($request);
+    }
+
+    public function missionAspireSchools($district)
+    {
+        $schools = School::select('id', 'school_name', 'district')
+            ->where('district', $district)
+            ->orderBy('school_name')
+            ->get();
+
+        return response()->json([
+            'data' => $schools,
+        ]);
+    }
+
+    private function missionAspireReportQuery(Request $request)
+    {
+        $modelClass = $this->missionAspireModelMap()[$request->input('mission_aspire')] ?? DistrictFinanceReport::class;
+
+        return $modelClass::query()
+            ->when($request->filled('district'), fn ($query) => $query->where('district', $request->input('district')))
+            ->when($request->filled('school'), fn ($query) => $query->where('school_id', $request->input('school')))
+            ->orderByDesc('id');
+    }
+
+    private function missionAspireModelMap(): array
+    {
+        return [
+            '1' => MissionAspire::class,
+            '2' => SchoolHelthReport::class,
+            '3' => TeacherStaffReport::class,
+            '4' => SchoolInfrastructureReport::class,
+            '5' => StudentActivityReport::class,
+            '6' => ParentEngagementReport::class,
+            '7' => DistrictFinanceReport::class,
+        ];
     }
 
    public function allreport()

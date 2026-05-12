@@ -52,6 +52,14 @@ Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->
     Route::get('/reports/data', [HomeController::class, 'getReportsData'])
         ->name('reports.data');
 
+    // Mission Aspire
+    Route::get('/mission-aspire', [HomeController::class, 'missionAspire'])
+        ->name('admin.mission.aspire');
+    Route::get('/mission-aspire/report', [HomeController::class, 'missionAspireReport'])
+        ->name('admin.mission.aspire.report');
+    Route::get('/mission-aspire/schools/{district}', [HomeController::class, 'missionAspireSchools'])
+        ->name('admin.mission.aspire.schools');
+
     // Approvals
     Route::view('/approvals', 'modules.approvals.index')
         ->name('approvals');

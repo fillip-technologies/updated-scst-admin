@@ -78,6 +78,18 @@
                 Manage Notices
             </a>
 
+            <a href="{{ route('admin.mission.aspire') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition {{ request()->routeIs('admin.mission.aspire*') ? 'bg-primary-800 text-white' : 'text-gray-300 hover:bg-primary-800' }}">
+
+                <svg class="w-5 h-5 {{ request()->routeIs('admin.mission.aspire*') ? 'text-accent-500' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="1.8"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6V3m0 3a4 4 0 014 4v1h1a2 2 0 012 2v3H5v-3a2 2 0 012-2h1v-1a4 4 0 014-4zm0 0a4 4 0 00-4 4v1h8v-1a4 4 0 00-4-4zm-3 13h6" />
+                </svg>
+
+                Mission Aspire
+            </a>
+
 
 
 
@@ -239,10 +251,20 @@
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
-                <i
-                    class="fa-solid fa-user-check {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-                Student Attendance
-            </a>
+            <i
+                class="fa-solid fa-user-check {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Student Attendance
+        </a>
+
+
+        <a href="{{ route('school.mission.list') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->routeIs('school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+            <i
+                class="fa-solid fa-user-check {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Mission ASPIRE
+        </a>
 
         <a href="{{ route('syllabus.index') }}"
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
@@ -380,12 +402,12 @@
             class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('staff.school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
-                <i
-                   class="fa-solid fa-book-open {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-                Assing Syllabus
-            </a>
-            <a href="{{ route('staff.school.attendance') }}"
-                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+            <i
+                class="fa-solid fa-book-open {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Assing Syllabus
+        </a>
+        <a href="{{ route('staff.school.attendance') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('staff.school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
             <i
