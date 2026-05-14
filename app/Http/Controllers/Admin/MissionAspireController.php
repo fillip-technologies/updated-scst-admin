@@ -149,7 +149,6 @@ class MissionAspireController extends Controller
                 $datacolum = Schema::getColumnListing('district_finance_reports');
             }
         }
-
         return view('modules.missionaspire.index', compact('datacolum', 'reports'));
 
     }

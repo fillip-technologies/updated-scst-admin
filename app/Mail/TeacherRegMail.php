@@ -29,7 +29,7 @@ class TeacherRegMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Teacher Registratiob Mail',
+            subject: 'Teacher Registration Mail',
         );
     }
 

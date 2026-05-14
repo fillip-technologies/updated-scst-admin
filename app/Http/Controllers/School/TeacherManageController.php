@@ -194,7 +194,8 @@ class TeacherManageController extends Controller
     {
         $getteacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
+            User::where('staff_id',$getteacher->id)->delete();
         if ($getteacher) {
             $getteacher->delete();
 
@@ -221,5 +222,5 @@ class TeacherManageController extends Controller
         return redirect('/school/teacher/list')->with('success', 'Teacher Importted Successfully');
     }
 
-   
+
 }
