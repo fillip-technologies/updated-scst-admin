@@ -47,23 +47,30 @@ document.addEventListener("DOMContentLoaded", function () {
             </p>
         </div>
 
-        <!-- Main Grid -->
-        <div class="grid grid-cols-3 gap-6">
+        <!-- Main Panel -->
+        <div class="flex justify-center">
 
             <!-- LEFT PANEL -->
-            <form action="{{ route('notification.send') }}" method="POST">
+            <form action="{{ route('notification.send') }}" method="POST" class="w-full max-w-2xl">
                 @csrf
-                <div class="col-span-1 bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-lg shadow-slate-200/70 p-6 sm:p-8">
 
                     <!-- Title -->
-                    <div class="flex items-center gap-3 mb-6">
-                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.8"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l9-7 9 7-9 7-9-7z" />
-                        </svg>
-                        <h2 class="font-semibold text-gray-800">
-                            Send Broadcast
-                        </h2>
+                    <div class="mb-7 flex items-center gap-4 border-b border-gray-100 pb-5">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-900 text-white shadow-md">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l9-7 9 7-9 7-9-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900">
+                                Send Broadcast
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Create and send a notification to the selected recipients.
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Recipient -->
@@ -117,154 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 </div>
             </form>
-
-
-
-            <!-- RIGHT PANEL -->
-            <div class="col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm">
-
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="font-semibold text-gray-800">
-                        Recent Notifications History
-                    </h2>
-                </div>
-
-                <div class="divide-y">
-
-                    <!-- Notification Item 1 -->
-                    <div class="p-6 flex justify-between items-start">
-
-                        <div class="flex gap-4">
-
-                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5" />
-                                </svg>
-                            </div>
-
-                            <div>
-                                <h3 class="font-semibold text-gray-800">
-                                    System Maintenance Scheduled
-                                </h3>
-                                <p class="text-sm text-gray-500 mt-1">
-                                    The portal will be down for maintenance on Sunday, 2 AM - 4 AM.
-                                </p>
-
-                                <div class="flex items-center gap-4 mt-3 text-xs">
-                                    <span class="bg-gray-100 px-2 py-1 rounded-md text-gray-600">
-                                        Sent to: All Schools
-                                    </span>
-                                    <span class="text-green-600 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Delivered
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <span class="text-xs text-gray-400">
-                            2 hours ago
-                        </span>
-
-                    </div>
-
-
-                    
-                    <div class="p-6 flex justify-between items-start">
-
-                        <div class="flex gap-4">
-
-                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
-                                    viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01" />
-                                </svg>
-                            </div>
-
-                            <div>
-                                <h3 class="font-semibold text-gray-800">
-                                    New Policy Update
-                                </h3>
-                                <p class="text-sm text-gray-500 mt-1">
-                                    Updated dietary guidelines have been uploaded to the documents section.
-                                </p>
-
-                                <div class="flex items-center gap-4 mt-3 text-xs">
-                                    <span class="bg-gray-100 px-2 py-1 rounded-md text-gray-600">
-                                        Sent to: All Schools
-                                    </span>
-                                    <span class="text-green-600 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Delivered
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <span class="text-xs text-gray-400">
-                            Yesterday
-                        </span>
-
-                    </div>
-
-
-                    <!-- Notification Item 3 -->
-                    <div class="p-6 flex justify-between items-start">
-
-                        <div class="flex gap-4">
-
-                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 9v4m0 4h.01M10.29 3.86l-7.12 12.3A2 2 0 004.9 19h14.2a2 2 0 001.73-2.84l-7.12-12.3a2 2 0 00-3.46 0z" />
-                                </svg>
-                            </div>
-
-                            <div>
-                                <h3 class="font-semibold text-gray-800">
-                                    Urgent: Weather Alert
-                                </h3>
-                                <p class="text-sm text-gray-500 mt-1">
-                                    All schools in Patna district to remain closed tomorrow due to heavy rains.
-                                </p>
-
-                                <div class="flex items-center gap-4 mt-3 text-xs">
-                                    <span class="bg-gray-100 px-2 py-1 rounded-md text-gray-600">
-                                        Sent to: All Schools
-                                    </span>
-                                    <span class="text-green-600 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Delivered
-                                    </span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <span class="text-xs text-gray-400">
-                            2 days ago
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
 
         </div>
 
