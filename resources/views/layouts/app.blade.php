@@ -29,19 +29,25 @@
 
 <body class="bg-gray-100 text-gray-800 antialiased">
 
-    <div class="flex min-h-screen">
+    <div x-data="{ sidebarOpen: false }" x-on:keydown.escape.window="sidebarOpen = false" class="min-h-screen">
 
         <!-- SIDEBAR -->
-        <aside class="w-[280px] bg-primary-900 fixed inset-y-0 left-0">
+        <div x-cloak x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-40 bg-gray-950/50 lg:hidden"
+            x-on:click="sidebarOpen = false"></div>
+
+        <aside
+            class="fixed inset-y-0 left-0 z-50 w-[280px] -translate-x-full bg-primary-900 shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 lg:shadow-none"
+            x-bind:class="sidebarOpen ? '!translate-x-0' : ''"
+            x-on:click="if ($event.target.closest('a') && window.innerWidth < 1024) sidebarOpen = false">
             @include('layouts.sidebar')
         </aside>
 
         <!-- MAIN WRAPPER -->
-        <div class="flex-1 flex flex-col ml-[280px] min-h-screen">
+        <div class="flex min-h-screen flex-col lg:ml-[280px]">
 
             @include('layouts.topbar')
 
-            <main class="flex-1 p-8 bg-gray-100">
+            <main class="flex-1 bg-gray-100 p-4 sm:p-6 lg:p-8">
                 @yield('content')
             </main>
 

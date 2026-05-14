@@ -1,20 +1,28 @@
-<header class="h-[88px] bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-10">
+<header class="min-h-[72px] bg-white border-b border-gray-200 shadow-sm flex items-center justify-between gap-4 px-4 sm:px-6 lg:h-[88px] lg:px-10">
 
-    @if (Auth::user()->role === 'admin')
-        <h1 class="text-xl font-semibold text-gray-800">
-            Department of SC & ST Welfare
-        </h1>
-    @elseif(Auth::user()->role === 'school_admin')
-        <h1 class="text-xl font-semibold text-gray-800">
-            {{ Auth::user()->school->school_name }}
-        </h1>
-    @else
-        <h1 class="text-xl font-semibold text-gray-800">
-            {{ Auth::user()->name }}
-        </h1>
-    @endif
+    <div class="flex min-w-0 items-center gap-3">
+        <button type="button"
+            class="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-600 lg:hidden"
+            x-on:click="sidebarOpen = true" aria-label="Open sidebar menu" x-bind:aria-expanded="sidebarOpen.toString()">
+            <i class="fa-solid fa-bars text-lg"></i>
+        </button>
 
-    <div class="flex items-center gap-8">
+        @if (Auth::user()->role === 'admin')
+            <h1 class="truncate text-base font-semibold text-gray-800 sm:text-xl">
+                Department of SC & ST Welfare
+            </h1>
+        @elseif(Auth::user()->role === 'school_admin')
+            <h1 class="truncate text-base font-semibold text-gray-800 sm:text-xl">
+                {{ Auth::user()->school->school_name }}
+            </h1>
+        @else
+            <h1 class="truncate text-base font-semibold text-gray-800 sm:text-xl">
+                {{ Auth::user()->name }}
+            </h1>
+        @endif
+    </div>
+
+    <div class="flex flex-shrink-0 items-center gap-3 sm:gap-8">
 
         {{-- <div class="relative">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24"
@@ -52,7 +60,7 @@ $profile_route =null;
                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm font-semibold text-gray-700">
                 <a href="{{ $route }}">{{ $initials }}</a>
             </div>
-            <div>
+            <div class="hidden sm:block">
                 <p class="text-sm font-semibold text-gray-800">
                     {{ Auth::user()->role === 'school_admin' ? Auth::user()->school->principle_name : Auth::user()->name }}
                 </p>

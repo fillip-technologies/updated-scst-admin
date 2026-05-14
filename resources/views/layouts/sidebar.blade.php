@@ -1,8 +1,8 @@
-<aside class="w-[280px] bg-primary-900 text-gray-300 flex flex-col h-full">
+<div class="flex h-full w-[280px] flex-col bg-primary-900 text-gray-300">
 
     @if (Auth::user()->role === 'admin')
     <!-- Header -->
-    <div class="h-[88px] px-6 flex items-center border-b border-primary-800 flex-shrink-0">
+    <div class="h-[88px] px-6 flex items-center justify-between gap-4 border-b border-primary-800 flex-shrink-0">
         <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-md overflow-hidden bg-black flex items-center justify-center">
                 <img src="{{ asset('images/bihar-sarka.png') }}" alt="Logo" class="w-full h-full object-contain">
@@ -16,6 +16,11 @@
                 </p>
             </div>
         </div>
+        <button type="button"
+            class="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-gray-300 transition hover:bg-primary-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent-500 lg:hidden"
+            x-on:click="sidebarOpen = false" aria-label="Close sidebar menu">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
     </div>
 
 
@@ -230,6 +235,15 @@
     @elseif (Auth::user()->role === 'school_admin')
     {{-- SCHOOL PANENL --}}
 
+    <div class="flex h-[72px] items-center justify-between border-b border-primary-800 px-6 lg:hidden">
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-400">School Panel</p>
+        <button type="button"
+            class="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-gray-300 transition hover:bg-primary-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
+            x-on:click="sidebarOpen = false" aria-label="Close sidebar menu">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+    </div>
+
     <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">
         School Panel
     </div>
@@ -381,6 +395,15 @@
         </a>
     </div>
     @else
+    <div class="flex h-[72px] items-center justify-between border-b border-primary-800 px-6 lg:hidden">
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-gray-400">Staff Panel</p>
+        <button type="button"
+            class="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-gray-300 transition hover:bg-primary-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent-500"
+            x-on:click="sidebarOpen = false" aria-label="Close sidebar menu">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+    </div>
+
     <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">
         Staff Panel
     </div>
@@ -464,4 +487,4 @@
 
     @endif
 
-</aside>
+</div>
