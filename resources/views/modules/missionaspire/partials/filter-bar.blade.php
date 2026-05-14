@@ -2,8 +2,6 @@
     class="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-sky-900 to-cyan-700 p-4 sm:p-6 text-white shadow-xl">
 
     <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-
-        {{-- Left Content --}}
         <div class="max-w-3xl">
             <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-cyan-100">
                 Mission Aspire
