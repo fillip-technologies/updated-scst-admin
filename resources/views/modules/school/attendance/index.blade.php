@@ -208,6 +208,7 @@
                                 <tr>
                                     <th class="py-3 px-6 text-left">Roll No</th>
                                     <th class="py-3 px-6 text-left">Student Name</th>
+                                     <th class="py-3 px-6 text-left">Father Name</th>
                                     <th class="py-3 px-6 text-left">Status</th>
                                     <th class="py-3 px-6 text-left">Action</th>
                                 </tr>
@@ -232,6 +233,9 @@
                                         <td class="py-3 px-6 text-gray-600 student-name">
                                             {{ $student->name }}
                                         </td>
+                                         <td class="py-3 px-6 text-gray-600 student-name">
+                                            {{ $student->parent_name }}
+                                        </td>
 
                                         <!-- Status -->
                                         <td class="py-3 px-6">
@@ -250,7 +254,7 @@
 
                                         <!-- Action -->
                                         <td class="py-3 px-6">
-                                            <form action="{{ route('attendance.status.update') }}" method="POST">
+                                            <form action="{{SchoolLogin() ?  route('attendance.status.update') : route('staff.attendance.status.update')  }}" method="POST">
                                                 @csrf
 
                                                 <input type="hidden" name="student_id" value="{{ $student->id }}">

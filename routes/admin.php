@@ -136,11 +136,7 @@ Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->
     Route::post('/secretary/data/store', [DepartmentCmsController::class, 'secretary_add'])->name('secretary.data.store');
     Route::post('/iasofficer/data/store', [DepartmentCmsController::class, 'ias_officer_add'])->name('ias.data.store');
 
-    // Imported Routes
+    Route::get('/search/mission/aspire',[MissionAspireController::class, 'searchMission'])->name('search.mission.aspire');
 
-    // Route::get('listing/mission/aspire',[MissionAspireController::class,'list_mission'])->name('mission.list'); //show mission
-    // Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire');
-    // Route::post('/upload/mission/aspire',[MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
-    // //Missin Filtering
-    // Route::get('/mission/type',[MissionAspireController::class, 'listofmission'])->name('list.search.mission');
+   
 });
