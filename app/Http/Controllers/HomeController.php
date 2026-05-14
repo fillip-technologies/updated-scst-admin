@@ -26,7 +26,6 @@ use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
@@ -161,6 +160,7 @@ class HomeController extends Controller
         if ($request->filled('mission_aspire')) {
             $reports = $this->missionAspireReportQuery($request)->get();
         }
+        
 
         return view('modules.missionaspire.index', [
             'districts' => $districts,
@@ -487,7 +487,7 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    // 🔹 EDIT PAGE
+
     public function editManageResult($id)
     {
         return view('modules.manage-result.edit');

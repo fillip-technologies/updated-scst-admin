@@ -1,139 +1,67 @@
+
+
 @extends('layouts.app')
 
 @section('content')
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: "Validation Error",
+                html: `<ul>
+        @foreach ($errors->all() as $error)
+         <li>{{ $error }}</li>
+        @endforeach
+        </ul>
+        `,
+                showConfirmButton: true,
+            })
+        </script>
+    @endif
     <div class="space-y-6" data-mission-aspire>
-        @include('modules.missionaspire.partials.filter-bar', [
-            'districts' => $districts,
-            'schools' => $schools,
-            'missionOptions' => $missionOptions,
-            'filters' => $filters,
-        ])
+        @include('modules.missionaspire.partials.filter-bar')
 
         @include('modules.missionaspire.partials.report-output', [
-            'reports' => $reports,
-            'filters' => $filters,
+            'report' => $reports ?? [],
+            'colums' => $datacolum ?? [],
         ])
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('[data-mission-form]');
-            const district = document.querySelector('#district');
-            const districtButton = document.querySelector('#district_button');
-            const districtMenu = document.querySelector('#district_menu');
-            const districtLabel = document.querySelector('[data-district-label]');
-            const school = document.querySelector('#school');
-            const reportOutput = document.querySelector('[data-report-table]');
-            const selectedDistrict = document.querySelector('[data-selected-district]');
-            const selectedSchool = document.querySelector('[data-selected-school]');
-            const selectedMission = document.querySelector('[data-selected-mission]');
+        $(document).ready(function() {
+            let schoolBox = $("#schooldata").hide();
+            let getschool = @json(getSchools());
+            $("#district").on('change', function() {
+                let value = $(this).val();
+                let html = '';
+                if (value) {
 
-            function updateSummary() {
-                selectedDistrict.textContent = district.value ? `District: ${district.value}` : 'District: Not selected';
-                selectedSchool.textContent = school.value && school.selectedOptions.length ?
-                    `School: ${school.selectedOptions[0].textContent}` :
-                    'School: Not selected';
-                selectedMission.textContent = form.mission_aspire.value && form.mission_aspire.selectedOptions.length ?
-                    `Mission: ${form.mission_aspire.selectedOptions[0].textContent}` :
-                    'Mission: Not selected';
-            }
+                    let filteredSchools = getschool.filter(item => item.district == value);
 
-            function closeDistrictMenu() {
-                districtMenu.classList.add('hidden');
-                districtButton.setAttribute('aria-expanded', 'false');
-            }
+                    html += `
+                    <label for="school" class="mb-1 block text-sm text-gray-500">
+                        Select School
+                    </label>
+                    <select
+                        id="school"
+                        name="school"
+                        class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-            function openDistrictMenu() {
-                districtMenu.classList.remove('hidden');
-                districtButton.setAttribute('aria-expanded', 'true');
-            }
-
-            districtButton.addEventListener('click', function() {
-                if (districtMenu.classList.contains('hidden')) {
-                    openDistrictMenu();
-                    return;
-                }
-
-                closeDistrictMenu();
-            });
-
-            document.querySelectorAll('[data-district-option]').forEach(function(option) {
-                option.addEventListener('click', function() {
-                    district.value = option.dataset.districtOption;
-                    districtLabel.textContent = district.value || 'Select District';
-                    closeDistrictMenu();
-                    district.dispatchEvent(new Event('change'));
-                });
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!districtButton.contains(event.target) && !districtMenu.contains(event.target)) {
-                    closeDistrictMenu();
-                }
-            });
-
-            async function loadSchools() {
-                school.innerHTML = '<option value="">Select School</option>';
-
-                if (!district.value) {
-                    updateSummary();
-                    return;
-                }
-
-                const url = `{{ url('/admin/mission-aspire/schools') }}/${encodeURIComponent(district.value)}`;
-                const response = await fetch(url, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                });
-                const result = await response.json();
-
-                result.data.forEach(function(item) {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.school_name;
-                    school.appendChild(option);
-                });
-
-                updateSummary();
-            }
-
-            district.addEventListener('change', loadSchools);
-            school.addEventListener('change', updateSummary);
-            form.mission_aspire.addEventListener('change', updateSummary);
-
-            form.addEventListener('submit', async function(event) {
-                event.preventDefault();
-
-                const params = new URLSearchParams(new FormData(form));
-                reportOutput.innerHTML = `
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-8 text-center text-sm text-slate-500">
-                        Loading Mission Aspire report...
-                    </div>
+                        <option value="">Select School</option>
                 `;
+                    filteredSchools.forEach((item) => {
 
-                try {
-                    const response = await fetch(`${form.action}?${params.toString()}`, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                    });
-                    const result = await response.json();
-                    reportOutput.innerHTML = result.html;
-                    updateSummary();
-                } catch (error) {
-                    reportOutput.innerHTML = `
-                        <div class="rounded-2xl border border-red-200 bg-red-50 px-5 py-8 text-center text-sm text-red-600">
-                            Unable to load report data.
-                        </div>
+                        html += `
+                        <option value="${item.id}">
+                            ${item.school_name}
+                        </option>
                     `;
+                    });
+                    html += `</select>`;
+                    schoolBox.html(html).show();
+                } else {
+                    schoolBox.hide();
                 }
             });
-
-            updateSummary();
         });
     </script>
 @endsection

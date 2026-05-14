@@ -13,6 +13,7 @@ use App\Http\Controllers\SubjectManageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('staff')->middleware('staff')->group(function () {
+    Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('staff.attendance.status.update');
     Route::view('/dashboard', 'modules.dashboard.index')->name('staff.dashboard');
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('staff.subjects');

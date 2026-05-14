@@ -18,6 +18,7 @@ use App\Models\SchoolInfrastructureReport;
 use App\Models\StudentActivityReport;
 use App\Models\TeacherStaffReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MissionAspireController extends Controller
@@ -96,6 +97,60 @@ class MissionAspireController extends Controller
 
             return view('modules.missionaspire.filter-tabs.financial_report', compact('reports'));
         }
+
+    }
+
+    public function searchMission(Request $request)
+    {
+
+        $request->validate([
+            'district' => 'required',
+            'mission_aspire' => 'required',
+            'school' => 'required',
+        ]);
+        $reports = [];
+        $datacolum = [] ?? null;
+        $district = trim($request->district);
+        $schoolId = trim($request->school);
+        $missionAspire = trim($request->mission_aspire);
+        if ($missionAspire == 1) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = MissionAspire::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('mission_aspires');
+            }
+        } elseif ($missionAspire == 2) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = SchoolHelthReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('school_health_reports');
+            }
+        } elseif ($missionAspire == 3) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = TeacherStaffReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('teacher_staff_reports');
+            }
+        } elseif ($missionAspire == 4) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = SchoolInfrastructureReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('school_infrastructure_reports');
+            }
+        } elseif ($missionAspire == 5) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = StudentActivityReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('student_activity_reports');
+            }
+        } elseif ($missionAspire == 6) {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = ParentEngagementReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('parent_engagement_reports');
+            }
+        } else {
+            if (! empty($missionAspire) && ! empty($schoolId) && ! empty($district)) {
+                $reports = DistrictFinanceReport::with('school')->where('district', $district)->where('school_id', $schoolId)->get();
+                $datacolum = Schema::getColumnListing('district_finance_reports');
+            }
+        }
+
+        return view('modules.missionaspire.index', compact('datacolum', 'reports'));
 
     }
 }
