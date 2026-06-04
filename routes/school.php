@@ -6,6 +6,7 @@ use App\Http\Controllers\School\Class\ClassController;
 use App\Http\Controllers\School\ExcelReportController;
 use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
 use App\Http\Controllers\School\ManageStaffController;
 use App\Http\Controllers\School\NoticeController;
@@ -16,10 +17,18 @@ use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\TeacherManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use App\Http\Controllers\SubjectManageController;
+use App\Http\Controllers\Admin\MissionAspireController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('school')->middleware('school')->group(function () {
+    Route::get('edit/assgin/syllabus/{id}/{school_id}',[ManagementSyllabusController::class, 'editasyllabus'])->name('edit.assgin.syllabus');
+    Route::post('subject/edit/{id}',[ManagementSyllabusController::class, 'subject_edit'])->name('subject.edit');
+     Route::get('topics/index/delete',[ManagementSyllabusController::class, 'index_delete'])->name('topics.index.delete');
+     Route::post('assgin/subject/edit/{id}',[ManagementSyllabusController::class, 'assingsubject_edit'])->name('assgin.subject.edit');
+     Route::get('/delete/assgin/subject',[ManagementSyllabusController::class, 'deleteSyllabus'])->name('delete.assgin.subject');
+
+    Route::post('/reset/password',[LoginController::class, 'schoolforgetpassword'])->name('reset.school.password');
     Route::post('teacher/update/attendance', [TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
     Route::get('/teacher/{id}/edit/{schoolId}', [TeacherManageController::class, 'editTeacher'])->name('edit.teacher');
     Route::post('create/acadmi/section/infrastructure', [InfrastructureController::class, 'SaveAcademic'])->name('inf.save.acadmi');
@@ -27,6 +36,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('/update/hero/section/infrastructure', [InfrastructureController::class, 'Updatehero'])->name('inf.update.hero');
     Route::post('update/acadmi/section/infrastructure', [InfrastructureController::class, 'UpdateAcademic'])->name('inf.update.acadmi');
     Route::delete('delete/acadmi/section/infrastructure', [InfrastructureController::class, 'deleteAcademic'])->name('inf.delete.acadmi');
+    Route::get('/profile', [HomeController::class, 'school_profile'])->name('school.profile');
 
     Route::post('create/leader/section/staff', [StaffController::class, 'SaveLeader'])->name('staff.save.leader');
     Route::post('update/leader/section/staff', [StaffController::class, 'UpdateLeader'])->name('staff.update.leader');
@@ -164,6 +174,17 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
      Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
+     
+      Route::get('/index/syllabus',[ManagementSyllabusController::class, 'indexsyllabus'])->name('syllabus.index');
+    Route::get('/create/syllabus',[ManagementSyllabusController::class,'createSyllabus'])->name('create.syllabus');
+    Route::post('/store/syllabus/topic',[ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
+    Route::post('/assing/subject',[ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
+    
+    
+     Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('school.mission.list');
+    Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('school.mission.aspire');
+    Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('school.upload.mission.aspire');
+    Route::get('/mission/type', [MissionAspireController::class, 'listofmission'])->name('school.list.search.mission');
 });
 
 

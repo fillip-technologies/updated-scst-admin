@@ -2,6 +2,9 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 if (! function_exists('districts')) {
 
@@ -146,7 +149,9 @@ if (! function_exists('leaveType')) {
 if (! function_exists('getDisc')) {
     function getDisc()
     {
-        $disdata = School::select('id', 'district')->get();
+        $disdata = School::select('district')
+            ->groupBy('district')
+            ->get();
 
         return $disdata;
     }
@@ -176,3 +181,117 @@ if (! function_exists('ExamType')) {
     }
 
 }
+
+if (! function_exists('RecipientGroup')) {
+    function RecipientGroup()
+    {
+        return [
+            'All Schools',
+            'Principals Only',
+            'District Coordinators',
+            'Specific District',
+        ];
+    }
+}
+
+if (! function_exists('getPrincipale')) {
+    function getPrincipale()
+    {
+        $principale = School::select('id', 'principle_name', 'official_email')->get();
+        if (! empty($principale)) {
+            return $principale;
+        } else {
+            echo 'No data found';
+        }
+    }
+}
+
+
+if (! function_exists('getPrincipale')) {
+    function getPrincipale()
+    {
+        $principale = School::select('id', 'principle_name', 'official_email')->get();
+        if (! empty($principale)) {
+            return $principale;
+        } else {
+            echo 'No data found';
+        }
+    }
+}
+
+if (! function_exists('SinglegetDisc')) {
+    function SinglegetDisc()
+    {
+        return School::select('id','district','official_email')
+            ->orderBy('district')
+            ->get()
+            ->unique('district')
+            ->values();
+    }
+}
+
+
+
+if (!function_exists('checkLoginAttempt')) {
+
+    function checkLoginAttempt(User $user, $credentials, $redirectRoute)
+    {
+
+        if ($user->lock_until && Carbon::now()->lessThan($user->lock_until)) {
+            return back()->with('error', 'Account locked for 24 hours');
+        }
+
+
+        if (Auth::attempt($credentials)) {
+
+         
+            $user->login_attempts = 0;
+            $user->lock_until = null;
+            $user->save();
+
+            return redirect()->route($redirectRoute);
+        }
+
+       
+        $user->login_attempts += 1;
+
+        if ($user->login_attempts >= 5) {
+            $user->lock_until = Carbon::now()->addHours(24);
+        }
+
+        $user->save();
+
+        $remaining = 5 - $user->login_attempts;
+
+        return back()->with('error', "Invalid Credentials. $remaining attempts left");
+    }
+    
+    if (! function_exists('mission_aspire')) {
+    function mission_aspire()
+    {
+        return [
+            '1' => 'Academic Excellence & Zero Dropout',
+            '2' => 'Poshan & Student Health',
+            '3' => 'Teacher Welfare & Capacity Building',
+            '4' => 'Assured Minimum Infrastructure',
+            '5' => 'Excellence & Personality Development',
+            '6' => 'Parent & Community Engagements',
+            '7' => 'Governance, Digital Monitoring & Finance',
+        ];
+    }
+}
+
+}
+if (! function_exists('getSchools')) {
+    function getSchools($district = null)
+    {
+        $query = School::select('id', 'school_name', 'district');
+
+        if ($district) {
+            $query->where('district', $district);
+        }
+
+        return $query->get();
+    }
+}
+

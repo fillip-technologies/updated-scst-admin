@@ -37,10 +37,10 @@
 
                 <!-- Buttons -->
                 <div class="flex gap-3">
-                    <button onclick="openModal()"
-                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2">
-                        📥 Import Excel
-                    </button>
+                    <!--<button onclick="openModal()"-->
+                    <!--    class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2">-->
+                    <!--    📥 Import Excel-->
+                    <!--</button>-->
                     <a href="{{ route('teacher.create') }}"
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                         + Add Teacher
@@ -91,13 +91,13 @@
             <!-- Search -->
             <div class="flex justify-between items-center mb-4">
 
-                <div class="relative">
-                    <input type="text" id="searchInput" onkeyup="searchTeacher()" placeholder="Search teacher..."
-                        class="border rounded-lg pl-10 pr-3 py-2 text-sm w-64 focus:ring-2 focus:ring-blue-200 outline-none">
+                <!--<div class="relative">-->
+                <!--    <input type="text" id="searchInput" onkeyup="searchTeacher()" placeholder="Search teacher..."-->
+                <!--        class="border rounded-lg pl-10 pr-3 py-2 text-sm w-64 focus:ring-2 focus:ring-blue-200 outline-none">-->
 
                     <!-- Icon -->
-                    <span class="absolute left-3 top-2.5 text-gray-400 text-sm">🔍</span>
-                </div>
+                <!--    <span class="absolute left-3 top-2.5 text-gray-400 text-sm">🔍</span>-->
+                <!--</div>-->
 
             </div>
 
@@ -167,7 +167,7 @@
 
 
                                 <td class="py-2 px-4">
-                                    {{ $teacher->class_id ?? '-' }}
+                                    {{ $teacher->addclass->name ?? '-' }}
                                 </td>
 
 

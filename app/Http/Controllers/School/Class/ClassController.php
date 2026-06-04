@@ -21,28 +21,42 @@ class ClassController extends Controller
         $schoolId = trim($request->school_id);
     }
 
-    public function classFilter(Request $request)
-    {
-        $request->validate(['class' => 'required', 'school_id' => 'required']);
-        $schoolId = $request->school_id;
-        if (! $request->class) {
-            $classes = AddClasses::all();
-            $studentdata = Student::with(['attendance'])->get();
-        }
-        $classId = $request->class
-            ?? session('selected_class')
-            ?? AddClasses::where('school_id', $schoolId)->first()->id;
-        session(['selected_class' => $classId]);
-        $classes = AddClasses::where('school_id', $schoolId)->get();
-        $studentdata = Student::with(['attendance' => function ($q) {
-            $q->whereDate('date', today());
-        }])
-            ->where('class_id', $classId)
-            ->where('school_id', $schoolId)
-            ->paginate(10);
+     public function classFilter(Request $request)
+{
+    $request->validate([
+        'school_id' => 'required',
+    ]);
 
-        return view('modules.school.attendance.index', compact('classes', 'studentdata'));
-    }
+    $schoolId = $request->school_id;
+
+    $classes = AddClasses::where('school_id', $schoolId)->get();
+
+    $classId = $request->class
+        ?? session('selected_class')
+        ?? optional($classes->first())->id;
+
+    session(['selected_class' => $classId]);
+
+    $studentdata = Student::with([
+            'attendance' => function ($q) {
+                $q->whereDate('date', today());
+            }
+        ])
+        ->where('school_id', $schoolId)
+        ->when($classId, function ($q) use ($classId) {
+            $q->where('class_id', $classId);
+        })
+        ->paginate(10)
+        ->withQueryString();
+
+        $totalstudent = Student::where('class_id',$classId)->count();
+
+    return view('modules.school.attendance.index', compact(
+        'classes',
+        'studentdata',
+        'totalstudent' 
+    ));
+}
 
     public function updateattendance(Request $request)
     {
@@ -71,7 +85,7 @@ class ClassController extends Controller
                 'school_id' => $request->school_id,
                 'date' => $request->date,
                 'status' => $request->status,
-                'recorded_by' => SchoolLogin()->id,
+                'recorded_by' => SchoolLogin()->id ?? TeacherLog()->school_id,
             ]);
         }
 

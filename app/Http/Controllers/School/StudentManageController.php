@@ -19,20 +19,20 @@ class StudentManageController extends Controller
         $request->validate([
             'name' => 'required|string',
             'class_id' => 'required',
-            'school_id' => 'required',
-            'dob' => 'required|date',
-            'gender' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'parent_name' => 'required',
-            'parent_email' => 'required|email',
-            'parent_phone' => 'required',
-            'parent_relation' => 'required',
+            'school_id' => 'nullable',
+            'dob' => 'nullable|date',
+            'gender' => 'nullable',
+            'email' => 'nullable|email',
+            'phone' => 'nullable',
+            'parent_name' => 'nullable',
+            'parent_email' => 'nullable|email',
+            'parent_phone' => 'nullable',
+            'parent_relation' => 'nullable',
         ]);
         $roll_number = roll_number($request->name);
         $data = [
             'name' => $request->name,
-            'roll_number' => $roll_number, // direct use
+            'roll_number' => $roll_number, 
             'class_id' => $request->class_id,
             'school_id' => $request->school_id,
             'dob' => $request->dob,
@@ -82,16 +82,16 @@ class StudentManageController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'class_id' => 'required',
-            'school_id' => 'required',
-            'dob' => 'required|date',
-            'gender' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'parent_name' => 'required',
-            'parent_email' => 'required|email',
-            'parent_phone' => 'required',
-            'parent_relation' => 'required',
+            'class_id' => 'nullable',
+            'school_id' => 'nullable',
+            'dob' => 'nullable|date',
+            'gender' => 'nullable',
+            'email' => 'nullable|email',
+            'phone' => 'nullable',
+            'parent_name' => 'nullable',
+            'parent_email' => 'nullable|email',
+            'parent_phone' => 'nullable',
+            'parent_relation' => 'nullable',
         ]);
 
         $data = [
@@ -137,7 +137,7 @@ class StudentManageController extends Controller
         $classes = AddClasses::where('school_id', $schoolId)->get();
         $studentdata = Student::with('allclass')
             ->where('class_id', $classId)
-            ->paginate(10);
+            ->paginate(10)->withQueryString();
 
         return view('modules.school.school-management.index', compact('studentdata', 'classes'));
     }

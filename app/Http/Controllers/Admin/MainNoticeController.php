@@ -16,7 +16,7 @@ class MainNoticeController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'file'=>'nullable|file',
+            'file' => 'nullable|file|mimes:pdf|max:5120',
             'date' => 'required|date',
             'description' => 'required|string',
             'notice_type' => 'required',

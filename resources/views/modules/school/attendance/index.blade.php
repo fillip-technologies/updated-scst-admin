@@ -34,6 +34,7 @@
         <div class="flex justify-between items-center mb-6">
 
             <!-- Left Content -->
+
             <div>
                 <h1 class="text-xl font-semibold text-gray-800">Student Attendance</h1>
                 <p class="text-sm text-gray-500">
@@ -53,22 +54,23 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-sm font-semibold text-gray-600">Select Class</h2>
 
-                    <a href="{{ SchoolLogin() ?  route('school.classes.create') : route('staff.classes.create') }}"
+                    <a href="{{ SchoolLogin() ? route('school.classes.create') : route('staff.classes.create') }}"
                         class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs">
-                        + Add
+                        + Add Class
                     </a>
                 </div>
 
-                <form id="classForm" action="{{ SchoolLogin() ? route('class.filter')  : route('staff.class.filter')}}" method="GET">
+                <form id="classForm" action="{{ SchoolLogin() ? route('class.filter') : route('staff.class.filter') }}"
+                    method="GET">
 
                     <input type="hidden" name="class" id="selectedClass">
-                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
+                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
 
 
                     @php
-                        $activeClass = session('selected_class') ?? $classes->first()->id;
+                        $activeClass =
+                            session('selected_class') ?? (request('class') ?? ($classes->first()->id ?? null));
                     @endphp
-
                     <div class="space-y-2">
                         @foreach ($classes as $class)
                             <div onclick="selectClass('{{ $class->id }}')"
@@ -85,7 +87,7 @@
             <!-- RIGHT SIDE -->
             <div class="col-span-9 space-y-6">
                 @php
-                    $activeClass = session('selected_class') ?? (request('class') ?? $classes->first()->id);
+                    $activeClass = session('selected_class') ?? (request('class') ?? ($classes->first()->id ?? null));
                 @endphp
                 <!-- Top Summary -->
                 @php
@@ -103,7 +105,9 @@
                     <div class="flex gap-8 text-sm">
                         <div>
                             <p class="text-gray-500">TOTAL STUDENTS</p>
-                            <h3 class="font-semibold text-gray-800">{{ $total }}</h3>
+                            <h3 class="font-semibold text-gray-800">
+                                {{ $totalstudent ?? App\Models\Student::where('school_id', SchoolLogin()->id)->count() }}
+                            </h3>
                         </div>
 
                         <div>
@@ -119,10 +123,10 @@
                     </div>
                     <div class="flex items-center gap-3">
 
-                        <form action="{{ SchoolLogin() ?  route('search.attendance') : route('staff.search.attendance')  }}" method="GET" class="flex items-center gap-3">
+                        <form action="{{ SchoolLogin() ? route('search.attendance') : route('staff.search.attendance') }}"
+                            method="GET" class="flex items-center gap-3">
 
-                            <input type="date" name="date"
-                                onchange="this.form.submit()"
+                            <input type="date" name="date" onchange="this.form.submit()"
                                 class=" w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none">
 
                         </form>
@@ -153,10 +157,13 @@
                             <h2 class="text-lg font-semibold mb-4">Upload Report</h2>
 
                             <!-- Form -->
-                            <form action="{{ SchoolLogin() ?  route('report.save') :  route('staff.report.save')  }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ SchoolLogin() ? route('report.save') : route('staff.report.save') }}"
+                                method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
-                                <input type="hidden" name="district" value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">
+                                <input type="hidden" name="school_id"
+                                    value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+                                <input type="hidden" name="district"
+                                    value="{{ SchoolLogin()->district ?? TeacherLog()->school->district }}">
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">Report Type</label>
                                     <select name="report_type" id="report_type"
@@ -200,6 +207,7 @@
                                 <tr>
                                     <th class="py-3 px-6 text-left">Roll No</th>
                                     <th class="py-3 px-6 text-left">Student Name</th>
+                                    <th class="py-3 px-6 text-left">Parent Name</th>
                                     <th class="py-3 px-6 text-left">Status</th>
                                     <th class="py-3 px-6 text-left">Action</th>
                                 </tr>
@@ -225,6 +233,11 @@
                                             {{ $student->name }}
                                         </td>
 
+                                        <td class="py-3 px-6 text-gray-600 student-name">
+                                            {{ $student->parent_name }}
+                                        </td>
+
+
                                         <!-- Status -->
                                         <td class="py-3 px-6">
                                             <span
@@ -242,17 +255,20 @@
 
                                         <!-- Action -->
                                         <td class="py-3 px-6">
-                                            <form action="{{ route('attendance.status.update') }}" method="POST">
+                                            <form
+                                                action="{{ SchoolLogin() ? route('attendance.status.update') : route('staff.attendance.status.update') }}"
+                                                method="POST">
                                                 @csrf
 
                                                 <input type="hidden" name="student_id" value="{{ $student->id }}">
                                                 <input type="hidden" name="class_id" value="{{ $student->class_id }}">
-                                                <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
+                                                <input type="hidden" name="school_id"
+                                                    value="{{ SchoolLogin()->id ?? TeacherLog()->school_id }}">
                                                 <input type="hidden" name="date" value="{{ date('Y-m-d') }}">
 
                                                 <select name="status" onchange="this.form.submit()"
                                                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-
+                                                    <option>Select Attendence</option>
                                                     <option value="present" {{ $status == 'present' ? 'selected' : '' }}>✅
                                                         Present</option>
                                                     <option value="absent" {{ $status == 'absent' ? 'selected' : '' }}>❌

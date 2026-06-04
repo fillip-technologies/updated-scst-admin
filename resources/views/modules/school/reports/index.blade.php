@@ -104,15 +104,16 @@
                     function selectCategory(button, category) {
 
                         // 1. Set hidden input value
-                        document.getElementById('categoryInput').value = category;
+                       document.getElementById('categoryInput').value = category;
 
                         // 2. Remove active class from all buttons
                         document.querySelectorAll('.report-btn').forEach(btn => {
-                            btn.classList.remove('border-primary-900', 'bg-primary-50');
+                            btn.classList.remove('border-blue-900', 'bg-primary-50', 'border-2');
                         });
 
                         // 3. Add active class to selected
-                        button.classList.add('border-primary-900', 'bg-primary-50');
+                        button.classList.add('border-2', 'border-blue-900', 'bg-primary-50');
+                        // 4. Dynamic Section Content
 
                         // 4. Dynamic Section Content
                         let html = '';
@@ -133,9 +134,15 @@
 
                         if (category === 'exam') {
                             html = `
-                <label class="text-sm text-gray-600">Exam Type</label>
-                <input type="text" name="exam_type" placeholder="Enter exam"
+
+               <label class="text-sm text-gray-600">Select Exam</label>
+                <select name="type"
                     class="mt-2 w-full border rounded-lg px-4 py-2 text-sm">
+                    <option>Select Exam Type</option>
+                    @foreach (ExamType() as $key => $type)
+                     <option value="{{ $key }}">{{ $type }}</option>
+                    @endforeach
+                </select>
 
                      <label class="text-sm text-gray-600">Select Class</label>
                 <select name="class"

@@ -28,26 +28,29 @@
             </span>
         </div> --}}
 
-        <div class="flex items-center gap-3">
+       <div class="flex items-center gap-3">
             @php
                 $user = Auth::user();
-
+                $profile_route  = null;
                 if ($user->role === 'school_admin' && $user->school) {
                     $name = $user->school->principle_name;
+                    $profile_route = route('school.profile');
                 } elseif ($user->role === 'staff') {
                     $name = $user->name; // ya staff_name field agar alag hai
                 } elseif ($user->role === 'admin') {
                     $name = $user->name;
+                    $profile_route = route('admin.profile');
                 } else {
                     $name = 'NA';
                 }
 
                 $initials = strtoupper(substr($name, 0, 2));
+                $route = $profile_route;
             @endphp
 
             <div
                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm font-semibold text-gray-700">
-                {{ $initials }}
+                <a href="{{ $route }}">{{ $initials }}</a>
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-800">
@@ -58,6 +61,7 @@
                 </p>
             </div>
         </div>
+
 
     </div>
 

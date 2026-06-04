@@ -64,6 +64,17 @@
                     </svg>
                     Manage School
                 </a>
+                
+                  <a href="{{ route('syllabusTraking') }}"
+                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16v12H4z" />
+                    </svg>
+                    Syllabus Tracking
+                </a>
+
+                
 
                 <a href="{{ route('admin.notices.index') }}"
                     class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
@@ -76,6 +87,18 @@
 
                     Manage Notices
                 </a>
+                
+                 <a href="{{ route('admin.mission.aspire') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition {{ request()->routeIs('admin.mission.aspire*') ? 'bg-primary-800 text-white' : 'text-gray-300 hover:bg-primary-800' }}">
+
+                <svg class="w-5 h-5 {{ request()->routeIs('admin.mission.aspire*') ? 'text-accent-500' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="1.8"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6V3m0 3a4 4 0 014 4v1h1a2 2 0 012 2v3H5v-3a2 2 0 012-2h1v-1a4 4 0 014-4zm0 0a4 4 0 00-4 4v1h8v-1a4 4 0 00-4-4zm-3 13h6" />
+                </svg>
+
+                Mission Aspire
+            </a>
 
                 <!-- Reports -->
                 <a href="{{ route('report') }}"
@@ -90,40 +113,40 @@
 
 
                 <!-- Rankings -->
-                <a href="{{ route('rankings') }}"
-                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 21l4-7 4 7M12 14V3" />
-                    </svg>
-                    Rankings
-                </a>
+                <!--<a href="{{ route('rankings') }}"-->
+                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
+                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
+                <!--        viewBox="0 0 24 24">-->
+                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M8 21l4-7 4 7M12 14V3" />-->
+                <!--    </svg>-->
+                <!--    Rankings-->
+                <!--</a>-->
 
                 <!-- Performance -->
-                <a href="{{ route('performance.analytics') }}"
-                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                <!--<a href="{{ route('performance.analytics') }}"-->
+                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
 
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13h18M3 6h18M3 20h18" />
-                    </svg>
+                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
+                <!--        viewBox="0 0 24 24">-->
+                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13h18M3 6h18M3 20h18" />-->
+                <!--    </svg>-->
 
-                    Performance Analytics
-                </a>
+                <!--    Performance Analytics-->
+                <!--</a>-->
 
 
 
 
 
                 <!-- Approvals -->
-                <a href="{{ route('approvals') }}"
-                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Approvals
-                </a>
+                <!--<a href="{{ route('approvals') }}"-->
+                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
+                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
+                <!--        viewBox="0 0 24 24">-->
+                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />-->
+                <!--    </svg>-->
+                <!--    Approvals-->
+                <!--</a>-->
 
                 <!-- Notifications -->
                 <a href="{{ route('notifications') }}"
@@ -136,6 +159,36 @@
                     Notifications
                 </a>
 
+
+<div class="px-6 py-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Department CMS</p>
+                <a href="{{ route('admin.department.cms.leader') }}"
+                    class="mt-3 flex items-center gap-4 rounded-xl px-4 py-3 transition {{ request()->routeIs('admin.department.cms.leader') ? 'bg-primary-800 text-white' : 'text-gray-300 hover:bg-primary-800' }}">
+                    <svg class="h-5 w-5 {{ request()->routeIs('admin.department.cms.leader') ? 'text-accent-500' : 'text-gray-400' }}"
+                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 14c3.314 0 6-2.686 6-6S15.314 2 12 2 6 4.686 6 8s2.686 6 6 6zm0 2c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z" />
+                    </svg>
+                    Leader Message
+                </a>
+                <a href="{{ route('admin.department.cms.stats') }}"
+                    class="mt-3 flex items-center gap-4 rounded-xl px-4 py-3 transition {{ request()->routeIs('admin.department.cms.stats') ? 'bg-primary-800 text-white' : 'text-gray-300 hover:bg-primary-800' }}">
+                    <svg class="h-5 w-5 {{ request()->routeIs('admin.department.cms.stats') ? 'text-accent-500' : 'text-gray-400' }}"
+                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5 12h3v7H5v-7zm5-5h4v12h-4V7zm6-3h3v15h-3V4z" />
+                    </svg>
+                    Stats Section
+                </a>
+                <a href="{{ route('admin.department.cms.schemes') }}"
+                    class="mt-3 flex items-center gap-4 rounded-xl px-4 py-3 transition {{ request()->routeIs('admin.department.cms.schemes*') ? 'bg-primary-800 text-white' : 'text-gray-300 hover:bg-primary-800' }}">
+                    <svg class="h-5 w-5 {{ request()->routeIs('admin.department.cms.schemes*') ? 'text-accent-500' : 'text-gray-400' }}"
+                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+                    </svg>
+                    Schemes / Initiatives
+                </a>
+            </div>
                 <!-- User & Role -->
                 <!-- <a href="{{ route('user.management.users') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl transition
@@ -207,7 +260,7 @@
         {{ request()->routeIs('school.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
                 <i
-                    class="fa-solid fa-user-check {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                    class="fa-solid fa-user-graduate {{ request()->routeIs('school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Student Attendance
             </a>
 
@@ -216,8 +269,26 @@
    {{ request()->routeIs('school.teacher.attendance') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
                 <i
-                    class="fa-solid fa-user-check {{ request()->routeIs('school.teacher.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                    class="fa-solid fa-user-tie {{ request()->routeIs('school.teacher.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Teacher Attendance
+            </a>
+            
+            <a href="{{ route('school.mission.list') }}"
+                    class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->is('mission/aspire') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+                    <i
+                        class="fa-solid fa-school {{ request()->is('mission/aspire') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                    Mission ASPIRE
+                </a>
+            
+             <a href="{{ url('/school/teacher/list') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->is('/school/teacher/list') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+                <i
+                    class="fa-solid fa-chalkboard-user {{ request()->is('/school/teacher/list') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                Teachers Management
             </a>
 
             <a href="{{ route('school.student') }}"
@@ -225,11 +296,23 @@
         {{ request()->is('school-management') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
                 <i
-                    class="fa-solid fa-school {{ request()->is('school-management') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                    class="fa-solid fa-users {{ request()->is('school-management') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Students Management
             </a>
 
+ <a href="{{ route('syllabus.index') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+   {{ request()->routeIs('school.teacher.syllabus') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
+                <i
+                    class="fa-solid fa-book-open
+       {{ request()->routeIs('school.teacher.syllabus') ? 'text-accent-500' : 'text-gray-400' }}">
+                </i>
+
+                <span class="font-medium">
+                    Syllabus Management
+                </span>
+            </a>
 
             {{-- <a href="{{ route('subjects') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl
@@ -253,14 +336,14 @@
             </a> --}}
 
             <!-- Academic Activities -->
-            <a href="{{ route('school.academics') }}"
-                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
-        {{ request()->routeIs('school.academics') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+        <!--    <a href="{{ route('school.academics') }}"-->
+        <!--        class="flex items-center gap-4 px-6 py-3 rounded-xl transition-->
+        <!--{{ request()->routeIs('school.academics') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">-->
 
-                <i
-                    class="fa-solid fa-book {{ request()->routeIs('school.academics') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-                Academic Activities
-            </a>
+        <!--        <i-->
+        <!--            class="fa-solid fa-book {{ request()->routeIs('school.academics') ? 'text-accent-500' : 'text-gray-400' }}"></i>-->
+        <!--        Academic Activities-->
+        <!--    </a>-->
 
             <!-- Meal Reporting -->
             <a href="{{ route('school.meal') }}"
@@ -338,7 +421,14 @@
                     class="fa-solid fa-user-check {{ request()->routeIs('staff.school.attendance') ? 'text-accent-500' : 'text-gray-400' }}"></i>
                 Student Attendance
             </a>
+      <a href="{{ route('staff.assing.syllabus') }}"
+                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+        {{ request()->routeIs('staff.assing.syllabus') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
+                <i
+                   class="fa-solid fa-book-open {{ request()->routeIs('staff.assing.syllabus') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+                Assign Syllabus
+            </a>
 
 
             <a href="{{ route('staff.school.student') }}"

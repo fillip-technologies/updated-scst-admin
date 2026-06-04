@@ -59,7 +59,7 @@
                                     <input type="text" name="stat_1_label"
 
                                         value="{{ old('stat_1_label', $glance->stat_1_label ?? '') }}"
-                                        readonly
+                                      
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
                                     <input type="text" name="stat_2_label"
                                         value="{{ old('stat_2_value', $glance->stat_2_label ?? '') }}"
-                                        readonly
+                                     
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                                 <div>
                                     <label for="stat_4_label"
                                         class="mb-2 block text-sm font-medium text-gray-700">Label</label>
-                                    <input type="text" name="stat_4_label" value="{{ old('stat_4_label', $glance->stat_4_label ?? '') }}" readonly
+                                    <input type="text" name="stat_4_label" value="{{ old('stat_4_label', $glance->stat_4_label ?? '') }}" 
 
                                         class="w-full rounded-xl border border-primary-800/15 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm transition focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-800/20">
                                 </div>

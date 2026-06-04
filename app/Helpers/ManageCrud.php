@@ -9,7 +9,7 @@ class ManageCrud
         return $model::create($data);
     }
 
-    public static function getAll($model)
+   public static function getAll($model)
     {
         return $model::all();
     }

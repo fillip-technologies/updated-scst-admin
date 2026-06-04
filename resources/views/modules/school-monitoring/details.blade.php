@@ -1,7 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-
+ @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                showConfirmButton: true,
+                timer: 3000
+            })
+        </script>
+    @endif
 <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- Top Header Card -->
@@ -86,7 +96,7 @@
                     <div>
                         <p class="text-gray-500">School Name</p>
                         <p class="font-medium">
-                            {{ $school->name ?? 'ABC Public School' }}
+                            {{ $school->school_name ?? 'ABC Public School' }}
                         </p>
                     </div>
 
@@ -223,17 +233,23 @@
             <div class="bg-white border rounded-xl p-5 shadow-sm">
                 <h2 class="text-lg font-semibold mb-4">Send Notice</h2>
 
-                <form class="space-y-3">
-                    <textarea
-                        class="w-full border rounded-lg px-3 py-2 text-sm"
-                        rows="4"
-                        placeholder="Write notice..."></textarea>
+                <form class="space-y-3" action="{{ route('send.email') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="school" value="{{ $school->school_name ?? "" }}">
+                        <input type="hidden" name="principale" value="{{ $school->principle_name ?? "" }}">
+                        <textarea name="message"
+                            class="w-full border rounded-lg px-3 py-2 text-sm
+                        @error('message')
+ border-red-500
+                        @enderror"
+                            rows="4" placeholder="Write notice...">{{ old('message') }}</textarea>
 
-                    <button
-                        class="w-full bg-blue-800 text-white rounded-lg px-4 py-2 text-sm hover:bg-primary-600">
-                        Send Notice
-                    </button>
-                </form>
+
+                        <button type="submit"
+                            class="w-full bg-blue-800 text-white rounded-lg px-4 py-2 text-sm hover:bg-primary-600">
+                            Send Flag Notice
+                        </button>
+                    </form>
             </div>
 
         </div>

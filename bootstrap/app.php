@@ -27,6 +27,27 @@ return Application::configure(basePath: dirname(__DIR__))
             'staff'=> App\Http\Middleware\StaffMiddleware::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+     ->withExceptions(function (Exceptions $exceptions): void {
+
+        $exceptions->render(function (Throwable $e, $request) {
+
+            return response()->view('errors.error', [
+
+                'message' => app()->environment('local')
+                    ? $e->getMessage()
+                    : 'Something went wrong',
+
+                'file' => app()->environment('local')
+                    ? $e->getFile()
+                    : 'Hidden',
+
+                'line' => app()->environment('local')
+                    ? $e->getLine()
+                    : 'Hidden',
+
+            ], 500);
+
+        });
+
     })->create();
+

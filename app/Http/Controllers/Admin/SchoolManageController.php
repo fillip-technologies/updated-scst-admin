@@ -7,16 +7,19 @@ use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\School;
+use App\Models\AssingSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\SubjectList;
+use App\Models\AddClasses;
 
 class SchoolManageController extends Controller
 {
     public function AddSchool(Request $request)
     {
         $validatedata = $request->validate([
-            'school_logo' => 'nullable|file',
+            'school_logo' => 'nullable|image|mimes:jpeg,png,jpg',
             'school_name' => 'required|string|max:255',
             'school_code' => 'required|string|max:100|unique:schools,school_code',
             'establishment_year' => 'required|digits:4|integer|min:1900|max:'.date('Y'),
@@ -163,4 +166,71 @@ class SchoolManageController extends Controller
     {
         return Excel::download(new SchoolExport, 'schools.xlsx');
     }
+    
+    public function getschools($value)
+    {
+         $value = trim($value);
+         $data = School::select('id', 'school_name', 'district')->where('district','LIKE',"%{$value}%")->get();
+         return response()->json([
+         'message'=>"All Schools Here",
+         'data'=>$data,
+        ]);
+    }
+    
+      public function syllabus_traking(Request $request)
+{
+    $request->validate([
+        'school'   => 'required',
+        'class'    => 'required',
+        'subject'  => 'required',
+        'district' => 'required'
+    ]);
+
+    $schoolID = trim($request->school);
+    $subID    = trim($request->subject);
+    $classID  = trim($request->class);
+
+    $records = AssingSubject::with([
+            'class',
+            'school',
+            'teacher',
+            'topic',
+            'subject'
+        ])
+        ->where('school_id', $schoolID)
+        ->where('class_id', $classID)
+        ->where('sublist_id', $subID)
+        ->get();
+        
+        // dd($records);
+
+    return view('modules.listing.syllabusTrack', compact('records'));
+}
+    
+     public function getclass($value)
+    {
+         $value = trim($value);
+
+         $data = AddClasses::select('id', 'name')->where('school_id',$value)->get();
+         return response()->json([
+         'message'=>"All Class Here",
+         'data'=>$data,
+        ]);
+    }
+
+
+    public function getsubjects($value)
+    {
+         $value = trim($value);
+         $data = SubjectList::select('id', 'subject_name')->where('school_id',$value)->get();
+         return response()->json([
+         'message'=>"All subject Here",
+         'data'=>$data,
+        ]);
+    }
+    
+    
+    
+    
+    
 }

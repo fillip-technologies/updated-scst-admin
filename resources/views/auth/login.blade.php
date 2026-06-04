@@ -22,6 +22,16 @@
                 });
             </script>
         @endif
+         @if ($errors->any())
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    confirmButtonText: 'OK'
+                });
+            </script>
+        @endif
         <!-- RIGHT SIDE -->
         <div class="w-1/2 p-10">
 
@@ -57,19 +67,19 @@
 
                 <!-- School Field -->
                 <div id="schoolField">
-                    <input type="text" name="schoolCode" placeholder="School Code / UDISE"
+                    <input type="text" name="schoolCode" placeholder="School Code / UDISE" autocomplete="off"
                         class="w-full border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary-700">
                 </div>
 
                 <!-- Department Field -->
                 <div id="departmentField" class="hidden">
-                    <input type="text" name="username" placeholder="Username"
+                    <input type="email" name="username" placeholder="Username"  autocomplete="off"
                         class="w-full border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary-700">
                 </div>
 
                 <!-- Password -->
                 <div class="relative">
-                    <input id="password" type="password" name="password" placeholder="Password"
+                    <input id="password" type="password" name="password" placeholder="Password" autocomplete="off"
                         class="w-full border rounded-xl px-4 py-2 pr-10 focus:ring-2 focus:ring-primary-700">
                     <button type="button" onclick="togglePassword()" class="absolute right-3 top-2 text-gray-400 text-sm">
                         👁
@@ -78,10 +88,12 @@
 
                 <!-- Captcha -->
                 <div class="flex items-center gap-3">
-                    <input type="text" id="captchaInput" placeholder="Enter Captcha"
+                     <input type="hidden" name="captcha_code" id="captchaCode">
+                    <input type="text" name="captcha" id="captchaInput" placeholder="Enter Captcha" autocomplete="off"
                         class="flex-1 border rounded-xl px-4 py-2">
 
                     <div id="captchaBox" class="px-4 py-2 bg-gray-200 rounded-md font-mono tracking-widest">
+                   
                     </div>
 
                     <button type="button" onclick="generateCaptcha()" class="text-gray-500">
@@ -90,10 +102,10 @@
                 </div>
 
                 <!-- Remember -->
-                <div class="flex items-center gap-2 text-sm">
-                    <input type="checkbox">
-                    <span class="text-gray-600">Remember me</span>
-                </div>
+                <!--<div class="flex items-center gap-2 text-sm">-->
+                <!--    <input type="checkbox">-->
+                <!--    <span class="text-gray-600">Remember me</span>-->
+                <!--</div>-->
 
                 <button type="submit" class="w-full bg-primary-700 hover:bg-primary-800 text-white py-2 rounded-xl">
                     Access Dashboard →
@@ -102,12 +114,12 @@
             </form>
 
             <!-- Signup Link -->
-            <p class="text-sm text-center mt-6 text-gray-600">
-                New user?
-                <a href="{{ route('signup') }}" class="text-primary-700 font-medium hover:underline">
-                    Create account
-                </a>
-            </p>
+            <!--<p class="text-sm text-center mt-6 text-gray-600">-->
+            <!--    New user?-->
+            <!--    <a href="{{ route('signup') }}" class="text-primary-700 font-medium hover:underline">-->
+            <!--        Create account-->
+            <!--    </a>-->
+            <!--</p>-->
 
         </div>
     </div>
@@ -137,24 +149,28 @@
         function generateCaptcha() {
             const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
             let result = "";
+
             for (let i = 0; i < 5; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
+
             captchaValue = result;
             document.getElementById('captchaBox').innerText = result;
+            document.getElementById('captchaCode').value = result;
         }
 
-        function validateCaptcha() {
-            let userInput = document.getElementById('captchaInput').value;
 
-            if (userInput !== captchaValue) {
-                alert("Invalid Captcha");
-                generateCaptcha();
-                return false;
-            }
+        // function validateCaptcha() {
+        //     let userInput = document.getElementById('captchaInput').value;
 
-            return true;
-        }
+        //     if (userInput !== captchaValue) {
+        //         alert("Invalid Captcha");
+        //         generateCaptcha();
+        //         return false;
+        //     }
+
+        //     return true;
+        // }
 
         generateCaptcha();
     </script>

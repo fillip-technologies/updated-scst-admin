@@ -30,85 +30,89 @@
                     x-text="`${notices.length} Notices`"></span>
             </div>
 
-            <div class="space-y-4">
-                @foreach ($notice ?? [] as $key => $items)
-                    <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4"
-                        {{ $key }}>
+           <div class="space-y-4">
+    @foreach ($notice as $key => $items)
+    
+        <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4">
 
-                        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 
-                            <!-- LEFT -->
-                            <div class="min-w-0">
+                <!-- LEFT -->
+                <div class="min-w-0">
 
-                                <!-- TITLE + CATEGORY + BADGE -->
-                                <div class="flex flex-wrap items-center gap-3">
-                                    <h3 class="text-base font-semibold text-gray-800">{{ $items->notice_title ?? '' }}
-                                    </h3>
+                    <!-- TITLE + CATEGORY + BADGE -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h3 class="text-base font-semibold text-gray-800">
+                            {{ $items['notice_title'] ?? '' }}
+                        </h3>
 
-                                    <span class="rounded-full px-3 py-1 text-xs font-semibold"
-                                        :class="categoryClass(notice.category)">{{ $items->notice_category ?? '' }}</span>
+                       
+                        <span class="rounded-full px-3 py-1 text-xs font-semibold">{{ $items['notice_category'] ?? '' }}</span>
 
-                                    @if ($items->notice_badge == 'new')
-                                        <span
-                                            class=" bg-red-700 text-white rounded-full px-3 py-1 text-xs font-semibold">{{ $items->notice_badge }}</span>
-                                    @else
-                                        <span
-                                            class=" bg-pink-700 text-white rounded-full px-3 py-1 text-xs font-semibold">{{ $items->notice_badge }}</span>
-                                    @endif
-
-                                </div>
-
-                                <!-- DESCRIPTION -->
-                                <p class="mt-3 text-sm text-gray-600 line-clamp-2">{{ $items->notice_description }}</p>
-
-                                <!-- META -->
-                                <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
-
-                                    <!-- DATE -->
-                                    <span class="inline-flex items-center gap-2">
-                                        <i class="fa-regular fa-calendar"></i>
-                                        <span>{{ $items->notice_publish_date }}</span>
-                                    </span>
-
-                                    <!-- ATTACHMENT -->
-
-                                    <a href="{{ asset($items->notice_attachment) }}" target="_blank"
-                                        class="inline-flex items-center gap-2 text-primary-700 hover:underline">
-                                        <i class="fa-regular fa-file-lines"></i>
-                                        <span>View Notice</span>
-                                    </a>
-
-
-                                </div>
-                            </div>
-
-                            <!-- RIGHT ACTIONS -->
-                            <div class="flex flex-wrap items-center gap-3">
-
-                                <!-- EDIT -->
-                                <a href="{{ route('notice.edit',['index'=> $key , 'sid'=> SchoolLogin()->id ?? ""]) }}" class="px-3 py-2 text-xs border rounded-lg text-primary-900">
-                                    Edit
-                                </a>
-
-                                <!-- DELETE -->
-                                <form action="{{ route('notice.delete') }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="index" value="{{ $key }}">
-                                    <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? '' }}">
-                                    <button type="submit" onclick="return confirm('Are you sure delete this data')" class="px-3 py-2 text-xs border rounded-lg text-red-500">
-                                        Delete
-                                    </button>
-                                </form>
-
-                            </div>
-
-                        </div>
+                        <!-- ✅ FIX: badge typo handle -->
+                        @if ($items['notice_badge'] ?? "" == 'New')
+                            <span class="bg-red-700 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                                New
+                            </span>
+                        @else
+                            <span class="bg-pink-700 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                                {{ $items['notice_badge'] ?? "" }}
+                            </span>
+                        @endif
                     </div>
-                @endforeach
 
+                    <!-- DESCRIPTION -->
+                    <p class="mt-3 text-sm text-gray-600 line-clamp-2">
+                        {{ $items['notice_description'] ?? "" }}
+                    </p>
+
+                    <!-- META -->
+                    <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+
+                        <!-- DATE -->
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span>{{ $items['notice_publish_date']  ?? ""}}</span>
+                        </span>
+
+                        <!-- ATTACHMENT -->
+                        <a href="{{ asset($items['notice_attachment'] ?? "") }}" target="_blank"
+                            class="inline-flex items-center gap-2 text-primary-700 hover:underline">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <span>View Notice</span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT ACTIONS -->
+                <div class="flex flex-wrap items-center gap-3">
+
+                    <!-- EDIT -->
+                    <a href="{{ route('notice.edit',['index'=> $key , 'sid'=> SchoolLogin()->id ?? ""]) }}"
+                        class="px-3 py-2 text-xs border rounded-lg text-primary-900">
+                        Edit
+                    </a>
+
+                    <!-- DELETE -->
+                    <form action="{{ route('notice.delete') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="index" value="{{ $key }}">
+                        <input type="hidden" name="school_id" value="{{ SchoolLogin()->id ?? '' }}">
+                        <button type="submit"
+                            onclick="return confirm('Are you sure delete this data')"
+                            class="px-3 py-2 text-xs border rounded-lg text-red-500">
+                            Delete
+                        </button>
+                    </form>
+
+                </div>
 
             </div>
+        </div>
+    @endforeach
+</div>
         </div>
     </div>
 

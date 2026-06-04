@@ -91,71 +91,148 @@ class LoginController extends Controller
             ->with('status', 'Password changed successfully');
     }
 
-    public function SystemLogin(Request $request)
+    // public function SystemLogin(Request $request)
+    // {
+    //     // SCHOOL LOGIN
+    //     if ($request->login_type === 'school') {
+
+    //         $request->validate([
+    //             'schoolCode' => 'required',
+    //             'password' => 'required',
+    //         ]);
+
+    //         if (Auth::attempt(['schoolCode' => $request->schoolCode, 'password' => $request->password])) {
+
+    //             $loginUser = Auth::user();
+
+    //             if ($loginUser->role === 'school_admin') {
+    //                 return redirect()->route('school.dashboard');
+    //             }
+
+    //         } else {
+    //             return redirect()->back()->with('error', 'Invalid School Credentials');
+    //         }
+    //     }
+
+    //     // STAFF LOGIN
+    //     elseif ($request->login_type === 'staff') {
+
+    //         $request->validate([
+    //             'username' => 'required',
+    //             'password' => 'required',
+    //         ]);
+
+    //         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+
+    //             $loginUser = Auth::user();
+
+    //             if ($loginUser->role === 'staff') {
+
+    //                 return redirect()->route('staff.dashboard');
+    //             }
+
+    //         } else {
+    //             return redirect()->back()->with('error', 'Invalid Staff Credentials');
+    //         }
+    //     }
+    //     else {
+
+    //         $request->validate([
+    //             'username' => 'required',
+    //             'password' => 'required',
+    //         ]);
+
+    //         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+
+    //             $loginUser = Auth::user();
+
+    //             if ($loginUser->role === 'admin') {
+    //                 return redirect()->route('admin.dashboard');
+    //             }
+
+    //         } else {
+    //             return redirect()->back()->with('error', 'Invalid Admin Credentials');
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('error', 'Unauthorized Access');
+    // }
+    
+    
+    
+    
+     public function SystemLogin(Request $request)
     {
-        // SCHOOL LOGIN
+      
         if ($request->login_type === 'school') {
 
             $request->validate([
                 'schoolCode' => 'required',
                 'password' => 'required',
+                 'captcha' => 'required',
+                'captcha_code' => 'required',
             ]);
 
-            if (Auth::attempt(['schoolCode' => $request->schoolCode, 'password' => $request->password])) {
-
-                $loginUser = Auth::user();
-
-                if ($loginUser->role === 'school_admin') {
-                    return redirect()->route('school.dashboard');
-                }
-
-            } else {
-                return redirect()->back()->with('error', 'Invalid School Credentials');
+            if ($request->captcha !== $request->captcha_code) {
+                return back()->with('error', 'Invalide Captcha Please Try Again');
             }
-        }
 
-        // STAFF LOGIN
-        elseif ($request->login_type === 'staff') {
+            $user = User::where('schoolCode', $request->schoolCode)->first();
+
+            if (! $user || $user->role !== 'school_admin') {
+                return back()->with('error', 'Invalid School Credentials');
+            }
+
+            return checkLoginAttempt(
+                $user,
+                ['schoolCode' => $request->schoolCode, 'password' => $request->password],
+                'school.dashboard'
+            );
+        } elseif ($request->login_type === 'staff') {
 
             $request->validate([
-                'username' => 'required',
+                'username' => 'required|email',
                 'password' => 'required',
+                
             ]);
 
-            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+           
 
-                $loginUser = Auth::user();
+            $user = User::where('username', $request->username)->first();
 
-                if ($loginUser->role === 'staff') {
-
-                    return redirect()->route('staff.dashboard');
-                }
-
-            } else {
-                return redirect()->back()->with('error', 'Invalid Staff Credentials');
+            if (! $user || $user->role !== 'staff') {
+                return back()->with('error', 'Invalid Staff Credentials');
             }
-        }
-        else {
+
+            return checkLoginAttempt(
+                $user,
+                ['username' => $request->username, 'password' => $request->password],
+                'staff.dashboard'
+            );
+        } else {
 
             $request->validate([
-                'username' => 'required',
+                'username' => 'required|email',
                 'password' => 'required',
+                 'captcha' => 'required',
+                'captcha_code' => 'required',
             ]);
 
-            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-
-                $loginUser = Auth::user();
-
-                if ($loginUser->role === 'admin') {
-                    return redirect()->route('admin.dashboard');
-                }
-
-            } else {
-                return redirect()->back()->with('error', 'Invalid Admin Credentials');
+            if ($request->captcha !== $request->captcha_code) {
+                return back()->with('error', 'Invalide Captcha Please Try Again');
             }
-        }
+            $user = User::where('username', $request->username)->first();
 
-        return redirect()->back()->with('error', 'Unauthorized Access');
+            if (! $user || $user->role !== 'admin') {
+                return back()->with('error', 'Invalid Admin Credentials');
+            }
+
+            return checkLoginAttempt(
+                $user,
+                ['username' => $request->username, 'password' => $request->password],
+                'admin.dashboard'
+            );
+        }
     }
 
     public function SchoolLogout()
@@ -176,5 +253,54 @@ class LoginController extends Controller
         Auth::guard('staff')->logout();
 
         return redirect()->route('teacher.singup');
+    }
+    
+      public function adminforgetpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'id' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        if ($request->password === $request->password_confirmation) {
+            $getdata = User::findOrFail($request->id);
+            if ($getdata->username === $request->email) {
+
+                $data = [
+                    'password' => Hash::make($request->password),
+                ];
+
+                $getdata->update($data);
+
+                return back()->with('success', 'Password Reset SuccessFul');
+            } else {
+                return back()->with('error', 'Data not found');
+            }
+        } else {
+            return back()->with('error', 'Something went wrong');
+        }
+
+    }
+
+    public function schoolforgetpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'id' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+        if ($request->password === $request->password_confirmation) {
+            $getdata = User::where('school_id', $request->id);
+            $schooldata = School::findOrFail($request->id);
+                $data = [
+                    'password' => Hash::make($request->password),
+                ];
+                $getdata->update($data);
+                $schooldata->update($data);
+                return back()->with('success', 'Password Reset SuccessFul');
+        } else {
+            return back()->with('error', 'Something went wrong');
+        }
     }
 }

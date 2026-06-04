@@ -9,9 +9,11 @@ use App\Http\Controllers\School\SearchManageController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use App\Http\Controllers\SubjectManageController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('staff')->middleware('staff')->group(function () {
+      Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('staff.attendance.status.update');
     Route::view('/dashboard', 'modules.dashboard.index')->name('staff.dashboard');
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('staff.subjects');
@@ -66,6 +68,8 @@ Route::prefix('staff')->middleware('staff')->group(function () {
     Route::post('/result/add',[ResultManageController::class, 'Resultstore'])->name('staff.result.store');
     Route::get('/list/reselt',[ResultManageController::class, 'ListResult'])->name('staff.result.list');
     Route::get('/get/filter/result',[ResultManageController::class, 'filterResult'])->name('filter.result');
+       Route::get('/teacher/get/syllabus',[ManagementSyllabusController::class, 'teachergetSyllabus'])->name('staff.assing.syllabus');
+    Route::post('/subject_status/',[ManagementSyllabusController::class, 'subject_status'])->name('subject.status');
 
 
 });

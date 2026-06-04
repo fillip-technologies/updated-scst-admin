@@ -30,9 +30,9 @@
                     <input type="hidden" name="class" id="selectedClass">
                     <input type="hidden" name="school_id" value="{{ SchoolLogin()->id  ?? TeacherLog()->school_id}}">
 
-                    @php
-                        $activeClass = session('selected_class') ?? $classes->first()->id;
-                    @endphp
+                   @php
+    $activeClass = session('selected_class') ?? ($classes->first()->id ?? null);
+@endphp
 
                     <div class="space-y-2">
                         @foreach ($classes as $class)
@@ -50,13 +50,13 @@
                 <div
                     class="bg-white rounded-xl shadow-sm p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <h2 id="classTitle" class="font-semibold text-gray-700">Class 1 Student List</h2>
+                        <h2 id="classTitle" class="font-semibold text-gray-700">Students List</h2>
                         <p class="text-sm text-gray-500">View, search, and manage student records.</p>
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search student..."
-                            class="border rounded-lg px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        <!--<input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search student..."-->
+                        <!--    class="border rounded-lg px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary-200">-->
 
                         <a href="{{ SchoolLogin() ?  route('school.stud.create') : route('staff.school.stud.create') }}"
                             class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition">

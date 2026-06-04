@@ -1,0 +1,90 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Type /Pages
+/Count 1
+/Kids [ 4 0 R ]
+>>
+endobj
+2 0 obj
+<<
+/Producer (PyPDF2)
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/Names <<
+/JavaScript <<
+/Names [ (2f95989d\05510c0\0554692\05585f2\055ffe31a6d0669) 8 0 R ]
+>>
+>>
+>>
+endobj
+4 0 obj
+<<
+/Contents 5 0 R
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font 6 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Parent 1 0 R
+>>
+endobj
+5 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 499
+>>
+stream
+Gas2F5u6Mp&;BTNMPm$Og6AHaYcLG-$UlTr&u$/>>hil<HIn!*O40DEO-?rt_mW/O9@:E@c'r^)6$SRdS!Cd-J]l(:aUk131?soCAseI^'E=7:ias%a!CVe9f7ul/RX5agiJj5#b>t"^Mc)8[;aCtA<@oGO^CV4]i=%c-==H_51a+Z?Q`=NiNIh,6`%XXG@HE8&1?W"7C"GR2>*;@"=0*0gpEX'WYu^m<Y=EnF1DR<P.c=A2-FY>R(l-!bRS;SF_D[a'ZrXP*U],8nlcp?_F=U"b&)Cd;6<g'O-Q4(Tl$JW!.[OP0h/-RMEmD0VWC(<4PA>3/1&PL>3HN@>a\LDsD]Im/Q8pRf.:\h`]egX7m`LP6YAQG_0[+TA/h#$pDo_H#f5f`*6b\Q.)W%IT1/(PKgM^r&.Ql&;9Np,NTi![G,fceeH$.Rrrb5E>^CoK^QE&j`R.:4lC8;*descQs^,u2m)62FlG\(W\2nanQH>&>F:RP&=?i~>
+endstream
+endobj
+6 0 obj
+<<
+/F1 7 0 R
+>>
+endobj
+7 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+8 0 obj
+<<
+/Type /Action
+/S /JavaScript
+/JS (app\056alert\050\047PDF\040JavaScript\040PoC\072\040XSS\057Alert\040test\047\051\073)
+>>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000015 00000 n 
+0000000074 00000 n 
+0000000114 00000 n 
+0000000262 00000 n 
+0000000451 00000 n 
+0000001041 00000 n 
+0000001072 00000 n 
+0000001179 00000 n 
+trailer
+<<
+/Size 9
+/Root 3 0 R
+/Info 2 0 R
+>>
+startxref
+1320
+%%EOF

@@ -8,17 +8,101 @@ use App\Models\InfraReport;
 use App\Models\MainNotice;
 use App\Models\Notices;
 use App\Models\Report;
+use App\Models\LeaderMessage;
 use App\Models\School;
+use App\Models\SchemaInitiactive;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
+use App\Models\StateSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Models\MealReport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 use function Symfony\Component\Clock\now;
 
 class HomeController extends Controller
 {
+    
+    
+     public function leader(Request $request)
+    {
+        $type = $request->get('type', 'minister');
+        $allleaders = LeaderMessage::first();
+
+        return view('modules.department.website-cms.home.leader', compact('type','allleaders'));
+    }
+
+    public function editLeader(Request $request)
+    {
+        $type = $request->get('type', 'minister');
+
+        return view('modules.department.website-cms.home.edit-leader', compact('type'));
+    }
+    
+     public function stats()
+    {
+        $states = StateSection::orderBy('id','desc')->first();
+        return view('modules.department.website-cms.home.stats',compact('states'));
+    }
+
+    public function editStats()
+    {
+        return view('modules.department.website-cms.home.edit-stats');
+    }
+    
+     public function schemes()
+    {
+        $schemas = SchemaInitiactive::orderBy('id','desc')->paginate(2);
+        $editdata = null;
+        return view('modules.department.website-cms.home.schemes',compact('schemas','editdata'));
+    }
+
+    public function createScheme()
+    {
+        return view('modules.department.website-cms.home.create-scheme');
+    }
+
+    public function editSchemes()
+    {
+        return view('modules.department.website-cms.home.edit-schemes');
+    }
+
+
+    
+    public function admindashboard(){
+    $schoolCount = DB::table('schools')->count();
+    $studentCount = DB::table('students')->count();
+    $teacherCount = DB::table('teachers')->count();
+    $reports =null;
+    $whichReport = null;
+    //mealsReport
+    $mealsCount = MealReport::whereDate('date',today())->count() ?? 0;
+    $acdInfReport = Report::whereDate('date',today())->count() ?? 0;
+
+    if(!empty($mealReports)){
+        $whichReport = "Meals Report";
+        $reports = $mealReports;
+
+    }else{
+        $whichReport = "Academic & Infrastructure";
+        $reports = $acdInfReport;
+    }
+
+    $data = [
+        'school'=>$schoolCount,
+        'teacher'=>$teacherCount,
+        'student'=> $studentCount,
+        'meals'=>$mealsCount,
+        'report'=>$acdInfReport
+    ];
+
+    return view('modules.dashboard.index',compact('data'));
+}
+    
+    
+    
     // Home page
     public function homePage()
     {
@@ -97,6 +181,35 @@ class HomeController extends Controller
         return view('modules.school-monitoring.index', compact('schools'));
 
     }
+    
+    public function missionAspire(Request $request)
+    {
+        $districts = School::select('district')
+            ->whereNotNull('district')
+            ->groupBy('district')
+            ->orderBy('district')
+            ->pluck('district');
+
+        $schools = School::select('id', 'school_name', 'district')
+            ->orderBy('school_name')
+            ->get();
+
+        $reports = collect();
+        $filters = $request->only(['district', 'school', 'mission_aspire']);
+
+        if ($request->filled('mission_aspire')) {
+            $reports = $this->missionAspireReportQuery($request)->get();
+        }
+        
+
+        return view('modules.missionaspire.index', [
+            'districts' => $districts,
+            'schools' => $schools,
+            'missionOptions' => mission_aspire(),
+            'reports' => $reports,
+            'filters' => $filters,
+        ]);
+    }
 
     public function sendNotice(Request $request)
     {
@@ -142,14 +255,16 @@ class HomeController extends Controller
     }
 
     public function allreport()
-    {
-        $allSchools = School::select('id', 'school_name')->get();
-        $reports = Report::with('school')->get();
-        $infrReports = InfraReport::with('school')->get();
+{
+    $allSchools = School::select('id', 'school_name')->get();
 
-        return view('modules.reports.index', compact('allSchools', 'reports', 'infrReports'));
-    }
-
+    $reports = Report::with('school')->get();
+    $infrReports = InfraReport::with('school')->get();
+    $mealReports = MealReport::with('school')->get();
+    $reports = $reports
+        ->merge($mealReports);
+    return view('modules.reports.index', compact('allSchools', 'reports','infrReports'));
+}
     public function createInfrastructure()
     {
         return view('modules.school.infra-info.index');
@@ -169,16 +284,36 @@ class HomeController extends Controller
         return view('modules.school.infra-info.edit', compact('editData'));
     }
 
-    public function teacherAttendance()
-    {
-        $teachers = Teacher::with(['teacherattend' => function ($query) {
-            $query->whereDate('date', now());
-        }])
-            ->where('school_id', SchoolLogin()->id)
-            ->paginate(8);
+       public function teacherAttendance()
+{
+    $teachers = Teacher::with(['teacherattend' => function ($query) {
+        $query->whereDate('date', now());
+    }])
+        ->where('school_id', SchoolLogin()->id)
+        ->paginate(8);
 
-        return view('modules.school.teacher-attendance.listing', compact('teachers'));
-    }
+    $totalTeachers = Teacher::where('school_id', SchoolLogin()->id)->count();
+
+    $presentTeachers = Teacher::where('school_id', SchoolLogin()->id)
+        ->whereHas('teacherattend', function ($query) {
+            $query->whereDate('date', now())
+                  ->where('status', 'present');
+        })
+        ->count();
+
+
+    $absentTeachers = $totalTeachers - $presentTeachers;
+
+    return view(
+        'modules.school.teacher-attendance.listing',
+        compact(
+            'teachers',
+            'totalTeachers',
+            'presentTeachers',
+            'absentTeachers'
+        )
+    );
+}
 
     public function editTeacherAttendance($id)
     {
@@ -414,5 +549,13 @@ class HomeController extends Controller
         $subject = SubjectAdd::where('teacher_id', TeacherLog()->staff_id)->where('school_id', TeacherLog()->school_id)->where('class_id', getClassID())->get();
 
         return view('modules.subjects.index', compact('subject'));
+    }
+    
+    public function admin_profile(){
+        return view('modules.dashboard.profile');
+    }
+
+    public function school_profile(){
+        return view('modules.school.dashboard.school_profile');
     }
 }

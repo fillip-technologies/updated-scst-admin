@@ -38,6 +38,7 @@ class WebsiteCmsController extends Controller
                 ->count();
 
             $data[] = [
+                
                 'class' => $class->class_id,
                 'total' => $total,
                 'present' => $present,
@@ -121,12 +122,15 @@ class WebsiteCmsController extends Controller
     }
 
     public function cmsnoticeindex()
-    {
-      $notice = Notices::where('school_id', SchoolLogin()->id)->first();
-      $notices = json_decode($notice->notice_manage);
-     return view('modules.school.notices.index', compact('notices'));
-    }
+{
+    $notice = Notices::where('school_id', SchoolLogin()->id)->first();
 
+    $notices = json_decode($notice?->notice_manage, true) ?? "{}";
+
+    return view('modules.school.notices.index', compact('notices'));
+}
+
+    
     public function attandence()
     {
         $school_id = SchoolLogin()->id ?? TeacherLog()->school_id;
@@ -139,9 +143,10 @@ class WebsiteCmsController extends Controller
             }])
             ->paginate(10);
 
-        return view('modules.school.attendance.index', compact('classes', 'studentdata'));
-    }
+            $totalstudent = Student::where('school_id', $school_id)->count();
 
+        return view('modules.school.attendance.index', compact('classes', 'studentdata','totalstudent'));
+    }
     public function academics()
     {
         return view('modules.school.academics.index');

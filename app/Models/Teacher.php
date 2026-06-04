@@ -20,7 +20,7 @@ class Teacher extends Model
 
     public function addclass()
     {
-        return $this->belongsTo(AddClasses::class);
+        return $this->belongsTo(AddClasses::class,'class_id');
     }
 
     public function teacherattend()

@@ -7,11 +7,13 @@ use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
 use App\Imports\TeacherImport;
 use App\Models\Teacher;
+use App\Mail\TeacherRegMail;
 use App\Models\TeacherAttend;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Mail;
 
 class TeacherManageController extends Controller
 {
@@ -59,15 +61,15 @@ class TeacherManageController extends Controller
 
         return view('modules.school.teacher-attendance.edit', compact('editdata'));
     }
-
-    public function SaveTeacher(Request $request)
+    
+     public function SaveTeacher(Request $request)
     {
         $request->validate([
             'school_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'password'=>'required|min:6',
+            'password' => 'required|min:6',
             'designation' => 'required',
             'address' => 'required',
             'photo' => 'required|file|mimes:jpg,jpeg,png,webp',
@@ -103,13 +105,25 @@ class TeacherManageController extends Controller
         $data = ManageCrud::createdatas(Teacher::class, $data);
 
         User::create([
-            'name'=>$data->name,
-            'username'=>$data->email,
-            'password'=> Hash::make($request->password),
-            'school_id'=> SchoolLogin()->id,
-            'role'=>'staff',
-            'staff_id' => $data->id
+            'name' => $data->name,
+            'username' => $data->email,
+            'password' => Hash::make($request->password),
+            'school_id' => SchoolLogin()->id,
+            'role' => 'staff',
+            'staff_id' => $data->id,
         ]);
+
+        $emaildata = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'link' => route('teacher.singup'),
+        ];
+        
+        if ($request->email !== config('mail.from.address')) {
+          Mail::to($request->email)->send(new TeacherRegMail($emaildata));
+
+        }
+      
         if ($data) {
             return redirect('/school/teacher/list')->with('success', 'Teacher Added SuccessFul');
         } else {
@@ -117,6 +131,7 @@ class TeacherManageController extends Controller
         }
 
     }
+
 
     public function UpdateTeacher(Request $request, $id, $schoolId)
     {
@@ -185,10 +200,10 @@ class TeacherManageController extends Controller
     {
         $getteacher = Teacher::where('school_id', $schoolId)
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
+            User::where('staff_id',$getteacher->id)->delete();
         if ($getteacher) {
             $getteacher->delete();
-
             return redirect('/school/teacher/list')->with('success', 'Teacher Deleted Successfully');
         } else {
             return redirect('/school/teacher/list')->with('error', 'Something went wrong');
