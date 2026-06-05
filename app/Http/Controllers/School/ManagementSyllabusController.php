@@ -105,20 +105,23 @@ class ManagementSyllabusController extends Controller
         }
     }
 
-    public function teachergetSyllabus()
-    {
-        $teacher = TeacherLog();
-        $class = $teacher->staffs->addclass->class;
-        $subjectname = ucfirst($teacher->staffs->subject);
-        echo $subjectname;
+   public function teachergetSyllabus()
+{
+    $teacher = TeacherLog();
+    $class = $teacher->staffs->addclass->class;
+    $subjectname = ucfirst($teacher->staffs->subject);
 
-        $studeySubject = SyllabusTracking::where('class_name', $class)
-            ->where('subject_name', $subjectname)
-            ->pluck('topics_name')->toArray();
-        // dd($studeySubject);
-       return view('modules.school.staff.assign_subject');
-    }
+    // Get all syllabus data for this teacher's class and subject
+    $syllabusData = SyllabusTracking::where('class_name', $class)
+        ->where('subject_name', $subjectname)
+        ->select('class_name', 'subject_name', 'topics_name')
+        ->get();
 
+    // Group by class and subject (though they are same, keeping for consistency)
+    $groupedData = $syllabusData->groupBy('class_name');
+
+    return view('modules.school.staff.assign_subject', compact('groupedData', 'class', 'subjectname'));
+}
     public function subject_status(Request $request)
     {
         $request->validate([

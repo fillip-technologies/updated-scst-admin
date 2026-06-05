@@ -5,27 +5,28 @@ namespace App\Http\Controllers;
 use App\Helpers\ManageCrud;
 use App\Models\AddClasses;
 use App\Models\InfraReport;
+use App\Models\LeaderMessage;
 use App\Models\MainNotice;
+use App\Models\MealReport;
 use App\Models\Notices;
 use App\Models\Report;
-use App\Models\LeaderMessage;
-use App\Models\School;
 use App\Models\SchemaInitiactive;
+use App\Models\School;
+use App\Models\StateSection;
 use App\Models\SubjectAdd;
 use App\Models\Teacher;
-use App\Models\StateSection;
+use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use App\Models\MealReport;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
-use function Symfony\Component\Clock\now;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
-    
-    
+
+
      public function leader(Request $request)
     {
         $type = $request->get('type', 'minister');
@@ -40,7 +41,7 @@ class HomeController extends Controller
 
         return view('modules.department.website-cms.home.edit-leader', compact('type'));
     }
-    
+
      public function stats()
     {
         $states = StateSection::orderBy('id','desc')->first();
@@ -51,7 +52,7 @@ class HomeController extends Controller
     {
         return view('modules.department.website-cms.home.edit-stats');
     }
-    
+
      public function schemes()
     {
         $schemas = SchemaInitiactive::orderBy('id','desc')->paginate(2);
@@ -70,7 +71,7 @@ class HomeController extends Controller
     }
 
 
-    
+
     public function admindashboard(){
     $schoolCount = DB::table('schools')->count();
     $studentCount = DB::table('students')->count();
@@ -100,9 +101,9 @@ class HomeController extends Controller
 
     return view('modules.dashboard.index',compact('data'));
 }
-    
-    
-    
+
+
+
     // Home page
     public function homePage()
     {
@@ -176,12 +177,12 @@ class HomeController extends Controller
 
                 return $school;
             });
-           
+
 
         return view('modules.school-monitoring.index', compact('schools'));
 
     }
-    
+
     public function missionAspire(Request $request)
     {
         $districts = School::select('district')
@@ -200,7 +201,7 @@ class HomeController extends Controller
         if ($request->filled('mission_aspire')) {
             $reports = $this->missionAspireReportQuery($request)->get();
         }
-        
+
 
         return view('modules.missionaspire.index', [
             'districts' => $districts,
@@ -550,7 +551,7 @@ class HomeController extends Controller
 
         return view('modules.subjects.index', compact('subject'));
     }
-    
+
     public function admin_profile(){
         return view('modules.dashboard.profile');
     }

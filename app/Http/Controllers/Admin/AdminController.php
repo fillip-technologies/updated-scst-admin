@@ -12,7 +12,7 @@ class AdminController extends Controller
 {
     public function login_admin()
     {
-       
+      
         return view('admin.login.signin');
     }
 
