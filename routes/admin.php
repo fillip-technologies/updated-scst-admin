@@ -121,13 +121,15 @@ Route::prefix('admin')->middleware('admin')->group(function () {
       Route::get('/get/class/data/{value}',[SchoolManageController::class, 'getclass'])->name('get.data.class');
      Route::get('/get/subject/data/{value}',[SchoolManageController::class, 'getsubjects'])->name('get.data.subject');
 
-     
-        Route::get('listing/mission/aspire',[MissionAspireController::class,'list_mission'])->name('mission.list'); 
+
+        Route::get('listing/mission/aspire',[MissionAspireController::class,'list_mission'])->name('mission.list');
     Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire');
     Route::post('/upload/mission/aspire',[MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
 
     //Missin Filtering
-
+Route::post('/add/syllabus/track',[ManagementSyllabusController::class ,'addsyllabusTrack'])->name('add.syllabus.track');
+Route::get('/view/tracking',[ManagementSyllabusController::class,'view_tracking'])->name('view.tracking');
+Route::get('/getSchoolId',[ManagementSyllabusController::class, 'getSchoolId'])->name('getSchoolId');
     Route::get('/mission/type',[MissionAspireController::class, 'listofmission'])->name('list.search.mission');
 Route::get('/search/mission/aspire',[MissionAspireController::class, 'searchMission'])->name('search.mission.aspire');
 });

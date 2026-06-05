@@ -4,24 +4,33 @@ namespace App\Http\Controllers\School;
 
 use App\Helpers\ManageCrud;
 use App\Http\Controllers\Controller;
+use App\Imports\SyllabusTrackingImport;
 use App\Models\AddClasses;
 use App\Models\AssingSubject;
+use App\Models\School;
 use App\Models\SubjectList;
 use App\Models\SubTopics;
+use App\Models\SyllabusTracking;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManagementSyllabusController extends Controller
 {
+    public function view_tracking()
+    {
+        return view('modules.syllabus-tracking.index');
+    }
+
     public function indexsyllabus()
     {
         $school = SchoolLogin();
-
         $records = AssingSubject::with(['class', 'school', 'teacher', 'subject', 'topic'])
             ->where('school_id', $school->id)
             ->get();
-        // dd($records);
 
+        // dd($records);
         return view('modules.school.syllabus.index', compact('school', 'records'));
     }
 
@@ -65,14 +74,14 @@ class ManagementSyllabusController extends Controller
         return back()->with('success', 'Created Syllabus and Topics');
     }
 
-     public function assingSubject(Request $request)
+    public function assingSubject(Request $request)
     {
         $request->validate([
             'school_id' => 'required',
             'teacher_id' => 'required',
             'class_id' => 'required',
             'sublist_id' => 'required',
-            'completion_time'=>'required'
+            'completion_time' => 'required',
         ]);
 
         $topicId = SubTopics::where('sublist_id', $request->sublist_id)->value('id');
@@ -86,7 +95,7 @@ class ManagementSyllabusController extends Controller
             'sublist_id' => $request->sublist_id,
             'class_id' => $request->class_id,
             'topics_id' => $topicId,
-            'completion_time'=>$request->completion_time
+            'completion_time' => $request->completion_time,
         ];
         $data = ManageCrud::createdatas(AssingSubject::class, $data);
         if ($data) {
@@ -99,10 +108,15 @@ class ManagementSyllabusController extends Controller
     public function teachergetSyllabus()
     {
         $teacher = TeacherLog();
+        $class = $teacher->staffs->addclass->class;
+        $subjectname = ucfirst($teacher->staffs->subject);
+        echo $subjectname;
 
-        $records = AssingSubject::with(['class', 'school', 'teacher', 'topic', 'subject'])->where('teacher_id', TeacherLog()->staff_id ?? 0)->get();
-
-        return view('modules.school.syllabus.assing_details', compact('records', 'teacher'));
+        $studeySubject = SyllabusTracking::where('class_name', $class)
+            ->where('subject_name', $subjectname)
+            ->pluck('topics_name')->toArray();
+        // dd($studeySubject);
+       return view('modules.school.staff.assign_subject');
     }
 
     public function subject_status(Request $request)
@@ -126,114 +140,163 @@ class ManagementSyllabusController extends Controller
         }
 
     }
-    
-    
-     public function syllabusTraking(){
-    $assingdata = AssingSubject::with(['class', 'school', 'teacher', 'topic', 'subject'])->get();
-     return view('modules.listing.syllabusTrack');
+
+    public function syllabusTraking()
+    {
+        $subjectdata = SyllabusTracking::select(
+            'class_name',
+            'subject_name',
+            'topics_name'
+        )
+            ->distinct()
+            ->get()
+            ->groupBy('class_name');
+
+
+        if ($subjectdata->isEmpty()) {
+            $subjectdata = collect([]);
+        }
+        $currentPage = request()->get('page', 1);
+        $perPage = 5;
+        $paginatedData = new LengthAwarePaginator(
+            $subjectdata->forPage($currentPage, $perPage),
+            $subjectdata->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        return view('modules.syllabus-tracking.add', compact('paginatedData'));
     }
-    
-    
-    
-    public function editasyllabus($id,$school_id){
-    $assgindata = AssingSubject::with(['class', 'school', 'teacher', 'topic', 'subject'])->where('id',$id)->where('school_id',$school_id)->first();
-    $subjectList = SubjectList::findOrFail($assgindata->sublist_id);
-    $topicsList = SubTopics::findOrFail($assgindata->topics_id);
-       $subject = SubjectList::where('school_id', SchoolLogin()->id)->get() ?? [];
+
+    public function editasyllabus($id, $school_id)
+    {
+        $assgindata = AssingSubject::with(['class', 'school', 'teacher', 'topic', 'subject'])->where('id', $id)->where('school_id', $school_id)->first();
+        $subjectList = SubjectList::findOrFail($assgindata->sublist_id);
+        $topicsList = SubTopics::findOrFail($assgindata->topics_id);
+        $subject = SubjectList::where('school_id', SchoolLogin()->id)->get() ?? [];
         $teachers = Teacher::where('school_id', SchoolLogin()->id)->get() ?? [];
         $classs = AddClasses::where('school_id', SchoolLogin()->id)->get() ?? [];
-    return view('modules.school.syllabus.edit_syllabus',compact('topicsList','assgindata','subjectList','subject','teachers','classs'));
+
+        return view('modules.school.syllabus.edit_syllabus', compact('topicsList', 'assgindata', 'subjectList', 'subject', 'teachers', 'classs'));
     }
 
+    public function subject_edit(Request $request, $id)
+    {
+        $request->validate([
+            'subject_name' => 'required|string|max:255',
+            'topics' => 'nullable|array',
+        ]);
 
-   public function subject_edit(Request $request, $id)
-{
-    $request->validate([
-        'subject_name' => 'required|string|max:255',
-        'topics' => 'nullable|array',
-    ]);
+        $editdata = SubjectList::where('id', $id)
+            ->where('school_id', $request->school_id)
+            ->first();
 
-    $editdata = SubjectList::where('id', $id)
-        ->where('school_id', $request->school_id)
-        ->first();
+        if (! $editdata) {
+            return back()->with('error', 'Subject not found');
+        }
+        $editdata->update([
+            'subject_name' => $request->subject_name,
+        ]);
+        SubTopics::updateOrCreate(
+            [
+                'sublist_id' => $editdata->id,
+                'school_id' => $request->school_id,
+            ],
+            [
+                'topics' => json_encode($request->topics ?? []),
+            ]
+        );
 
-    if (!$editdata) {
-        return back()->with('error', 'Subject not found');
+        return back()->with('success', 'Subject Update data successful');
     }
-    $editdata->update([
-        'subject_name' => $request->subject_name,
-    ]);
-    SubTopics::updateOrCreate(
-        [
-            'sublist_id' => $editdata->id,
-            'school_id' => $request->school_id,
-        ],
-        [
-            'topics' => json_encode($request->topics ?? []),
-        ]
-    );
 
-    return back()->with('success', 'Subject Update data successful');
-}
+    public function index_delete(Request $request)
+    {
 
-public function index_delete(Request $request)
-{
-    
-    $index = $request->index;
-    $getdata = SubTopics::findOrFail($request->id);
-    $topics = json_decode($getdata->topics, true);
-    unset($topics[$index]);
-    $topics = array_values($topics);
-    $getdata->topics = json_encode($topics);
-    $getdata->save();
-    return response()->json([
-        'message' => 'Delete Items',
-        'data' => $topics
-    ]);
-}
+        $index = $request->index;
+        $getdata = SubTopics::findOrFail($request->id);
+        $topics = json_decode($getdata->topics, true);
+        unset($topics[$index]);
+        $topics = array_values($topics);
+        $getdata->topics = json_encode($topics);
+        $getdata->save();
 
-public function assingsubject_edit(Request $request, $id)
-{
-    $request->validate([
-        'teacher_id' => 'required',
-        'class_id' => 'required',
-        'sublist_id' => 'required',
-        'completion_time'=>'required'
-    ]);
-
-    $editdata = AssingSubject::where('id', $id)
-        ->where('school_id', $request->school_id)
-        ->first();
-
-    if (!$editdata) {
-        return back()->with('error', 'Record not found');
+        return response()->json([
+            'message' => 'Delete Items',
+            'data' => $topics,
+        ]);
     }
-    $editdata->update([
-        'teacher_id' => $request->teacher_id,
-        'class_id' => $request->class_id,
-        'sublist_id' => $request->sublist_id,
-        'completion_time'=>$request->completion_time
-    ]);
 
-    return back()->with('success', ' Assgin Subject details Update data successful');
+    public function assingsubject_edit(Request $request, $id)
+    {
+        $request->validate([
+            'teacher_id' => 'required',
+            'class_id' => 'required',
+            'sublist_id' => 'required',
+            'completion_time' => 'required',
+        ]);
 
-}
+        $editdata = AssingSubject::where('id', $id)
+            ->where('school_id', $request->school_id)
+            ->first();
 
+        if (! $editdata) {
+            return back()->with('error', 'Record not found');
+        }
+        $editdata->update([
+            'teacher_id' => $request->teacher_id,
+            'class_id' => $request->class_id,
+            'sublist_id' => $request->sublist_id,
+            'completion_time' => $request->completion_time,
+        ]);
 
-public function deleteSyllabus(Request $request)
-{
-    $record = AssingSubject::findOrFail($request->id);
-    $record->delete();
+        return back()->with('success', ' Assgin Subject details Update data successful');
 
-    return response()->json([
-        'message'=>'delete data ',
-        'data'=>$record
-    ]);
+    }
 
-}
-    
-    
-    
-    
-    
+    public function deleteSyllabus(Request $request)
+    {
+        $record = AssingSubject::findOrFail($request->id);
+        $record->delete();
+
+        return response()->json([
+            'message' => 'delete data ',
+            'data' => $record,
+        ]);
+
+    }
+
+    public function addsyllabusTrack(Request $request)
+    {
+
+        $request->validate([
+            'subject' => 'required',
+            'class_name' => 'required',
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+            'assign_date' => 'nullable|date',
+            'completion_date' => 'nullable|date',
+        ]);
+
+        Excel::import(
+            new SyllabusTrackingImport(
+                $request->subject,
+                $request->assign_date,
+                $request->completion_date,
+                $request->class_name
+            ),
+            $request->file('file')
+        );
+
+        return back()->with('success', 'Excel imported successfully : '.' Class : '.$request->class_name.' Subject : '.$request->subject);
+    }
+
+    public function getSchoolId()
+    {
+        $data = School::pluck('id')->toArray();
+
+        return response()->json([
+            'message' => 'All School ID',
+            'data' => $data,
+        ], 200);
+    }
 }

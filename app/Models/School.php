@@ -86,7 +86,7 @@ class School extends Authenticatable
     public function result(){
         return $this->hasMany(Result::class);
     }
-    
+
      public function assingsubject()
     {
         return $this->hasMany(AssingSubject::class);
@@ -140,6 +140,10 @@ class School extends Authenticatable
     public function teacherstaffreport()
     {
         return $this->hasMany(TeacherStaffReport::class);
+    }
+
+    public function syllabusTrack(){
+        return $this->hasMany(SyllabusTracking::class);
     }
 
 

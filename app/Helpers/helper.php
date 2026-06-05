@@ -244,7 +244,7 @@ if (!function_exists('checkLoginAttempt')) {
 
         if (Auth::attempt($credentials)) {
 
-         
+
             $user->login_attempts = 0;
             $user->lock_until = null;
             $user->save();
@@ -252,7 +252,7 @@ if (!function_exists('checkLoginAttempt')) {
             return redirect()->route($redirectRoute);
         }
 
-       
+
         $user->login_attempts += 1;
 
         if ($user->login_attempts >= 5) {
@@ -265,7 +265,7 @@ if (!function_exists('checkLoginAttempt')) {
 
         return back()->with('error', "Invalid Credentials. $remaining attempts left");
     }
-    
+
     if (! function_exists('mission_aspire')) {
     function mission_aspire()
     {
@@ -294,4 +294,23 @@ if (! function_exists('getSchools')) {
         return $query->get();
     }
 }
+
+if(!function_exists('all_syllabus')){
+    function all_syllabus(){
+        return[
+            'History',
+            'English',
+            'Economics',
+            'Civics',
+            'Sanskrit',
+            'Social Science',
+            'Hindi',
+            'Maths',
+            'Science',
+            'Geography',
+            'EVS'
+        ];
+    }
+}
+
 

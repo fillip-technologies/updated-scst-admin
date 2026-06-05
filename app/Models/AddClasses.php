@@ -41,4 +41,9 @@ class AddClasses extends Model
     {
         return $this->hasMany(Result::class);
     }
+
+    public function syllabusTrack()
+    {
+        return $this->hasMany(SyllabusTracking::class);
+    }
 }

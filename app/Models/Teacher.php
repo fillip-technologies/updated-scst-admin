@@ -35,4 +35,8 @@ class Teacher extends Model
     public function result(){
         return $this->hasMany(Result::class);
     }
+
+    public function user(){
+        return $this->hasMany(User::class,'staff_id');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('SchoolLogin')) {
@@ -32,7 +33,7 @@ if (! function_exists('TeacherLog')) {
     {
         $admin = Auth::user();
         if ($admin && $admin->role === 'staff') {
-            return $admin;
+           return  User::with(['staffs'])->where('staff_id', $admin->staff_id)->first();
         }
 
         return null;
