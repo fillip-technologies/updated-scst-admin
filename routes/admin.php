@@ -1,48 +1,50 @@
 <?php
+
 use App\Http\Controllers\Admin\cms\DepartmentCmsController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainNoticeController;
+use App\Http\Controllers\Admin\MissionAspireController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\SchoolManageController;
+use App\Http\Controllers\Admin\ViewTrakingController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\Mails\ManageMailController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MissionAspireController;
-
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-        Route::post('/update/schema/{id}', [DepartmentCmsController::class, 'updateschema'])->name('update.schema');
-     Route::post('/minister/data/store', [DepartmentCmsController::class, 'minister_add'])->name('minister.data.store');
+    Route::post('/update/schema/{id}', [DepartmentCmsController::class, 'updateschema'])->name('update.schema');
+    Route::post('/minister/data/store', [DepartmentCmsController::class, 'minister_add'])->name('minister.data.store');
     Route::post('/secretary/data/store', [DepartmentCmsController::class, 'secretary_add'])->name('secretary.data.store');
     Route::post('/iasofficer/data/store', [DepartmentCmsController::class, 'ias_officer_add'])->name('ias.data.store');
 
-        Route::get('/schema/edit/{id}', [DepartmentCmsController::class, 'editschema'])->name('edit.schema');
-        Route::post('/store/state/section', [DepartmentCmsController::class, 'add_states'])->name('add.states');
-            Route::post('/store/schema', [DepartmentCmsController::class, 'add_schema'])->name('add.schemas');
-      Route::get('department/website-cms/home/leader', [HomeController::class, 'leader'])
+    Route::get('/schema/edit/{id}', [DepartmentCmsController::class, 'editschema'])->name('edit.schema');
+    Route::post('/store/state/section', [DepartmentCmsController::class, 'add_states'])->name('add.states');
+    Route::post('/store/schema', [DepartmentCmsController::class, 'add_schema'])->name('add.schemas');
+    Route::get('department/website-cms/home/leader', [HomeController::class, 'leader'])
         ->name('admin.department.cms.leader');
-        Route::get('/department/website-cms/home/stats', [HomeController::class, 'stats'])
+    Route::get('/department/website-cms/home/stats', [HomeController::class, 'stats'])
         ->name('admin.department.cms.stats');
-         Route::get('/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
+    Route::get('/department/website-cms/home/schemes', [HomeController::class, 'schemes'])
         ->name('admin.department.cms.schemes');
-        Route::get('/syllabusTraking',[ManagementSyllabusController::class, 'syllabusTraking'])->name('syllabusTraking');
-        Route::get('get/syllabus/traking',[SchoolManageController::class, 'syllabus_traking'])->name('tracking.syllabus.serach');
+    Route::get('/syllabusTraking', [ManagementSyllabusController::class, 'syllabusTraking'])->name('syllabusTraking');
+
+    Route::get('get/syllabus/traking', [SchoolManageController::class, 'syllabus_traking'])->name('tracking.syllabus.serach');
 
     // Route::view('/dashboard', 'modules.dashboard.index')->name('admin.dashboard');
-        Route::get('/dashboard', [HomeController::class,'admindashboard'])->name('admin.dashboard');
+    Route::get('/dashboard', [HomeController::class, 'admindashboard'])->name('admin.dashboard');
 
     Route::get('/logout', [LoginController::class, 'AdminLogout'])->name('admin.logout');
     Route::get('/school-management', [HomeController::class, 'schoolManagement'])->name('admin.school.management');
     Route::get('/school-management/create', function () {
         return view('modules.school-management.create');
     });
-      Route::get('/mission-aspire', [HomeController::class, 'missionAspire'])
+    Route::get('/mission-aspire', [HomeController::class, 'missionAspire'])
         ->name('admin.mission.aspire');
-        Route::get('/profile',[HomeController::class, 'admin_profile'])->name('admin.profile');
-    Route::post('/reset/password',[LoginController::class, 'adminforgetpassword'])->name('reset.admin.password');
+    Route::get('/profile', [HomeController::class, 'admin_profile'])->name('admin.profile');
+    Route::post('/reset/password', [LoginController::class, 'adminforgetpassword'])->name('reset.admin.password');
     Route::post('/school/create', [SchoolManageController::class, 'AddSchool'])->name('save.school');
     Route::get('/edit/school/{id}', [SchoolManageController::class, 'EditSchool'])->name('edit.school');
     Route::get('/view/school/{id}', [SchoolManageController::class, 'ViewSchool'])->name('show.school');
@@ -63,7 +65,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('performance.analytics');
 
     // Ranking
-    Route::post('/send/notification/mail',[ManageMailController::class, 'sentNotification'])->name('send.email');
+    Route::post('/send/notification/mail', [ManageMailController::class, 'sentNotification'])->name('send.email');
     Route::view('/rankings', 'modules.rankings.index')
         ->name('rankings');
 
@@ -92,7 +94,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('school.monitoring.send-notice');
 
     //
-  Route::post('/notificationsend',[ManageMailController::class, 'notificationsend'])->name('notification.send');
+    Route::post('/notificationsend', [ManageMailController::class, 'notificationsend'])->name('notification.send');
     Route::get('/notices', [HomeController::class, 'notices'])
         ->name('admin.notices.index');
 
@@ -116,20 +118,23 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/admin/stock/update', [HomeController::class, 'updateStock'])
         ->name('admin.stock.update');
     Route::get('/search/data', [SearchManageController::class, 'schoolSearch'])->name('search.school');
-    Route::get('/details/montering/school/{id}',[MonitoringController::class, 'detailsMonitering'])->name('details.schools');
-     Route::get('/get/school/{value}',[SchoolManageController::class, 'getschools'])->name('get.schools');
-      Route::get('/get/class/data/{value}',[SchoolManageController::class, 'getclass'])->name('get.data.class');
-     Route::get('/get/subject/data/{value}',[SchoolManageController::class, 'getsubjects'])->name('get.data.subject');
+    Route::get('/details/montering/school/{id}', [MonitoringController::class, 'detailsMonitering'])->name('details.schools');
+    Route::get('/get/school/{value}', [SchoolManageController::class, 'getschools'])->name('get.schools');
+    Route::get('/get/class/data/{value}', [SchoolManageController::class, 'getclass'])->name('get.data.class');
+    Route::get('/get/subject/data/{value}', [SchoolManageController::class, 'getsubjects'])->name('get.data.subject');
 
+    Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('mission.list');
+    Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('mission.aspire');
+    Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
 
-        Route::get('listing/mission/aspire',[MissionAspireController::class,'list_mission'])->name('mission.list');
-    Route::get('mission/aspire',[MissionAspireController::class,'mission_aspire'])->name('mission.aspire');
-    Route::post('/upload/mission/aspire',[MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
+    // Missin Filtering
+    Route::post('/add/syllabus/track', [ManagementSyllabusController::class, 'addsyllabusTrack'])->name('add.syllabus.track');
+    Route::get('/view/tracking', [ManagementSyllabusController::class, 'view_tracking'])->name('view.tracking');
+    Route::get('/getSchoolId', [ManagementSyllabusController::class, 'getSchoolId'])->name('getSchoolId');
+    Route::get('/mission/type', [MissionAspireController::class, 'listofmission'])->name('list.search.mission');
+    Route::get('/search/mission/aspire', [MissionAspireController::class, 'searchMission'])->name('search.mission.aspire');
 
-    //Missin Filtering
-Route::post('/add/syllabus/track',[ManagementSyllabusController::class ,'addsyllabusTrack'])->name('add.syllabus.track');
-Route::get('/view/tracking',[ManagementSyllabusController::class,'view_tracking'])->name('view.tracking');
-Route::get('/getSchoolId',[ManagementSyllabusController::class, 'getSchoolId'])->name('getSchoolId');
-    Route::get('/mission/type',[MissionAspireController::class, 'listofmission'])->name('list.search.mission');
-Route::get('/search/mission/aspire',[MissionAspireController::class, 'searchMission'])->name('search.mission.aspire');
+    Route::get('/view/tracking', [ViewTrakingController::class, 'tackingList'])->name('view.tracking.list');
+    Route::get('/view/tracking/details/{school_id}/{teacher_id}', [ViewTrakingController::class, 'view_tracking_details'])->name('view.tracking.details');
+
 });

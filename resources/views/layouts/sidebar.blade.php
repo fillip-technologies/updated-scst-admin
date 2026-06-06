@@ -102,7 +102,7 @@
                         class="mt-1 ml-4 pl-4 border-l-2 border-primary-700 space-y-0.5">
 
                         <!-- View Tracking -->
-                        <a href="{{ route('view.tracking') }}"
+                        <a href="{{ route('view.tracking.list') }}"
                             class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition text-sm
             {{ request()->routeIs('admin.syllabus.tracking') ? 'bg-primary-700 text-white font-medium' : 'text-gray-400 hover:bg-primary-800 hover:text-white' }}">
                             <i
@@ -357,7 +357,7 @@
                 </i>
 
                 <span class="font-medium">
-                    Syllabus Management
+                   Subjects/Syllabus
                 </span>
             </a>
 

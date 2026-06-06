@@ -39,4 +39,8 @@ class Teacher extends Model
     public function user(){
         return $this->hasMany(User::class,'staff_id');
     }
+
+    public function viewTrack(){
+        return $this->hasMany(ViewTracking::class);
+    }
 }

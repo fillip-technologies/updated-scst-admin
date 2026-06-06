@@ -12,6 +12,7 @@ use App\Models\SubjectList;
 use App\Models\SubTopics;
 use App\Models\SyllabusTracking;
 use App\Models\Teacher;
+use App\Models\ViewTracking;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,16 +24,11 @@ class ManagementSyllabusController extends Controller
         return view('modules.syllabus-tracking.index');
     }
 
-    public function indexsyllabus()
-    {
-        $school = SchoolLogin();
-        $records = AssingSubject::with(['class', 'school', 'teacher', 'subject', 'topic'])
-            ->where('school_id', $school->id)
-            ->get();
+    // public function indexsyllabus()
+    // {
 
-        // dd($records);
-        return view('modules.school.syllabus.index', compact('school', 'records'));
-    }
+    //     return view('modules.school.syllabus.index', compact('school', 'records'));
+    // }
 
     public function createSyllabus()
     {
@@ -105,23 +101,20 @@ class ManagementSyllabusController extends Controller
         }
     }
 
-   public function teachergetSyllabus()
-{
-    $teacher = TeacherLog();
-    $class = $teacher->staffs->addclass->class;
-    $subjectname = ucfirst($teacher->staffs->subject);
+    public function teachergetSyllabus()
+    {
+        $teacher = TeacherLog();
+        $class = $teacher->staffs->addclass->class;
+        $subjectname = ucfirst($teacher->staffs->subject);
+        $syllabusData = SyllabusTracking::where('class_name', $class)
+            ->where('subject_name', $subjectname)
+            ->select('class_name', 'subject_name', 'topics_name')
+            ->get();
+        $groupedData = $syllabusData->groupBy('class_name');
+        $viewstatus = ViewTracking::with(['school:id,school_name','teacher'])->where('teacher_id',$teacher->staff_id)->where('school_id',$teacher->school_id)->get();
+        return view('modules.school.staff.assign_subject', compact('groupedData', 'class', 'subjectname','viewstatus'));
+    }
 
-    // Get all syllabus data for this teacher's class and subject
-    $syllabusData = SyllabusTracking::where('class_name', $class)
-        ->where('subject_name', $subjectname)
-        ->select('class_name', 'subject_name', 'topics_name')
-        ->get();
-
-    // Group by class and subject (though they are same, keeping for consistency)
-    $groupedData = $syllabusData->groupBy('class_name');
-
-    return view('modules.school.staff.assign_subject', compact('groupedData', 'class', 'subjectname'));
-}
     public function subject_status(Request $request)
     {
         $request->validate([
@@ -155,6 +148,32 @@ class ManagementSyllabusController extends Controller
             ->get()
             ->groupBy('class_name');
 
+        if ($subjectdata->isEmpty()) {
+            $subjectdata = collect([]);
+        }
+        $currentPage = request()->get('page', 1);
+        $perPage = 5;
+        $paginatedData = new LengthAwarePaginator(
+            $subjectdata->forPage($currentPage, $perPage),
+            $subjectdata->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('modules.syllabus-tracking.add', compact('paginatedData'));
+    }
+
+    public function forschool_syllabusTraking()
+    {
+        $subjectdata = SyllabusTracking::select(
+            'class_name',
+            'subject_name',
+            'topics_name'
+        )
+            ->distinct()
+            ->get()
+            ->groupBy('class_name');
 
         if ($subjectdata->isEmpty()) {
             $subjectdata = collect([]);
@@ -168,7 +187,8 @@ class ManagementSyllabusController extends Controller
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-        return view('modules.syllabus-tracking.add', compact('paginatedData'));
+
+        return view('modules.syllabus-tracking.school_syllabus', compact('paginatedData'));
     }
 
     public function editasyllabus($id, $school_id)

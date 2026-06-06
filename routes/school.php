@@ -27,7 +27,6 @@ Route::prefix('school')->middleware('school')->group(function () {
      Route::get('topics/index/delete',[ManagementSyllabusController::class, 'index_delete'])->name('topics.index.delete');
      Route::post('assgin/subject/edit/{id}',[ManagementSyllabusController::class, 'assingsubject_edit'])->name('assgin.subject.edit');
      Route::get('/delete/assgin/subject',[ManagementSyllabusController::class, 'deleteSyllabus'])->name('delete.assgin.subject');
-
     Route::post('/reset/password',[LoginController::class, 'schoolforgetpassword'])->name('reset.school.password');
     Route::post('teacher/update/attendance', [TeacherManageController::class, 'attend_teacher'])->name('attendance.update.teacher');
     Route::get('/teacher/{id}/edit/{schoolId}', [TeacherManageController::class, 'editTeacher'])->name('edit.teacher');
@@ -174,17 +173,21 @@ Route::prefix('school')->middleware('school')->group(function () {
 
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
      Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
-     
-      Route::get('/index/syllabus',[ManagementSyllabusController::class, 'indexsyllabus'])->name('syllabus.index');
+
+      Route::get('/index/syllabus',[ManagementSyllabusController::class, 'forschool_syllabusTraking'])->name('syllabus.index');
     Route::get('/create/syllabus',[ManagementSyllabusController::class,'createSyllabus'])->name('create.syllabus');
     Route::post('/store/syllabus/topic',[ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
     Route::post('/assing/subject',[ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
-    
-    
+
+
      Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('school.mission.list');
     Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('school.mission.aspire');
     Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('school.upload.mission.aspire');
     Route::get('/mission/type', [MissionAspireController::class, 'listofmission'])->name('school.list.search.mission');
+
+   Route::get('/syllabusTraking',[ManagementSyllabusController::class, 'forschool_syllabusTraking'])->name('school.syllabusTraking');
+
+
 });
 
 

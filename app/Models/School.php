@@ -146,5 +146,9 @@ class School extends Authenticatable
         return $this->hasMany(SyllabusTracking::class);
     }
 
+     public function viewTrack(){
+        return $this->hasMany(ViewTracking::class);
+    }
+
 
 }

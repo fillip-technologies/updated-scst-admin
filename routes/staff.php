@@ -1,19 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\ViewTrakingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\School\Class\ClassController;
+use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\ResultManageController;
 use App\Http\Controllers\School\SearchManageController;
 use App\Http\Controllers\School\StudentManageController;
 use App\Http\Controllers\School\WebsiteCmsController;
 use App\Http\Controllers\SubjectManageController;
-use App\Http\Controllers\School\ManagementSyllabusController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('staff')->middleware('staff')->group(function () {
-      Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('staff.attendance.status.update');
+    Route::post('/attendance/update', [ClassController::class, 'updateattendance'])->name('staff.attendance.status.update');
     Route::view('/dashboard', 'modules.dashboard.index')->name('staff.dashboard');
     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('staff.subjects');
@@ -56,7 +57,6 @@ Route::prefix('staff')->middleware('staff')->group(function () {
     Route::get('/schoolmanagement/bulk-upload', [StudentManageController::class, 'bulkUploadStudent'])->name('staff.student.bulkupload');
     Route::get('/schoolmanagement/edit/{id}', [StudentManageController::class, 'studentEdit'])->name('staff.school.stud.edit');
 
-
     // Subject
 
     Route::get('/subjects', [HomeController::class, 'subjects'])
@@ -64,12 +64,12 @@ Route::prefix('staff')->middleware('staff')->group(function () {
     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('staff.create.subject');
     Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('staff.delete.subject');
 
-    Route::get('/result/show/data',[ResultManageController::class ,'getdata'])->name('staff.get.result');
-    Route::post('/result/add',[ResultManageController::class, 'Resultstore'])->name('staff.result.store');
-    Route::get('/list/reselt',[ResultManageController::class, 'ListResult'])->name('staff.result.list');
-    Route::get('/get/filter/result',[ResultManageController::class, 'filterResult'])->name('filter.result');
-       Route::get('/teacher/get/syllabus',[ManagementSyllabusController::class, 'teachergetSyllabus'])->name('staff.assing.syllabus');
-    Route::post('/subject_status/',[ManagementSyllabusController::class, 'subject_status'])->name('subject.status');
-
+    Route::get('/result/show/data', [ResultManageController::class, 'getdata'])->name('staff.get.result');
+    Route::post('/result/add', [ResultManageController::class, 'Resultstore'])->name('staff.result.store');
+    Route::get('/list/reselt', [ResultManageController::class, 'ListResult'])->name('staff.result.list');
+    Route::get('/get/filter/result', [ResultManageController::class, 'filterResult'])->name('filter.result');
+    Route::get('/teacher/get/syllabus', [ManagementSyllabusController::class, 'teachergetSyllabus'])->name('staff.assing.syllabus');
+    Route::post('/subject/status/update', [ViewTrakingController::class, 'subjectHandel'])->name('subject.status.update');
+    Route::post('/subject_status/', [ManagementSyllabusController::class, 'subject_status'])->name('subject.status');
 
 });
