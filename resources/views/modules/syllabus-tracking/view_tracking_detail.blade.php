@@ -38,7 +38,8 @@
                 <div class="relative z-10">
                     <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                         <div class="flex-1">
-                            <h1 class="text-xl sm:text-2xl font-bold leading-tight" id="detailSchoolName">{{ $trackingdetails->school->school_name ?? "School Name" }}</h1>
+                            <h1 class="text-xl sm:text-2xl font-bold leading-tight" id="detailSchoolName">
+                                {{ $trackingdetails->school->school_name ?? 'School Name' }}</h1>
                             <div class="flex items-center gap-1.5 mt-2">
                                 <svg class="w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
@@ -47,7 +48,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                <span class="text-sm text-white/60" id="detailDistrict">District, {{ $trackingdetails->school->district ?? "District" }}</span>
+                                <span class="text-sm text-white/60" id="detailDistrict">District,
+                                    {{ $trackingdetails->school->district ?? 'District' }}</span>
                             </div>
                         </div>
                         <span class="px-3 py-1.5 rounded-full text-xs font-semibold border" id="detailStatusBadge">-</span>
@@ -56,15 +58,18 @@
                     <div class="flex flex-wrap gap-5 mt-6">
                         <div class="bg-white/10 rounded-xl px-4 py-2.5 backdrop-blur-sm">
                             <span class="text-white/50 text-[11px] uppercase tracking-wider font-medium">Students</span>
-                            <p class="font-bold text-xl mt-0.5" id="detailStudents">{{ $trackingdetails->school->student->count() ?? "0" }}</p>
+                            <p class="font-bold text-xl mt-0.5" id="detailStudents">
+                                {{ $trackingdetails->school->student->count() ?? '0' }}</p>
                         </div>
                         <div class="bg-white/10 rounded-xl px-4 py-2.5 backdrop-blur-sm">
                             <span class="text-white/50 text-[11px] uppercase tracking-wider font-medium">Teachers</span>
-                            <p class="font-bold text-xl mt-0.5" id="detailTeachers">0</p>
+                            <p class="font-bold text-xl mt-0.5" id="detailTeachers">
+                                {{ $trackingdetails->school->teacher->count() ?? '0' }}</p>
                         </div>
                         <div class="bg-white/10 rounded-xl px-4 py-2.5 backdrop-blur-sm">
                             <span class="text-white/50 text-[11px] uppercase tracking-wider font-medium">Last Updated</span>
-                            <p class="font-bold text-xl mt-0.5" id="detailLastUpdated">-</p>
+                            <p class="font-bold text-xl mt-0.5" id="detailLastUpdated">
+                                {{ \Carbon\Carbon::parse($trackingdetails->updated_at)->format('d M Y') }}</p>
                         </div>
                     </div>
                 </div>
@@ -92,11 +97,13 @@
                             <div>
                                 <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-1">School Name
                                 </p>
-                                <p class="text-sm font-semibold text-gray-700" id="detailSchoolNameInfo">-</p>
+                                <p class="text-sm font-semibold text-gray-700" id="detailSchoolNameInfo">
+                                    {{ $trackingdetails->school->school_name ?? 'School Name' }}</p>
                             </div>
                             <div>
                                 <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-1">District</p>
-                                <p class="text-sm font-semibold text-gray-700" id="detailDistrictInfo">-</p>
+                                <p class="text-sm font-semibold text-gray-700" id="detailDistrictInfo">
+                                    {{ $trackingdetails->school->district ?? 'School Name' }}</p>
                             </div>
                         </div>
                     </div>
@@ -118,16 +125,20 @@
                             <div class="flex items-center gap-3 mb-4">
                                 <div
                                     class="w-10 h-10 rounded-full bg-primary-900/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="text-sm font-bold text-primary-900" id="detailTeacherInitials">-</span>
+                                    <img src="{{ asset($trackingdetails->teacher->photo ?? '') }}" alt="Teacher"
+                                        class="w-full h-full object-cover rounded-full">
                                 </div>
                                 <div>
-                                    <p class="text-sm font-semibold text-gray-700" id="detailTeacherName">-</p>
-                                    <p class="text-xs text-gray-400" id="detailTeacherEmail">-</p>
+                                    <p class="text-sm font-semibold text-gray-700" id="detailTeacherName">
+                                        {{ $trackingdetails->teacher->name ?? 'name' }}</p>
+                                    <p class="text-xs text-gray-400" id="detailTeacherEmail">
+                                        {{ $trackingdetails->teacher->email ?? 'email' }}</p>
                                 </div>
                             </div>
                             <div class="bg-gray-50 rounded-xl px-3 py-2.5">
                                 <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-0.5">Phone</p>
-                                <p class="text-sm font-semibold text-gray-700" id="detailTeacherPhone">-</p>
+                                <p class="text-sm font-semibold text-gray-700" id="detailTeacherPhone">
+                                    {{ $trackingdetails->teacher->phone ?? 'phone' }}</p>
                             </div>
                         </div>
 
@@ -144,8 +155,7 @@
                                     </div>
                                     <h3 class="text-sm font-bold text-gray-800">Daily Remarks</h3>
                                 </div>
-                                <span class="text-[11px] font-medium text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full"
-                                    id="remarksCount">0 remarks</span>
+
                             </div>
 
 
@@ -204,18 +214,24 @@
                                 <div class="bg-gray-50 rounded-xl px-3 py-2.5">
                                     <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-0.5">
                                         Subject</p>
-                                    <p class="text-sm font-semibold text-gray-700" id="detailSubject">-</p>
+                                    <p class="text-sm font-semibold text-gray-700" id="detailSubject">
+                                        {{ $trackingdetails->subject ?? 'subject' }}</p>
                                 </div>
                                 <div class="bg-gray-50 rounded-xl px-3 py-2.5">
                                     <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-0.5">
                                         Class</p>
-                                    <p class="text-sm font-semibold text-gray-700" id="detailClass">-</p>
+                                    <p class="text-sm font-semibold text-gray-700" id="detailClass">
+                                        {{ $trackingdetails->class_name ?? 'class' }}</p>
                                 </div>
                             </div>
                             <div class="bg-gray-50 rounded-xl px-3 py-2.5">
-                                <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-0.5">Topic
+                                <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-2">
+                                    Topic
                                 </p>
-                                <p class="text-sm font-semibold text-gray-700" id="detailTopic">-</p>
+
+                                <div id="detailTopic" class="flex flex-wrap gap-2">
+                                    <!-- Topics Checkbox Here -->
+                                </div>
                             </div>
                             <div>
 
@@ -278,6 +294,29 @@
         }
     </style>
 
+    <script>
+        let stutopic = @json($trackingdetails->topic_name);
+        let topics = @json($topics);
+        let topicHtml = '';
+
+        topics.forEach((topic, index) => {
+            const checked = topic.includes(stutopic) ? 'checked' : '';
+            topicHtml += `
+        <label class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100">
+            <input
+                type="checkbox"
+                name="topics[]"
+                value="${topic}"
+                ${checked}
+                class="w-4 h-4 text-blue-600 rounded"
+            >
+            <span class="text-sm text-gray-700">${topic}</span>
+        </label>
+    `;
+        });
+
+        document.getElementById('detailTopic').innerHTML = topicHtml;
+    </script>
     {{-- <script>
         // ==================== DEMO DATA ====================
         const trackingData = [
