@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-
-    <!-- Tailwind CDN -->
+<script src="https://cdn.jsdelivr.net/npm/jsencrypt/bin/jsencrypt.min.js"></script>
    @vite(['resources/css/app.css','resources/js/app.js'])
+   <script src="{{ asset('js/login.js') }}"></script>
 
     <script>
         tailwind.config = {

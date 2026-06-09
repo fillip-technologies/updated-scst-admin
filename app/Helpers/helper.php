@@ -2,9 +2,9 @@
 
 use App\Models\AddClasses;
 use App\Models\School;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 if (! function_exists('districts')) {
 
@@ -176,7 +176,7 @@ if (! function_exists('ExamType')) {
         return [
             'half' => 'Half Yearly',
             'third' => 'Third Terminal',
-            'final' =>'Final'
+            'final' => 'Final',
         ];
     }
 
@@ -206,7 +206,6 @@ if (! function_exists('getPrincipale')) {
     }
 }
 
-
 if (! function_exists('getPrincipale')) {
     function getPrincipale()
     {
@@ -222,7 +221,7 @@ if (! function_exists('getPrincipale')) {
 if (! function_exists('SinglegetDisc')) {
     function SinglegetDisc()
     {
-        return School::select('id','district','official_email')
+        return School::select('id', 'district', 'official_email')
             ->orderBy('district')
             ->get()
             ->unique('district')
@@ -230,9 +229,7 @@ if (! function_exists('SinglegetDisc')) {
     }
 }
 
-
-
-if (!function_exists('checkLoginAttempt')) {
+if (! function_exists('checkLoginAttempt')) {
 
     function checkLoginAttempt(User $user, $credentials, $redirectRoute)
     {
@@ -241,9 +238,7 @@ if (!function_exists('checkLoginAttempt')) {
             return back()->with('error', 'Account locked for 24 hours');
         }
 
-
         if (Auth::attempt($credentials)) {
-
 
             $user->login_attempts = 0;
             $user->lock_until = null;
@@ -251,7 +246,6 @@ if (!function_exists('checkLoginAttempt')) {
 
             return redirect()->route($redirectRoute);
         }
-
 
         $user->login_attempts += 1;
 
@@ -266,7 +260,9 @@ if (!function_exists('checkLoginAttempt')) {
         return back()->with('error', "Invalid Credentials. $remaining attempts left");
     }
 
-    if (! function_exists('mission_aspire')) {
+}
+
+if (! function_exists('mission_aspire')) {
     function mission_aspire()
     {
         return [
@@ -279,8 +275,6 @@ if (!function_exists('checkLoginAttempt')) {
             '7' => 'Governance, Digital Monitoring & Finance',
         ];
     }
-}
-
 }
 if (! function_exists('getSchools')) {
     function getSchools($district = null)
@@ -295,9 +289,10 @@ if (! function_exists('getSchools')) {
     }
 }
 
-if(!function_exists('all_syllabus')){
-    function all_syllabus(){
-        return[
+if (! function_exists('all_syllabus')) {
+    function all_syllabus()
+    {
+        return [
             'History',
             'English',
             'Economics',
@@ -308,9 +303,39 @@ if(!function_exists('all_syllabus')){
             'Maths',
             'Science',
             'Geography',
-            'EVS'
+            'EVS',
         ];
     }
 }
 
+if (! function_exists('months')) {
+    function months()
+    {
+        return [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
+    }
+}
 
+if(!function_exists('Years')){
+    function Years(){
+        $years = [];
+        $currentYears = date('Y');
+
+        for($i = $currentYears; $i >= $currentYears -10; $i--){
+        $years[] = $i;
+        }
+        return $years;
+    }
+}

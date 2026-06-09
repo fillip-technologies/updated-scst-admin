@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Middleware\SchoolMiddleware;
+use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\StaffMiddleware;
+use App\Http\Middleware\SuperAdminAuthMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -21,13 +26,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'super_admin' => App\Http\Middleware\SuperAdminAuthMiddleware::class,
-            'admin' => App\Http\Middleware\AdminAuthMiddleware::class,
-            'school' => App\Http\Middleware\SchoolMiddleware::class,
-            'staff'=> App\Http\Middleware\StaffMiddleware::class,
+            'super_admin' => SuperAdminAuthMiddleware::class,
+            'admin' => AdminAuthMiddleware::class,
+            'school' => SchoolMiddleware::class,
+            'staff' => StaffMiddleware::class,
         ]);
     })
-     ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions): void {
 
         $exceptions->render(function (Throwable $e, $request) {
 
@@ -50,4 +55,3 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
     })->create();
-

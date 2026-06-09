@@ -5,9 +5,6 @@ use App\Http\Controllers\Api\SchoolApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DepartmentCmsApiController;
-
-
-
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -21,3 +18,4 @@ Route::get('/all/notice',[HomeSectionController::class,'mainnotice']);
 Route::get('/leaders',[DepartmentCmsApiController::class, 'leaderMessage']);
 Route::get('/states',[DepartmentCmsApiController::class, 'stateList']);
 Route::get('/schemas',[DepartmentCmsApiController::class, 'schemaList']);
+Route::get('/public-key', [SchoolApiController::class, 'ecryptionKey']);

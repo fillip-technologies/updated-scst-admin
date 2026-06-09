@@ -9,29 +9,91 @@ use Illuminate\Http\Request;
 
 class ViewTrakingController extends Controller
 {
+    // public function tackingList()
+    // {
+    //     $latestIds = ViewTracking::selectRaw('MAX(id) as id')
+    //         ->groupBy('school_id', 'teacher_id')
+    //         ->pluck('id');
+
+    //     $tackingList = ViewTracking::with([
+    //         'school:id,school_name,district',
+    //         'teacher:id,name,subject,class_id,photo',
+    //         'teacher.addclass:id,class',
+    //     ])
+    //         ->whereIn('id', $latestIds)
+    //         ->latest()
+    //         ->paginate(10);
+
+    //     return view(
+    //         'modules.syllabus-tracking.view_tracking',
+    //         compact('tackingList')
+    //     );
+    // }
+
     public function tackingList()
     {
-        $tackingList = ViewTracking::with(['school', 'teacher'])->paginate(10);
+        $schoolId = 91;
+        $subject = 'Hindi';
+        $className = '4';
 
-        return view('modules.syllabus-tracking.view_tracking', compact('tackingList'));
-    }
-
-    public function view_tracking_details($school_id, $teacher_id)
-    {
         $trackingdetails = ViewTracking::with(['school', 'teacher'])
-            ->where('school_id', $school_id)
-            ->where('teacher_id', $teacher_id)
-            ->firstOrFail();
-        $topics = SyllabusTracking::where('class_name', trim($trackingdetails->class_name))
-            ->whereRaw('LOWER(TRIM(subject_name)) = ?', [
-                strtolower(trim($trackingdetails->subject)),
-            ])
+            ->where('school_id', $schoolId)
+            ->where('subject', $subject)
+            ->where('class_name', $className)
+            ->select(
+                'school_id',
+                'teacher_id',
+                'subject',
+                'class_name'
+            )
+            ->groupBy(
+                'school_id',
+                'teacher_id',
+                'subject',
+                'class_name'
+            )
+            ->get();
+
+     
+        $topics = SyllabusTracking::where('class_name', $className)
+            ->where('subject_name', $subject)
             ->pluck('topics_name')
             ->toArray();
 
+        $totalTopics = count($topics);
+
+        // Completed
+        $completedTopics = $trackingdetails
+            ->where('status', 'completed')
+            ->count();
+
+        // Ongoing
+        $ongoingTopics = $trackingdetails
+            ->whereIn('status', ['ongoing', 'in_progress'])
+            ->count();
+
+        // Pending
+        $pendingTopics = max(
+            0,
+            $totalTopics - ($completedTopics + $ongoingTopics)
+        );
+
+        // Percentage
+        $completionPercentage = $totalTopics > 0
+            ? round(($completedTopics / $totalTopics) * 100, 2)
+            : 0;
+
         return view(
-            'modules.syllabus-tracking.view_tracking_detail',
-            compact('trackingdetails','topics')
+            'modules.syllabus-tracking.view_tracking',
+            compact(
+                'trackingdetails',
+                'topics',
+                'totalTopics',
+                'completedTopics',
+                'ongoingTopics',
+                'pendingTopics',
+                'completionPercentage'
+            )
         );
     }
 

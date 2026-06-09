@@ -40,7 +40,7 @@ class ReportManageController extends Controller
             'report_category' => 'academic',
             'report_img' => $uploadImage,
         ]);
-        
+
         if ($data) {
             return back()->with('success', 'Upload Reports SuccessFully');
         } else {
@@ -51,7 +51,7 @@ class ReportManageController extends Controller
 
     public function mealReport(Request $request)
     {
-      
+
         $request->validate([
             'meal_type' => 'required',
             'school_id' => 'required',
@@ -125,7 +125,7 @@ class ReportManageController extends Controller
 
     public function infrReportSave(Request $request)
     {
-        // dd($request->all());
+        
         $request->validate([
             'school_id' => 'required',
             'toilets' => 'required',

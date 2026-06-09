@@ -15,7 +15,7 @@ class LoginController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|',
             'password' => 'required',
         ]);
 
@@ -157,25 +157,38 @@ class LoginController extends Controller
 
     //     return redirect()->back()->with('error', 'Unauthorized Access');
     // }
-    
-    
-    
-    
-     public function SystemLogin(Request $request)
+
+
+    private function decryptPassword(string $encryptedPassword): string
     {
-      
+        $privateKey = file_get_contents(
+            storage_path('keys/private.pem')
+        );
+
+        $success = openssl_private_decrypt(
+            base64_decode($encryptedPassword),
+            $decrypted,
+            $privateKey
+        );
+
+        if (! $success) {
+            throw new \Exception('Password decryption failed');
+        }
+
+        return $decrypted;
+    }
+
+    public function SystemLogin(Request $request)
+    {
+         $data = $this->decryptPassword($request->password);
+         $password = $data;
         if ($request->login_type === 'school') {
 
             $request->validate([
                 'schoolCode' => 'required',
                 'password' => 'required',
-                 'captcha' => 'required',
-                'captcha_code' => 'required',
-            ]);
 
-            if ($request->captcha !== $request->captcha_code) {
-                return back()->with('error', 'Invalide Captcha Please Try Again');
-            }
+            ]);
 
             $user = User::where('schoolCode', $request->schoolCode)->first();
 
@@ -185,7 +198,7 @@ class LoginController extends Controller
 
             return checkLoginAttempt(
                 $user,
-                ['schoolCode' => $request->schoolCode, 'password' => $request->password],
+                ['schoolCode' => $request->schoolCode, 'password' =>$password],
                 'school.dashboard'
             );
         } elseif ($request->login_type === 'staff') {
@@ -193,10 +206,8 @@ class LoginController extends Controller
             $request->validate([
                 'username' => 'required|email',
                 'password' => 'required',
-                
-            ]);
 
-           
+            ]);
 
             $user = User::where('username', $request->username)->first();
 
@@ -206,7 +217,7 @@ class LoginController extends Controller
 
             return checkLoginAttempt(
                 $user,
-                ['username' => $request->username, 'password' => $request->password],
+                ['username' => $request->username, 'password' =>$password],
                 'staff.dashboard'
             );
         } else {
@@ -214,13 +225,9 @@ class LoginController extends Controller
             $request->validate([
                 'username' => 'required|email',
                 'password' => 'required',
-                 'captcha' => 'required',
-                'captcha_code' => 'required',
+
             ]);
 
-            if ($request->captcha !== $request->captcha_code) {
-                return back()->with('error', 'Invalide Captcha Please Try Again');
-            }
             $user = User::where('username', $request->username)->first();
 
             if (! $user || $user->role !== 'admin') {
@@ -229,7 +236,7 @@ class LoginController extends Controller
 
             return checkLoginAttempt(
                 $user,
-                ['username' => $request->username, 'password' => $request->password],
+                ['username' => $request->username, 'password' =>$password],
                 'admin.dashboard'
             );
         }
@@ -248,14 +255,15 @@ class LoginController extends Controller
 
         return redirect()->route('login');
     }
+
     public function StaffLogout()
     {
         Auth::guard('staff')->logout();
 
         return redirect()->route('teacher.singup');
     }
-    
-      public function adminforgetpassword(Request $request)
+
+    public function adminforgetpassword(Request $request)
     {
         $request->validate([
             'email' => 'required',
@@ -293,12 +301,13 @@ class LoginController extends Controller
         if ($request->password === $request->password_confirmation) {
             $getdata = User::where('school_id', $request->id);
             $schooldata = School::findOrFail($request->id);
-                $data = [
-                    'password' => Hash::make($request->password),
-                ];
-                $getdata->update($data);
-                $schooldata->update($data);
-                return back()->with('success', 'Password Reset SuccessFul');
+            $data = [
+                'password' => Hash::make($request->password),
+            ];
+            $getdata->update($data);
+            $schooldata->update($data);
+
+            return back()->with('success', 'Password Reset SuccessFul');
         } else {
             return back()->with('error', 'Something went wrong');
         }

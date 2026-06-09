@@ -230,7 +230,6 @@ class ManageSchoolUpdateController extends Controller
 
     public function UpdateActivitiesSection(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'activity_title' => 'required|string',
             'school_id' => 'required',

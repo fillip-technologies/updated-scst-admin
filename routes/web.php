@@ -7,87 +7,12 @@ use App\Http\Controllers\Manegement\UserAccountController;
 use Illuminate\Support\Facades\Route;
 
 
-/*
-|--------------------------------------------------------------------------
-| AUTH ROUTES (Frontend Only)
-|--------------------------------------------------------------------------
-*/
 
-// Login page default
 Route::get('/', [HomeController::class, 'homePage'])->name('login');
 Route::post('/system/login', [LoginController::class, 'SystemLogin'])->name('system.login');
 // Signup
 Route::view('/signup', 'auth.signup')->name('signup');
 Route::view('/staff/login','auth.teacher')->name('teacher.singup');
-// Dashboard
-/*
-|--------------------------------------------------------------------------
-| SCHOOL MODULES
-|--------------------------------------------------------------------------
-*/
-
-// School Monitoring
-// Route::get('/school-monitoring', [HomeController::class, 'schoolMonitoring'])
-//     ->name('school.monitoring');
-
-// School Management
-// Route::get('/school-management', function () {
-//     return view('modules.school.school-management.index');
-// })->name('school.management');
-
-// Route::get('/school-management/create', function () {
-//     return view('modules.school.school-management.create');
-// });
-
-// Route::get('/school-management/bulk-upload', function () {
-//     return view('modules.school.school-management.bulk-upload');
-// });
-
-// Route::get('/school-management/edit/{id}', function ($id) {
-//     return view('modules.school.school-management.edit');
-// });
-
-// // School Management Edit
-// Route::view('/school-management/edit', 'modules.school-management.edit')
-//     ->name('school-management.edit');
-
-// // School Management View
-// Route::view('/school-management/view', 'modules.school-management.show')
-//     ->name('school-management.view');
-
-
-/*
-|--------------------------------------------------------------------------
-| PERFORMANCE & RANKINGS
-|--------------------------------------------------------------------------
-*/
-
-// Performance
-// Route::view('/performance-analytics', 'modules.performance-management.index')
-//     ->name('performance.analytics');
-
-// // Ranking
-// Route::view('/rankings', 'modules.rankings.index')
-//     ->name('rankings');
-
-// // Reports
-// Route::view('/reports', 'modules.reports.index')
-//     ->name('reports');
-
-// // Approvals
-// Route::view('/approvals', 'modules.approvals.index')
-//     ->name('approvals');
-
-// // Notifications
-// Route::view('/notifications', 'modules.notifications.index')
-//     ->name('notifications');
-
-
-/*
-|--------------------------------------------------------------------------
-| USER MANAGEMENT
-|--------------------------------------------------------------------------
-*/
 
 Route::prefix('user-management')->group(function () {
 
@@ -109,27 +34,4 @@ Route::prefix('user-management')->group(function () {
     Route::view('/logs', 'modules.user-management.logs.index')
         ->name('user.management.logs');
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| AUDIT & SYSTEM
-|--------------------------------------------------------------------------
-*/
-
-// Audit Logs
-// Route::view('/audit-logs', 'modules.audit-logs.index')
-//     ->name('audit.logs');
-
-// // System Settings
-// Route::view('/system-settings', 'modules.system-settings.index')
-//     ->name('system.settings');
-
-
-/*
-|--------------------------------------------------------------------------
-| CHATBOT
-|--------------------------------------------------------------------------
-*/
-
 Route::post('/chat', [ChatController::class, 'handle']);

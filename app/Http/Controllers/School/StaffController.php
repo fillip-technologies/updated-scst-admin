@@ -11,7 +11,7 @@ class StaffController extends Controller
 {
     public function SaveLeader(Request $request)
     {
-        // dd($request->all());
+     
         $request->validate([
             'leader_name' => 'required|string',
             'leader_designation' => 'required|string',

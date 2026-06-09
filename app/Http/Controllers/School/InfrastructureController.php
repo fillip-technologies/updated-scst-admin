@@ -13,7 +13,7 @@ class InfrastructureController extends Controller
     {
 
         $request->validate([
-            'infra_hero_image' => 'required|file',
+            'infra_hero_image' => 'required|mimes:jpeg,jpg,png',
             'infra_hero_title' => 'required|string',
             'infra_hero_subtitle' => 'required|string',
             'infra_breadcrumb' => 'required|string',
@@ -46,22 +46,23 @@ class InfrastructureController extends Controller
 
     public function SaveCampus(Request $request)
     {
-        // dd($request->all());
-        $request->validate([
-            'campus_overview_title' => 'required',
-            'campus_paragraph_1' => 'required',
-            'campus_paragraph_2' => 'required',
-            'feature_1_title' => 'required',
-            'feature_1_description' => 'required',
-            'feature_2_title' => 'required',
-            'feature_2_description' => 'required',
-            'feature_3_title' => 'required',
-            'feature_3_description' => 'required',
-            'feature_4_title' => 'required',
-            'feature_4_description' => 'required',
-            'campus_overview_image' => 'required',
-        ]);
 
+        $request->validate([
+            'campus_overview_title' => 'required|string|max:255',
+            'campus_paragraph_1' => 'required|string|max:5000',
+            'campus_paragraph_2' => 'required|string|max:5000',
+            'feature_1_title' => 'required|string|max:255',
+            'feature_1_description' => 'required|string|max:1000',
+            'feature_2_title' => 'required|string|max:255',
+            'feature_2_description' => 'required|string|max:1000',
+            'feature_3_title' => 'required|string|max:255',
+            'feature_3_description' => 'required|string|max:1000',
+            'feature_4_title' => 'required|string|max:255',
+            'feature_4_description' => 'required|string|max:1000',
+            'campus_overview_image' => 'required|url',
+        ], [
+            '*.required' => 'This field is required.',
+        ]);
         $infCampus = [];
         $uploadImg = null;
 

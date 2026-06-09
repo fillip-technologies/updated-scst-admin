@@ -7,10 +7,10 @@ use App\Models\Student;
 
 class ManageStaffController extends Controller
 {
-    public function index()
-    {
-        echo 'dashboard';
-    }
+    // public function index()
+    // {
+    //     echo 'dashboard';
+    // }
 
     public function staffDashboard()
     {

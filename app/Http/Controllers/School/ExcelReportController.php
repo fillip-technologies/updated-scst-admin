@@ -42,7 +42,7 @@ class ExcelReportController extends Controller
                 'StudentReport.xlsx'
             );
         } elseif ($category === 'teacher_attendance') {
-            //   dd($request->all());
+           
             $startDate = now();
             $endDate = now();
 
