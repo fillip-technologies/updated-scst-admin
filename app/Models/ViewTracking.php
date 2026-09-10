@@ -10,7 +10,7 @@ class ViewTracking extends Model
 
     protected $table = 'view_trackings';
 
-    protected $fillable = ['class_name', 'subject', 'topic_name', 'school_id', 'teacher_id', 'status', 'remarks','progress','month','year'];
+    protected $fillable = ['class_name', 'subject', 'topic_name', 'school_id', 'teacher_id', 'status', 'remarks','progress','month','years'];
 
     public function school()
     {

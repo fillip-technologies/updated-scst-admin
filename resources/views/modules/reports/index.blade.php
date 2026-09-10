@@ -14,17 +14,11 @@
     @endphp
 
     <div class="space-y-6" x-data="reportsDashboard()" x-init="init()">
-        @include('modules.reports.partials.filter-bar', [
-            'schools' => $allSchools ?? null,
-            'allReports' => $reportData ?? null,
-            'infrReports'=> $infrReports ?? null,
-        ])
-
+        @include('modules.reports.partials.filter-bar')
         <section>
             @include('modules.reports.partials.report-display', [
-                'allReports' => $reports ?? null,
-                'schools' => $allSchools ?? null,
-                'infrReports'=> $infrReports ?? null,
+                'reports' => $reports ?? [],
+                'category' => $category ?? [],
             ])
         </section>
     </div>
@@ -43,7 +37,7 @@
                             label: 'Student Attendance'
                         },
                         {
-                            value:'Student Marks',
+                            value: 'Student Marks',
                             label: 'Student Marks'
                         },
                         {

@@ -5,6 +5,7 @@ use App\Models\School;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 if (! function_exists('districts')) {
 
@@ -95,8 +96,18 @@ if (! function_exists('academicType')) {
             'Student Attendance',
             'Student Marks',
             'Teacher Attendance',
-            'Student Leave',
-            'Dropout Rate',
+            'Meal Attendance',
+        ];
+    }
+}
+
+if (! function_exists('AttendanceType')) {
+    function AttendanceType()
+    {
+        return [
+            'Student Attendance',
+            'Student Marks',
+            'Teacher Attendance',
             'Meal Attendance',
         ];
     }
@@ -229,37 +240,92 @@ if (! function_exists('SinglegetDisc')) {
     }
 }
 
-if (! function_exists('checkLoginAttempt')) {
+// if (! function_exists('checkLoginAttempt')) {
+
+//     function checkLoginAttempt(User $user, $credentials, $redirectRoute)
+//     {
+
+//         if ($user->lock_until && Carbon::now()->lessThan($user->lock_until)) {
+//             return back()->with('error', 'Account locked for 24 hours');
+//         }
+
+//         if (Auth::attempt($credentials)) {
+
+//             $user->login_attempts = 0;
+//             $user->lock_until = null;
+//             $user->save();
+
+//             return redirect()->route($redirectRoute);
+//         }
+
+//         $user->login_attempts += 1;
+
+//         if ($user->login_attempts >= 5) {
+//             $user->lock_until = Carbon::now()->addHours(24);
+//         }
+
+//         $user->save();
+
+//         $remaining = 5 - $user->login_attempts;
+
+//         return back()->with('error', "Invalid Credentials. $remaining attempts left");
+//     }
+
+// }
+if (!function_exists('checkLoginAttempt')) {
 
     function checkLoginAttempt(User $user, $credentials, $redirectRoute)
     {
-
         if ($user->lock_until && Carbon::now()->lessThan($user->lock_until)) {
             return back()->with('error', 'Account locked for 24 hours');
         }
 
+        $oldSessionId = $user->session_id;
+
         if (Auth::attempt($credentials)) {
 
-            $user->login_attempts = 0;
-            $user->lock_until = null;
-            $user->save();
+            $loggedInUser = Auth::user();
+
+            request()->session()->regenerate();
+
+            // Only for Admin
+            if ($loggedInUser->role === 'admin') {
+
+                $currentSessionId = session()->getId();
+
+                if (!empty($oldSessionId) && $oldSessionId !== $currentSessionId) {
+                    DB::table('sessions')
+                        ->where('id', $oldSessionId)
+                        ->delete();
+                }
+
+                $loggedInUser->session_id = $currentSessionId;
+            }
+
+            $loggedInUser->login_attempts = 0;
+            $loggedInUser->lock_until = null;
+            $loggedInUser->save();
 
             return redirect()->route($redirectRoute);
         }
 
-        $user->login_attempts += 1;
+        $user->increment('login_attempts');
+
+        $user->refresh();
 
         if ($user->login_attempts >= 5) {
-            $user->lock_until = Carbon::now()->addHours(24);
+            $user->update([
+                'lock_until' => Carbon::now()->addHours(24),
+            ]);
         }
 
-        $user->save();
+        $remaining = max(0, 5 - $user->login_attempts);
 
-        $remaining = 5 - $user->login_attempts;
-
-        return back()->with('error', "Invalid Credentials. $remaining attempts left");
+        return back()->with(
+            'error',
+            "Invalid Credentials. {$remaining} attempts left"
+        );
     }
-
 }
 
 if (! function_exists('mission_aspire')) {
@@ -288,6 +354,7 @@ if (! function_exists('getSchools')) {
         return $query->get();
     }
 }
+
 
 if (! function_exists('all_syllabus')) {
     function all_syllabus()
@@ -328,6 +395,26 @@ if (! function_exists('months')) {
     }
 }
 
+if (!function_exists('selectmonths')) {
+    function selectmonths()
+    {
+        return [
+            1  => 'January',
+            2  => 'February',
+            3  => 'March',
+            4  => 'April',
+            5  => 'May',
+            6  => 'June',
+            7  => 'July',
+            8  => 'August',
+            9  => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
+        ];
+    }
+}
+
 if(!function_exists('Years')){
     function Years(){
         $years = [];
@@ -337,5 +424,20 @@ if(!function_exists('Years')){
         $years[] = $i;
         }
         return $years;
+    }
+}
+
+if(!function_exists('getClassSchool')){
+    function getClassSchool($id){
+        $data = AddClasses::select('id','class')->where('school_id',$id)->get();
+        return $data;
+    }
+}
+
+
+if(!function_exists('getSingleSchool')){
+    function getSingleSchool($school_id){
+        $data =School::select('id','school_name')->findOrFail($school_id);
+        return $data;
     }
 }

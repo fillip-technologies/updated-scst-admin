@@ -21,7 +21,7 @@ class Result extends Model
     // Relationship
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class,'student_id');
     }
 
     public function subject()
@@ -31,7 +31,7 @@ class Result extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(Teacher::class,'teacher_id');
     }
 
     public function school()

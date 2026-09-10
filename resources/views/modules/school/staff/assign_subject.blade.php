@@ -87,7 +87,7 @@
 
                                             <td class="px-4 py-3 text-center">
                                                 <button
-                                                    onclick="openRemarkModal('{{ TeacherLog()->staff_id ?? 0 }}',
+                                         onclick="openRemarkModal('{{ TeacherLog()->staff_id ?? 0 }}',
                                         '{{ TeacherLog()->school_id ?? 0 }}',
                                         '{{ $topic->subject_name }}',
                                         '{{ $className }}',
@@ -135,6 +135,8 @@
                         <th class="px-4 py-3 text-left text-sm font-semibold">Class</th>
                         <th class="px-4 py-3 text-left text-sm font-semibold">Subject</th>
                         <th class="px-4 py-3 text-left text-sm font-semibold">Topic</th>
+                         <th class="px-4 py-3 text-left text-sm font-semibold">Month</th>
+                          <th class="px-4 py-3 text-left text-sm font-semibold">Years</th>
                         <th class="px-4 py-3 text-left text-sm font-semibold">Status</th>
 
                         <th class="px-4 py-3 text-left text-sm font-semibold">Remarks</th>
@@ -154,6 +156,12 @@
 
                             <td class="px-4 py-3 text-sm text-gray-700">
                                 {{ $item->topic_name }}
+                            </td>
+                             <td class="px-4 py-3 text-sm text-gray-700">
+                                {{ $item->month }}
+                            </td>
+                             <td class="px-4 py-3 text-sm text-gray-700">
+                                {{ $item->years }}
                             </td>
 
                             <td class="px-4 py-3">
@@ -203,8 +211,8 @@
                 <input type="hidden" id="teacherID" name="teacher_id">
                 <input type="hidden" id="subject_name" name="subject">
                 <input type="hidden" id="class_name" name="class_name">
-                <div class="px-6 py-4">
-                    <div class="mb-4">
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 px-6 py-4">
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fa-solid fa-tag text-indigo-500 mr-1"></i> Topic
                         </label>
@@ -212,28 +220,58 @@
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
                     </div>
 
-                    <div class="mb-4">
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fa-solid fa-flag-checkered text-indigo-500 mr-1"></i> Status
                         </label>
                         <select id="modalStatus" name="status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            class="@error('status') border-red-500 @else border-gray-300 @enderror px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option>Select Status</option>
                             <option value="pending">🔴 Pending</option>
                             <option value="ongoing">🟡 Ongoing</option>
                             <option value="completed">🟢 Completed</option>
                         </select>
                     </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 px-6 py-4">
+                    <div >
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa-solid fa-tag text-indigo-500 mr-1"></i> Topic
+                        </label>
+                        <select name="month" required
+                            class="@error('month') border-red-500 @else border-gray-300 @enderror w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option>Select Month</option>
+                            @foreach (months() as $month)
+                                <option value="{{ $month }}">{{ $month }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa-solid fa-flag-checkered text-indigo-500 mr-1"></i> Status
+                        </label>
+                        <select name="years" required
+                            class="@error('years') border-red-500 @else border-gray-300 @enderror w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option>Select Years</option>
+                            @foreach (Years() as $item)
+                                <option value="{{ $item }}">{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-1 px-6 py-4">
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fa-solid fa-comment text-indigo-500 mr-1"></i> Remark
                         </label>
                         <textarea id="modalRemark" rows="4" name="remarks"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            class="@error('remarks') border-red-500 @else border-gray-300 @enderror w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                             placeholder="Enter your remark here..."></textarea>
                     </div>
                 </div>
-
                 <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
                     <button onclick="closeRemarkModal()"
                         class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">

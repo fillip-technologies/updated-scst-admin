@@ -40,34 +40,65 @@
         @endif
 
         <!-- RIGHT -->
+        <!-- RIGHT -->
         <div class="w-1/2 p-10">
 
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-primary-800">
-                    Teacher Login
+                    Login
                 </h2>
+                <p class="text-gray-500 text-sm mt-2">
+                    Select your login type
+                </p>
             </div>
 
             <form action="{{ route('system.login') }}" method="POST" id="loginForm">
                 @csrf
-                <input type="hidden" name="login_type" value="staff">
 
-                <div class="mb-4">
-                    <input type="text" name="username" value="{{ old('username') }}" required placeholder="Username"
-                        class="w-full border rounded-xl px-4 py-2">
+                <!-- Login Type -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        Login As
+                    </label>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <label
+                            class="flex items-center justify-center gap-2 border rounded-xl py-3 cursor-pointer hover:border-primary-600">
+                            <input type="radio" name="login_type" value="staff" checked>
+                            <span class="font-medium">👨‍🏫 Teacher</span>
+                        </label>
+
+                        <label
+                            class="flex items-center justify-center gap-2 border rounded-xl py-3 cursor-pointer hover:border-primary-600">
+                            <input type="radio" name="login_type" value="dwo">
+                            <span class="font-medium">🏢 DWO</span>
+                        </label>
+
+                    </div>
                 </div>
 
+                <!-- Username -->
+                <div class="mb-4">
+                    <input type="text" name="username" id="Username" value="{{ old('username') }}" required
+                        placeholder="Username"
+                        class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-600 focus:outline-none">
+                </div>
 
-                <div class="mb-4 relative">
+                <!-- Password -->
+                <div class="mb-5 relative">
                     <input id="password" type="password" name="password" required placeholder="Password"
-                        class="w-full border rounded-xl px-4 py-2 pr-16">
+                        class="w-full border rounded-xl px-4 py-3 pr-20 focus:ring-2 focus:ring-primary-600 focus:outline-none">
 
-                    <button type="button" onclick="togglePassword(event)" class="absolute right-3 top-2 text-sm">
+                    <button type="button" onclick="togglePassword(event)"
+                        class="absolute right-4 top-3 text-sm text-gray-600 hover:text-primary-700">
                         👁 Show
                     </button>
                 </div>
 
-                <button type="submit" class="w-full bg-primary-700 text-white py-2 rounded-xl">
+                <!-- Login Button -->
+                <button type="submit"
+                    class="w-full bg-primary-700 hover:bg-primary-800 text-white py-3 rounded-xl font-semibold transition">
                     Login →
                 </button>
 
@@ -89,31 +120,36 @@
             }
         }
 
-        document
-            .getElementById('loginForm')
-            .addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-                e.preventDefault();
-                const passwordField =
-                    document.getElementById('password');
+            const passwordField = document.getElementById('password');
+            const usernameField = document.getElementById('Username');
 
-                const res = await fetch('http://127.0.0.1:8000/api/public-key');
+            try {
+                const res = await fetch('/api/public-key');
                 const data = await res.json();
 
                 const encrypt = new JSEncrypt();
                 encrypt.setPublicKey(data.public_key);
 
-                const encryptedPassword =
-                    encrypt.encrypt(passwordField.value);
+                const encryptedPassword = encrypt.encrypt(passwordField.value);
+                const encryptedUsername = encrypt.encrypt(usernameField.value);
 
-                if (!encryptedPassword) {
-                    alert('Encryption failed');
+                if (!encryptedPassword || !encryptedUsername) {
+                    alert('Encryption Failed');
                     return;
                 }
 
                 passwordField.value = encryptedPassword;
+                usernameField.value = encryptedUsername;
 
                 this.submit();
-            });
+
+            } catch (error) {
+                console.error(error);
+                alert('Encryption Error');
+            }
+        });
     </script>
 @endsection

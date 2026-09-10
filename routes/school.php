@@ -8,7 +8,6 @@ use App\Http\Controllers\School\InfrastructureController;
 use App\Http\Controllers\School\ManageSchoolController;
 use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ManageSchoolUpdateController;
-use App\Http\Controllers\School\ManageStaffController;
 use App\Http\Controllers\School\NoticeController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
@@ -36,7 +35,7 @@ Route::prefix('school')->middleware('school')->group(function () {
     Route::post('update/acadmi/section/infrastructure', [InfrastructureController::class, 'UpdateAcademic'])->name('inf.update.acadmi');
     Route::delete('delete/acadmi/section/infrastructure', [InfrastructureController::class, 'deleteAcademic'])->name('inf.delete.acadmi');
     Route::get('/profile', [HomeController::class, 'school_profile'])->name('school.profile');
-
+    
     Route::post('create/leader/section/staff', [StaffController::class, 'SaveLeader'])->name('staff.save.leader');
     Route::post('update/leader/section/staff', [StaffController::class, 'UpdateLeader'])->name('staff.update.leader');
     Route::post('create/teache/section/staff', [StaffController::class, 'SaveTeacher'])->name('staff.save.teacher');
@@ -168,23 +167,22 @@ Route::prefix('school')->middleware('school')->group(function () {
         return view('modules.manage-result.edit');
     })->name('school.manage-result.edit2');
 
-    Route::get('/subjects', [HomeController::class, 'subjects'])
+     Route::get('/subjects', [HomeController::class, 'subjects'])
         ->name('subjects');
 
-    Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
+     Route::post('/create/subject', [SubjectManageController::class, 'createSubject'])->name('create.subject');
      Route::delete('/delete/subject/{id}', [SubjectManageController::class, 'deleteSubject'])->name('delete.subject');
 
-      Route::get('/index/syllabus',[ManagementSyllabusController::class, 'forschool_syllabusTraking'])->name('syllabus.index');
+    Route::get('/index/syllabus',[ManagementSyllabusController::class, 'forschool_syllabusTraking'])->name('syllabus.index');
     Route::get('/create/syllabus',[ManagementSyllabusController::class,'createSyllabus'])->name('create.syllabus');
     Route::post('/store/syllabus/topic',[ManagementSyllabusController::class, 'storeSyllabus'])->name('store.syllabus.topic');
     Route::post('/assing/subject',[ManagementSyllabusController::class, 'assingSubject'])->name('store.assing.subject');
 
 
-     Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('school.mission.list');
+    Route::get('listing/mission/aspire', [MissionAspireController::class, 'list_mission'])->name('school.mission.list');
     Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('school.mission.aspire');
     Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('school.upload.mission.aspire');
     Route::get('/mission/type', [MissionAspireController::class, 'listofmission'])->name('school.list.search.mission');
-
    Route::get('/syllabusTraking',[ManagementSyllabusController::class, 'forschool_syllabusTraking'])->name('school.syllabusTraking');
 
 

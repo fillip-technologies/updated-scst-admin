@@ -1,4 +1,4 @@
-<div class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 items-end">
+<div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 items-end">
 
     <!-- District -->
     <div class="flex flex-col">
@@ -12,6 +12,9 @@
             @endforeach
         </select>
     </div>
+
+    <!-- From Date -->
+
 
     <!-- Dropout -->
     <div class="flex flex-col">
@@ -37,17 +40,34 @@
             class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full"
         >
     </div>
+ <div class="flex flex-col">
+        <label class="text-xs text-gray-500 mb-1">From Date</label>
+        <input
+            type="date"
+            name="from_date"
+            value="{{ request('from_date') }}"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full"
+        >
+    </div>
 
+    <!-- To Date -->
+    <div class="flex flex-col">
+        <label class="text-xs text-gray-500 mb-1">To Date</label>
+        <input
+            type="date"
+            name="to_date"
+            value="{{ request('to_date') }}"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm w-full"
+        >
+    </div>
     <!-- Buttons -->
     <div class="flex gap-2">
-        <!-- Submit -->
         <button
             type="submit"
             class="w-full rounded-md bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 transition"
         >
             Apply
         </button>
-
 
         <a href="{{ url('admin/school-monitoring') }}"
            class="w-full text-center rounded-md bg-gray-500 text-white px-4 py-2 text-sm font-medium hover:bg-gray-600 transition">

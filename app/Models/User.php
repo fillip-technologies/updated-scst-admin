@@ -28,6 +28,7 @@ class User extends Authenticatable
         'school_id',
         'phone',
         'staff_id',
+        'session_id'
 
     ];
 

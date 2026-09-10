@@ -80,7 +80,7 @@
     ];
 @endphp
 
-<div
+<div 
     x-data="{
         activeTab: 'hero',
         sections: @js($homeSections),

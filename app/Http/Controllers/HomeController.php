@@ -259,12 +259,12 @@ class HomeController extends Controller
 {
     $allSchools = School::select('id', 'school_name')->get();
 
-    $reports = Report::with('school')->get();
-    $infrReports = InfraReport::with('school')->get();
-    $mealReports = MealReport::with('school')->get();
-    $reports = $reports
-        ->merge($mealReports);
-    return view('modules.reports.index', compact('allSchools', 'reports','infrReports'));
+    // $reports = Report::with('school')->get();
+    // $infrReports = InfraReport::with('school')->get();
+    // $mealReports = MealReport::with('school')->get();
+    // $reports = $reports
+    //     ->merge($mealReports);
+    return view('modules.reports.index');
 }
     public function createInfrastructure()
     {

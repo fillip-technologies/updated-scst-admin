@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\MainNoticeController;
 use App\Http\Controllers\Admin\MissionAspireController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\SchoolManageController;
+use App\Http\Controllers\Admin\SearchingController;
 use App\Http\Controllers\Admin\ViewTrakingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Mails\ManageMailController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\School\ManagementSyllabusController;
 use App\Http\Controllers\School\ReportManageController;
 use App\Http\Controllers\School\SearchManageController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/update/schema/{id}', [DepartmentCmsController::class, 'updateschema'])->name('update.schema');
@@ -85,7 +87,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::view('/audit-logs', 'modules.audit-logs.index')
         ->name('audit.logs');
 
-    // System Settings
+
     Route::view('/system-settings', 'modules.system-settings.index')
         ->name('system.settings');
     Route::get('/school-monitoring', [HomeController::class, 'monitoring'])
@@ -93,7 +95,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/send-notice', [HomeController::class, 'sendNotice'])
         ->name('school.monitoring.send-notice');
 
-    //
+
     Route::post('/notificationsend', [ManageMailController::class, 'notificationsend'])->name('notification.send');
     Route::get('/notices', [HomeController::class, 'notices'])
         ->name('admin.notices.index');
@@ -127,7 +129,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('mission/aspire', [MissionAspireController::class, 'mission_aspire'])->name('mission.aspire');
     Route::post('/upload/mission/aspire', [MissionAspireController::class, 'uploadMissionAspire'])->name('upload.mission.aspire');
 
-    // Missin Filtering
     Route::post('/add/syllabus/track', [ManagementSyllabusController::class, 'addsyllabusTrack'])->name('add.syllabus.track');
     Route::get('/view/tracking', [ManagementSyllabusController::class, 'view_tracking'])->name('view.tracking');
     Route::get('/getSchoolId', [ManagementSyllabusController::class, 'getSchoolId'])->name('getSchoolId');
@@ -135,6 +136,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/search/mission/aspire', [MissionAspireController::class, 'searchMission'])->name('search.mission.aspire');
 
     Route::get('/view/tracking', [ViewTrakingController::class, 'tackingList'])->name('view.tracking.list');
-    Route::get('/view/tracking/details/{school_id}/{teacher_id}', [ViewTrakingController::class, 'view_tracking_details'])->name('view.tracking.details');
+    Route::get('/view/tracking/details/', [ViewTrakingController::class, 'tackingList_view'])->name('view.tracking.details');
 
+    Route::get('/viewspacificdata',[SearchingController::class, 'viewspacificdata'])->name('viewspacificdata');
+    Route::get('/allinfo/{school_id}/{teacher_id}/{subject}/{class_name}',[ViewTrakingController::class, 'allInfoTraking'])->name('all.info');
+    Route::get('manulareport/{school_id}/{name}',[MonitoringController::class, 'manulareport'])->name('manulareport');
+    Route::get('manualistutech/search',[MonitoringController::class, 'manualistutech'])->name('manualistutech.search');
 });

@@ -25,7 +25,7 @@ class Teacher extends Model
 
     public function teacherattend()
     {
-        return $this->hasMany(TeacherAttend::class);
+        return $this->hasMany(TeacherAttend::class,'teacher_id');
     }
 
     public function subject(){
@@ -33,7 +33,7 @@ class Teacher extends Model
     }
 
     public function result(){
-        return $this->hasMany(Result::class);
+        return $this->hasMany(Result::class,'teacher_id');
     }
 
     public function user(){

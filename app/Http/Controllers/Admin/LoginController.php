@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,106 +92,49 @@ class LoginController extends Controller
             ->with('status', 'Password changed successfully');
     }
 
-    // public function SystemLogin(Request $request)
-    // {
-    //     // SCHOOL LOGIN
-    //     if ($request->login_type === 'school') {
-
-    //         $request->validate([
-    //             'schoolCode' => 'required',
-    //             'password' => 'required',
-    //         ]);
-
-    //         if (Auth::attempt(['schoolCode' => $request->schoolCode, 'password' => $request->password])) {
-
-    //             $loginUser = Auth::user();
-
-    //             if ($loginUser->role === 'school_admin') {
-    //                 return redirect()->route('school.dashboard');
-    //             }
-
-    //         } else {
-    //             return redirect()->back()->with('error', 'Invalid School Credentials');
-    //         }
-    //     }
-
-    //     // STAFF LOGIN
-    //     elseif ($request->login_type === 'staff') {
-
-    //         $request->validate([
-    //             'username' => 'required',
-    //             'password' => 'required',
-    //         ]);
-
-    //         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-
-    //             $loginUser = Auth::user();
-
-    //             if ($loginUser->role === 'staff') {
-
-    //                 return redirect()->route('staff.dashboard');
-    //             }
-
-    //         } else {
-    //             return redirect()->back()->with('error', 'Invalid Staff Credentials');
-    //         }
-    //     }
-    //     else {
-
-    //         $request->validate([
-    //             'username' => 'required',
-    //             'password' => 'required',
-    //         ]);
-
-    //         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-
-    //             $loginUser = Auth::user();
-
-    //             if ($loginUser->role === 'admin') {
-    //                 return redirect()->route('admin.dashboard');
-    //             }
-
-    //         } else {
-    //             return redirect()->back()->with('error', 'Invalid Admin Credentials');
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('error', 'Unauthorized Access');
-    // }
 
 
-    private function decryptPassword(string $encryptedPassword): string
-    {
-        $privateKey = file_get_contents(
-            storage_path('keys/private.pem')
-        );
+    private function decryptData(string $encrypted): string
+{
+    $privateKey = file_get_contents(
+        storage_path('keys/private.pem')
+    );
 
-        $success = openssl_private_decrypt(
-            base64_decode($encryptedPassword),
-            $decrypted,
-            $privateKey
-        );
-
-        if (! $success) {
-            throw new \Exception('Password decryption failed');
-        }
-
-        return $decrypted;
+    if (!$privateKey) {
+        throw new \Exception('Private key not found');
     }
+
+    $success = openssl_private_decrypt(
+        base64_decode($encrypted),
+        $decrypted,
+        $privateKey,
+        OPENSSL_PKCS1_PADDING
+    );
+
+    if (!$success) {
+        throw new \Exception(
+            'Decryption failed: ' . openssl_error_string()
+        );
+    }
+
+    return $decrypted;
+}
 
     public function SystemLogin(Request $request)
     {
-         $data = $this->decryptPassword($request->password);
+
+
+         $data = $this->decryptData($request->password);
          $password = $data;
         if ($request->login_type === 'school') {
-
+            $schoolCode = $this->decryptData($request->schoolCode);
             $request->validate([
                 'schoolCode' => 'required',
                 'password' => 'required',
 
             ]);
 
-            $user = User::where('schoolCode', $request->schoolCode)->first();
+            $user = User::where('schoolCode',  $schoolCode)->first();
 
             if (! $user || $user->role !== 'school_admin') {
                 return back()->with('error', 'Invalid School Credentials');
@@ -198,18 +142,23 @@ class LoginController extends Controller
 
             return checkLoginAttempt(
                 $user,
-                ['schoolCode' => $request->schoolCode, 'password' =>$password],
+                ['schoolCode' =>  $schoolCode, 'password' =>$password],
                 'school.dashboard'
             );
         } elseif ($request->login_type === 'staff') {
-
+             $userName = $this->decryptData($request->username);
             $request->validate([
-                'username' => 'required|email',
+                'username' => 'required',
                 'password' => 'required',
 
             ]);
+             if (!filter_var($userName, FILTER_VALIDATE_EMAIL)) {
+                return back()->withErrors([
+                  'username' => 'Invalid email format'
+                 ]);
+                 }
 
-            $user = User::where('username', $request->username)->first();
+            $user = User::where('username',  $userName)->first();
 
             if (! $user || $user->role !== 'staff') {
                 return back()->with('error', 'Invalid Staff Credentials');
@@ -217,26 +166,54 @@ class LoginController extends Controller
 
             return checkLoginAttempt(
                 $user,
-                ['username' => $request->username, 'password' =>$password],
+                ['username' =>  $userName, 'password' =>$password],
                 'staff.dashboard'
             );
-        } else {
-
-            $request->validate([
-                'username' => 'required|email',
+        }elseif ($request->login_type === 'dwo') {
+             $userName = $this->decryptData($request->username);
+             $request->validate([
+                'username' => 'required',
                 'password' => 'required',
 
             ]);
+             if (!filter_var($userName, FILTER_VALIDATE_EMAIL)) {
+                return back()->withErrors([
+                  'username' => 'Invalid email format'
+                 ]);
+                 }
 
-            $user = User::where('username', $request->username)->first();
+            $user = User::where('username',  $userName)->first();
 
+            if (! $user || $user->role !== 'dwo') {
+                return back()->with('error', 'Invalid DWO Credentials');
+            }
+
+            return checkLoginAttempt(
+                $user,
+                ['username' =>  $userName, 'password' =>$password],
+                'dwo.dashboard'
+            );
+        } else {
+           $userName = $this->decryptData($request->username);
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+
+            ]);
+              if (!filter_var($userName, FILTER_VALIDATE_EMAIL)) {
+                return back()->withErrors([
+                  'username' => 'Invalid email format'
+                 ]);
+                 }
+
+            $user = User::where('username', $userName)->first();
             if (! $user || $user->role !== 'admin') {
                 return back()->with('error', 'Invalid Admin Credentials');
             }
 
             return checkLoginAttempt(
                 $user,
-                ['username' => $request->username, 'password' =>$password],
+                ['username' => $userName, 'password' =>$password],
                 'admin.dashboard'
             );
         }
@@ -245,7 +222,14 @@ class LoginController extends Controller
     public function SchoolLogout()
     {
         Auth::guard('school')->logout();
+        request()->session()->regenerate();
+        return redirect()->route('login');
+    }
 
+     public function DWOLogout()
+    {
+        Auth::guard('dwo')->logout();
+        request()->session()->regenerate();
         return redirect()->route('login');
     }
 
@@ -280,7 +264,6 @@ class LoginController extends Controller
                 ];
 
                 $getdata->update($data);
-
                 return back()->with('success', 'Password Reset SuccessFul');
             } else {
                 return back()->with('error', 'Data not found');

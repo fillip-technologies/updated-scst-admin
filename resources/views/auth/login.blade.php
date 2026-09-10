@@ -68,12 +68,12 @@
                 <!-- School Field -->
                 <div id="schoolField">
                     <input type="text" name="schoolCode" placeholder="School Code / UDISE" autocomplete="off"
-                        class="w-full border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary-700">
+                        id="schoolCode" class="w-full border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary-700">
                 </div>
 
                 <!-- Department Field -->
                 <div id="departmentField" class="hidden">
-                    <input type="email" name="username" placeholder="Username" autocomplete="off"
+                    <input type="email" name="username" placeholder="Username" autocomplete="off" id="departmentUsername"
                         class="w-full border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary-700">
                 </div>
 
@@ -145,28 +145,59 @@
             document.getElementById('captchaBox').innerText = result;
 
         }
-        document
-            .getElementById('loginForm')
-            .addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const passwordField =
-                    document.getElementById('password');
-                const res = await fetch('http://127.0.0.1:8000/api/public-key');
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const passwordField = document.getElementById('password');
+            const loginType = document.getElementById('loginType').value;
+
+            let usernameField;
+
+            if (loginType === 'school') {
+                usernameField = document.getElementById('schoolCode');
+            } else {
+                usernameField = document.getElementById('departmentUsername');
+            }
+
+            try {
+
+                const res = await fetch('/api/public-key');
+
+                if (!res.ok) {
+                    throw new Error('Unable to fetch public key');
+                }
+
                 const data = await res.json();
 
                 const encrypt = new JSEncrypt();
                 encrypt.setPublicKey(data.public_key);
 
-                const encryptedPassword =
-                    encrypt.encrypt(passwordField.value);
+
+                const encryptedPassword = encrypt.encrypt(passwordField.value);
 
                 if (!encryptedPassword) {
-                    alert('Encryption failed');
-                    return;
+                    throw new Error('Password encryption failed');
                 }
+
                 passwordField.value = encryptedPassword;
+
+
+                const encryptedUsername = encrypt.encrypt(usernameField.value);
+
+                if (!encryptedUsername) {
+                    throw new Error('Username encryption failed');
+                }
+
+                usernameField.value = encryptedUsername;
+
                 this.submit();
-            });
+
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        });
         generateCaptcha();
     </script>
 @endsection

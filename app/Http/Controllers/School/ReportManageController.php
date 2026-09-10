@@ -86,46 +86,89 @@ class ReportManageController extends Controller
         return back()->with('success', 'Meal Reports Uploade SuccessFully');
     }
 
-    public function showallReport(Request $request)
-    {
+ public function showallReport(Request $request)
+{
+    $category  = trim($request->report_category);
+    $school_id = trim($request->school_id);
+    $type      = trim($request->report_type);
+    $district  = trim($request->district);
+    $from_date = $request->from_date;
+    $to_date   = $request->to_date;
 
-        $request->validate([
-            'district' => 'required',
-            'school_id' => 'required',
-            'report_category' => 'required',
-            'report_type' => 'required',
-        ]);
 
-        $category = trim($request->report_category);
-        $school_id = trim($request->school_id);
-        $type = trim($request->report_type);
-        $district = trim($request->district);
-        $allSchools = School::select('id', 'school_name')->get();
-        $reportData = Report::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('report_type', $type)
-            ->where('district', $district)
+    if ($category == 'academic') {
+
+        $reports = Report::query()
+            ->when($district, fn($q) => $q->where('district', $district))
+            ->when($school_id, fn($q) => $q->where('school_id', $school_id))
+            ->when($type, fn($q) => $q->where('report_type', 'LIKE', "%{$type}%"))
+            ->when($from_date, fn($q) => $q->whereDate('date', $from_date))
             ->get();
-
-        $mealData = MealReport::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('report_type', $type)
-            ->where('district', $district)
-            ->get();
-
-        $infrReports = InfraReport::with('school')->where('report_category', $category)
-            ->where('school_id', $school_id)
-            ->where('district', $district)
-            ->get();
-        $reports = $reportData->merge($mealData);
-
-        return view('modules.reports.index', compact('reports', 'allSchools', 'infrReports'));
 
     }
 
+
+    elseif ($category == 'infrastructure') {
+
+        $reports = InfraReport::with('school')
+            ->when($school_id, fn($q) => $q->where('school_id', $school_id))
+            ->when($district, fn($q) => $q->where('district', $district))
+            ->when($from_date && $to_date, function ($q) use ($from_date, $to_date) {
+                $q->whereBetween('created_at', [$from_date, $to_date]);
+            })
+            ->get();
+
+    }
+
+
+    elseif (!empty($district)) {
+
+    $schools = School::where('district', $district)->get();
+
+    $reports = $schools->map(function ($school) use ($from_date, $to_date) {
+
+        return (object)[
+            'school_name' => $school->school_name,
+
+            'student_attendance' => Report::where('school_id', $school->id)
+                ->where('report_type', 'Student Attendance')
+                ->when($from_date, fn($q) => $q->whereDate('date', $from_date))
+                ->count(),
+
+            'student_marks' => Report::where('school_id', $school->id)
+                ->where('report_type', 'Student Marks')
+                ->when($from_date, fn($q) => $q->whereDate('date', $from_date))
+                ->count(),
+
+            'teacher_attendance' => Report::where('school_id', $school->id)
+                ->where('report_type', 'Teacher Attendance')
+                ->when($from_date, fn($q) => $q->whereDate('date', $from_date))
+                ->count(),
+
+            'meal_attendance' => Report::where('school_id', $school->id)
+                ->where('report_type', 'Meal Attendance')
+                ->when($from_date, fn($q) => $q->whereDate('date', $from_date))
+                ->count(),
+
+            'infrastructure' => InfraReport::where('school_id', $school->id)
+                ->when($from_date && $to_date, function ($q) use ($from_date, $to_date) {
+                    $q->whereBetween('created_at', [$from_date, $to_date]);
+                })
+                ->count(),
+        ];
+    });
+}
+
+    else {
+        $reports = collect();
+    }
+
+    return view('modules.reports.index', compact('reports', 'category','district'));
+}
+
     public function infrReportSave(Request $request)
     {
-        
+
         $request->validate([
             'school_id' => 'required',
             'toilets' => 'required',

@@ -65,14 +65,7 @@
                     Manage School
                 </a>
 
-                {{-- <a href="{{ route('syllabusTraking') }}"
-                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16v12H4z" />
-                    </svg>
-                    Syllabus Tracking
-                </a> --}}
+
 
                 <div x-data="{ open: false }">
 
@@ -104,7 +97,7 @@
                         <!-- View Tracking -->
                         <a href="{{ route('view.tracking.list') }}"
                             class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition text-sm
-            {{ request()->routeIs('admin.syllabus.tracking') ? 'bg-primary-700 text-white font-medium' : 'text-gray-400 hover:bg-primary-800 hover:text-white' }}">
+                        {{ request()->routeIs('admin.syllabus.tracking') ? 'bg-primary-700 text-white font-medium' : 'text-gray-400 hover:bg-primary-800 hover:text-white' }}">
                             <i
                                 class="fa-solid fa-list-ul text-xs {{ request()->routeIs('admin.syllabus.tracking') ? 'text-accent-500' : '' }}"></i>
                             View Tracking
@@ -113,7 +106,7 @@
                         <!-- Add Syllabus -->
                         <a href="{{ route('syllabusTraking') }}"
                             class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition text-sm
-            {{ request()->routeIs('admin.syllabus.add') ? 'bg-primary-700 text-white font-medium' : 'text-gray-400 hover:bg-primary-800 hover:text-white' }}">
+                    {{ request()->routeIs('admin.syllabus.add') ? 'bg-primary-700 text-white font-medium' : 'text-gray-400 hover:bg-primary-800 hover:text-white' }}">
                             <i
                                 class="fa-solid fa-circle-plus text-xs {{ request()->routeIs('admin.syllabus.add') ? 'text-accent-500' : '' }}"></i>
                             Add Syllabus
@@ -158,44 +151,6 @@
                 </a>
 
 
-
-                <!-- Rankings -->
-                <!--<a href="{{ route('rankings') }}"-->
-                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
-                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
-                <!--        viewBox="0 0 24 24">-->
-                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M8 21l4-7 4 7M12 14V3" />-->
-                <!--    </svg>-->
-                <!--    Rankings-->
-                <!--</a>-->
-
-                <!-- Performance -->
-                <!--<a href="{{ route('performance.analytics') }}"-->
-                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
-
-                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
-                <!--        viewBox="0 0 24 24">-->
-                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13h18M3 6h18M3 20h18" />-->
-                <!--    </svg>-->
-
-                <!--    Performance Analytics-->
-                <!--</a>-->
-
-
-
-
-
-                <!-- Approvals -->
-                <!--<a href="{{ route('approvals') }}"-->
-                <!--    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">-->
-                <!--    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"-->
-                <!--        viewBox="0 0 24 24">-->
-                <!--        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />-->
-                <!--    </svg>-->
-                <!--    Approvals-->
-                <!--</a>-->
-
-                <!-- Notifications -->
                 <a href="{{ route('notifications') }}"
                     class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -236,30 +191,7 @@
                         Schemes / Initiatives
                     </a>
                 </div>
-                <!-- User & Role -->
-                <!-- <a href="{{ route('user.management.users') }}"
-                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
-            {{ request()->routeIs('user.management.*') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
-                <svg class="w-5 h-5 {{ request()->routeIs('user.management.*') ? 'text-accent-500' : 'text-gray-400' }}"
-                    fill="none" stroke="currentColor" stroke-width="1.8"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16 14a4 4 0 10-8 0M12 14v7" />
-                </svg>
-
-                User & Role Management
-            </a> -->
-
-                <!-- Audit Logs -->
-                <!-- <a href="{{ route('audit.logs') }}" class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                    stroke-width="1.8" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 12h6M9 16h6M9 8h6" />
-                </svg>
-                Audit Logs
-            </a> -->
 
                 <!-- Settings -->
                 <a href="{{ route('system.settings') }}"
@@ -357,42 +289,11 @@
                 </i>
 
                 <span class="font-medium">
-                   Subjects/Syllabus
+                    Subjects/Syllabus
                 </span>
             </a>
 
-            {{-- <a href="{{ route('subjects') }}"
-                class="flex items-center gap-4 px-6 py-3 rounded-xl
-   {{ request()->routeIs('subjects') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
 
-                <i
-                    class="fa-solid fa-book {{ request()->routeIs('school.academics') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-
-                Manage Subjects
-            </a>
-
-            <a href="{{ route('school.manage-result') }}"
-                class="flex items-center gap-4 px-6 py-3 rounded-xl transition
-   {{ request()->routeIs('school.manage-result*') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
-
-                <i
-                    class="fa-solid fa-chart-line
-    {{ request()->routeIs('school.manage-result*') ? 'text-accent-500' : 'text-gray-400' }}"></i>
-
-                Manage Result
-            </a> --}}
-
-            <!-- Academic Activities -->
-            <!--    <a href="{{ route('school.academics') }}"-->
-            <!--        class="flex items-center gap-4 px-6 py-3 rounded-xl transition-->
-        <!--{{ request()->routeIs('school.academics') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">-->
-
-            <!--        <i-->
-            <!--            class="fa-solid fa-book {{ request()->routeIs('school.academics') ? 'text-accent-500' : 'text-gray-400' }}"></i>-->
-            <!--        Academic Activities-->
-            <!--    </a>-->
-
-            <!-- Meal Reporting -->
             <a href="{{ route('school.meal') }}"
                 class="flex items-center gap-4 px-6 py-3 rounded-xl transition
         {{ request()->routeIs('school.meal') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
@@ -441,6 +342,52 @@
                 </svg>
                 Sign Out
             </a>
+        </div>
+ @elseif (Auth::user()->role === 'dwo')
+
+
+    <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">
+            DWO Panel
+        </div>
+
+        <div class="space-y-1">
+        <a href="{{ route('dwo.dashboard') }}"
+            class="flex items-center gap-4 px-6 py-3 rounded-xl transition
+    {{ request()->routeIs('dwo.dashboard') ? 'bg-primary-800 text-white' : 'hover:bg-primary-800 text-gray-300' }}">
+
+            <i
+                class="fa-solid fa-house {{ request()->routeIs('dwo.dashboard') ? 'text-accent-500' : 'text-gray-400' }}"></i>
+            Dwo Dashboard
+        </a>
+
+
+          <a href="{{ route('dwo.monitoring') }}"
+                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M3 6h18M3 18h12" />
+                    </svg>
+                    School Monitoring
+                </a>
+
+                <a href="{{ route('dwo.report') }}"
+                    class="flex items-center gap-4 px-6 py-3 rounded-xl hover:bg-primary-800 transition">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 2h9l5 5v15H6z" />
+                    </svg>
+                    Reports
+                </a>
+
+        <div class="border-t border-primary-800 p-4 flex-shrink-0">
+            <a href="{{ route('dwo.logout') }}"
+                class="w-full flex items-center gap-4 px-6 py-3 rounded-xl text-red-400 hover:bg-primary-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                </svg>
+                Sign Out
+            </a>
+        </div>
         </div>
     @else
         <div class="mt-6 mb-3 px-6 text-xs text-gray-400 uppercase tracking-wider">

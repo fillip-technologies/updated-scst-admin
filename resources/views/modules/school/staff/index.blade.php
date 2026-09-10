@@ -20,6 +20,7 @@
 
     @php
      $leasder = json_decode($staffdata->leadership ?? '[]');
+     
     $teachers = json_decode($staffdata->teacher_staff ?? '[]');
     @endphp
 

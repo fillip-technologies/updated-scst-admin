@@ -31,8 +31,8 @@
             </div>
 
            <div class="space-y-4">
-    @foreach ($notice as $key => $items)
-    
+    @foreach ($notice ?? [] as $key => $items)
+
         <div class="rounded-2xl border border-primary-800/10 bg-white p-5 shadow-sm mb-4">
 
             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -46,7 +46,7 @@
                             {{ $items['notice_title'] ?? '' }}
                         </h3>
 
-                       
+
                         <span class="rounded-full px-3 py-1 text-xs font-semibold">{{ $items['notice_category'] ?? '' }}</span>
 
                         <!-- ✅ FIX: badge typo handle -->

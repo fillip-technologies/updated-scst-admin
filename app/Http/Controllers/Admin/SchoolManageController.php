@@ -108,6 +108,15 @@ class SchoolManageController extends Controller
         ]);
         $id = decrypt($id);
         $dataget = ManageCrud::singledata(School::class, $id);
+        $userget = User::where('school_id',$dataget->id)->first();
+        $userget->updateOrCreate([
+             'name'=>$dataget->school_name,
+             'username'=>$dataget->school_admin_username,
+             'schoolCode'=>$dataget->school_code,
+             'password'=>$dataget->password,
+             'role'=>'school_admin',
+             'school_id'=>$dataget->id
+        ]);
         if ($request->hasFile('school_logo')) {
             if (file_exists($dataget->school_logo)) {
                 unlink(public_path($dataget->school_logo));
@@ -166,17 +175,21 @@ class SchoolManageController extends Controller
     {
         return Excel::download(new SchoolExport, 'schools.xlsx');
     }
-    
-    public function getschools($value)
-    {
-         $value = trim($value);
-         $data = School::select('id', 'school_name', 'district')->where('district','LIKE',"%{$value}%")->get();
-         return response()->json([
-         'message'=>"All Schools Here",
-         'data'=>$data,
-        ]);
-    }
-    
+
+  public function getschools($value)
+{
+    $value = trim($value);
+
+    $data = School::select('id', 'school_name', 'district')
+        ->where('district','LIKE',"%{$value}%")
+        ->get();
+
+    return response()->json([
+        'message' => "All Schools Here",
+        'data' => $data,
+    ]);
+}
+
       public function syllabus_traking(Request $request)
 {
     $request->validate([
@@ -201,16 +214,15 @@ class SchoolManageController extends Controller
         ->where('class_id', $classID)
         ->where('sublist_id', $subID)
         ->get();
-        
+
         // dd($records);
 
     return view('modules.listing.syllabusTrack', compact('records'));
 }
-    
+
      public function getclass($value)
     {
          $value = trim($value);
-
          $data = AddClasses::select('id', 'name')->where('school_id',$value)->get();
          return response()->json([
          'message'=>"All Class Here",
@@ -228,9 +240,9 @@ class SchoolManageController extends Controller
          'data'=>$data,
         ]);
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 }

@@ -31,7 +31,7 @@ class Student extends Model
 
     public function attendance()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Attendance::class,'student_id');
     }
 
     public function allclass()
@@ -46,8 +46,8 @@ class Student extends Model
 
     public function result()
     {
-        return $this->hasMany(Result::class);
+        return $this->hasMany(Result::class,'student_id');
     }
 
-    
+
 }

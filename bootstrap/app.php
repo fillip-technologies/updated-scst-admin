@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Middleware\SchoolMiddleware;
-use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\StaffMiddleware;
 use App\Http\Middleware\SuperAdminAuthMiddleware;
 use Illuminate\Foundation\Application;
@@ -21,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')->group(base_path('routes/school.php'));
             Route::middleware('web')->group(base_path('routes/admin.php'));
             Route::middleware('web')->group(base_path('routes/staff.php'));
+            Route::middleware('web')->group(base_path('routes/dwo.php'));
         }
 
     )
@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => AdminAuthMiddleware::class,
             'school' => SchoolMiddleware::class,
             'staff' => StaffMiddleware::class,
+            'dwo'=> App\Http\Middleware\DwoAuthMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

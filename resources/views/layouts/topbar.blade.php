@@ -16,22 +16,12 @@
 
     <div class="flex items-center gap-8">
 
-        {{-- <div class="relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                    d="M15 17h5l-1.405-1.405C18.79 14.79 18 13.42 18 12V8a6 6 0 10-12 0v4c0 1.42-.79 2.79-1.595 3.595L3 17h5m4 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
 
-            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
-                1
-            </span>
-        </div> --}}
 
-       <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3">
             @php
                 $user = Auth::user();
-                $profile_route  = null;
+                $profile_route = null;
                 if ($user->role === 'school_admin' && $user->school) {
                     $name = $user->school->principle_name;
                     $profile_route = route('school.profile');
@@ -66,3 +56,4 @@
     </div>
 
 </header>
+

@@ -9,7 +9,7 @@
                 </span>
 
                 <input type="text" placeholder="Search by name, code or principal..." name="search"
-                    value="{{ request('search') }}" id="search"
+                    id="search"
                     class="w-full pl-11 pr-4 py-3 rounded-xl
                    border border-gray-300 bg-gray-50
                    text-sm text-gray-700 placeholder-gray-400
@@ -51,7 +51,8 @@
                 <option>All Categories</option>
             </select> --}}
 
-            <a href="{{ url('/admin/school-management') }}" class="text-sm font-medium text-white transition bg-blue-500 p-3 rounded-xl te ">
+            <a href="{{ url('/admin/school-management') }}"
+                class="text-sm font-medium text-white transition bg-blue-500 p-3 rounded-xl te ">
                 Reset
             </a>
 
@@ -60,3 +61,12 @@
     </div>
 
 </div>
+<script>
+    $(document).ready(function() {
+        $("#search").on('keyup', function() {
+            var value = $(this).val();
+            console.log(value);
+
+        })
+    })
+</script>

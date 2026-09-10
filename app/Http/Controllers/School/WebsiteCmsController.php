@@ -38,7 +38,7 @@ class WebsiteCmsController extends Controller
                 ->count();
 
             $data[] = [
-                
+
                 'class' => $class->class_id,
                 'total' => $total,
                 'present' => $present,
@@ -117,7 +117,6 @@ class WebsiteCmsController extends Controller
     public function cmsstaffindex()
     {
         $staffdata = Staff::where('school_id', SchoolLogin()->id)->first();
-
         return view('modules.school.staff.index', compact('staffdata'));
     }
 
@@ -125,12 +124,13 @@ class WebsiteCmsController extends Controller
 {
     $notice = Notices::where('school_id', SchoolLogin()->id)->first();
 
-    $notices = json_decode($notice?->notice_manage, true) ?? "{}";
+
+    $notices = json_decode($notice?->notice_manage, true) ?? [];
 
     return view('modules.school.notices.index', compact('notices'));
 }
 
-    
+
     public function attandence()
     {
         $school_id = SchoolLogin()->id ?? TeacherLog()->school_id;
